@@ -16,6 +16,10 @@
   "eslintConfig": {
     "extends": "react-app"
   },
+  "author": {
+    "name": "Pakhomova Mary",
+    "email": "marusel.12@gmail.com"
+  },
   "browserslist": [
     ">0.2%",
     "not dead",
