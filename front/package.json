@@ -20,6 +20,12 @@
     "name": "Pakhomova Mary",
     "email": "marusel.12@gmail.com"
   },
+  "contributors": [
+    {
+      "name": "Rarnz",
+      "email": "lightnekromant@gmail.com"
+    }
+  ],
   "browserslist": [
     ">0.2%",
     "not dead",
