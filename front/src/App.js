@@ -8,6 +8,7 @@ class App extends Component {
     return (
       <div className="App">
         <header className="App-header">
+          <div id="alkashPicture"></div>
           <p>
             Hello, Alkash!!
           </p>
