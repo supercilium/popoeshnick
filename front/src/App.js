@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import './App.css';
 import TextField from '@material-ui/core/TextField'
+import Button from '@material-ui/core/Button'
 
 class App extends Component {
   render() {
@@ -22,6 +23,15 @@ class App extends Component {
             label="password"
             margin="normal"
           />
+          <Button variant="contained" color="primary" style = {{marginTop: '10px'}} >
+            Log in
+          </Button>
+          <Button href="#text-buttons" style={{marginTop: '15px', marginBottom: '15px'}} >
+            Forgot password?
+          </Button>
+          <Button href="#text-buttons" >
+            Registration
+          </Button>
         </header>
       </div>
     );
