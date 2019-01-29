@@ -33,34 +33,30 @@ export class DialogForgot extends Component {
   }
   render() {
     return (
-      <div className="dialog-style">
-        <Dialog
-          open={this.props.open}
-          onClose={this.props.onClose}
-        >
-          <DialogTitle>{'Enter your email to get confirmation code'}</DialogTitle>
-          <DialogContent>
-            <form
-              // style={ DIALOG_STYLE }
+      <Dialog
+        open={this.props.open}
+        onClose={this.props.onClose}
+      >
+        <DialogTitle>{'Enter your email to get confirmation code'}</DialogTitle>
+        <DialogContent>
+          <form className="dialog-style">
+            <TextField
+              label="Enter email"
+              margin="normal"
+              onChange={this.onSetLogin}
+            />
+            <Button
+              variant="contained"
+              color="primary"
+              style={{marginTop: '20px'}}
+              onClick={this.onForgotPassword}
+              disabled={!this.state.login}
             >
-              <TextField
-                label="Enter email"
-                margin="normal"
-                onChange={this.onSetLogin}
-              />
-              <Button
-                variant="contained"
-                color="primary"
-                style={{marginTop: '20px'}}
-                onClick={this.onForgotPassword}
-                disabled={!this.state.login}
-              >
-                Send
-              </Button>
-            </form>
-          </DialogContent>
-        </Dialog>
-      </div>
+              Send
+            </Button>
+          </form>
+        </DialogContent>
+      </Dialog>
     )
   }
 }

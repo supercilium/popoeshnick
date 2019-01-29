@@ -32,46 +32,42 @@ export class DialogSignup extends Component {
   }
   render() {
     return (
-      <div className="dialog-style">
-        <Dialog
-          open={this.props.open}
-          onClose={this.props.onClose}
-        >
-          <DialogTitle>{'Registration'}</DialogTitle>
-          <DialogContent>
-            <form
-              // style={ DIALOG_STYLE }
+      <Dialog
+        open={this.props.open}
+        onClose={this.props.onClose}
+      >
+        <DialogTitle>{'Registration'}</DialogTitle>
+        <DialogContent>
+          <form className="dialog-style">
+            <TextField
+              label="Enter email"
+              margin="normal"
+              onChange={this.onSetLogin}
+            />
+            <TextField
+              label="Enter password"
+              margin="normal"
+              type="password"
+              onChange={this.onSetPassword}
+            />
+            <TextField
+              label="Verify password"
+              margin="normal"
+              type="password"
+              onChange={this.handleVerifyPassword}
+            />
+            <Button
+              variant="contained"
+              color="primary"
+              style={{marginTop: '20px'}}
+              onClick={this.onLogin}
+              disabled={!this.state.login || !this.state.password || !this.state.passwordIdentity}
             >
-              <TextField
-                label="Enter email"
-                margin="normal"
-                onChange={this.onSetLogin}
-              />
-              <TextField
-                label="Enter password"
-                margin="normal"
-                type="password"
-                onChange={this.onSetPassword}
-              />
-              <TextField
-                label="Repeat password"
-                margin="normal"
-                type="password"
-                onChange={this.handleVerifyPassword}
-              />
-              <Button
-                variant="contained"
-                color="primary"
-                style={{marginTop: '20px'}}
-                onClick={this.onLogin}
-                disabled={!this.state.login || !this.state.password || !this.state.passwordIdentity}
-              >
-                Sign Up
-              </Button>
-            </form>
-          </DialogContent>
-        </Dialog>
-      </div>
+              Sign Up
+            </Button>
+          </form>
+        </DialogContent>
+      </Dialog>
     )
   }
 }
