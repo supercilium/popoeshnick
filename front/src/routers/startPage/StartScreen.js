@@ -3,6 +3,9 @@ import TextField from '@material-ui/core/TextField'
 import Button from '@material-ui/core/Button'
 import Typography from '@material-ui/core/Typography'
 import axios from 'axios'
+import {
+  Redirect,
+} from "react-router-dom";
 
 import './StartScreen.css'
 import { DialogSignup, DialogForgot } from '../../components/dialogs';
@@ -13,6 +16,7 @@ export class StartScreen extends Component {
     password: null,
     openSignup: false,
     openForgot: false,
+    redirect: null
   }
 
   onSetPassword = (event) => {
@@ -29,17 +33,14 @@ export class StartScreen extends Component {
       password: this.state.password
     }).then(
       // ...
-    )
+      // console.log('login')
+      this.setState({ redirect:true })
+    ).catch(e => {
+      
+    })
   }
 
-  onSignup = () => {
-    axios.post('/user/signup', {
-      email: this.state.login,
-      password: this.state.password
-    }).then(
-      // ...
-    )
-  }
+  handleSendQuery = () => this.setState({ redirect:true })
 
   onForgotPassword = () => {
     axios.post('/user/forget', {
@@ -71,6 +72,11 @@ export class StartScreen extends Component {
   }
 
   render() {
+    const { redirect } = this.state;
+
+    if (redirect) {
+      return <Redirect to='/protected'/>;
+    }
     return (
       <div className="start">
         <header className="App-header">
@@ -117,6 +123,7 @@ export class StartScreen extends Component {
           <DialogSignup 
             open={this.state.openSignup}
             onClose={this.handleCloseSignup}
+            onSend={this.handleSendQuery}
           />
           <DialogForgot 
             open={this.state.openForgot}

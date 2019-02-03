@@ -16,6 +16,15 @@ export class DialogSignup extends Component {
     passwordIdentity: false,
   }
 
+  onSetPassword = (event) => {
+    this.setState({password: event.target.value})
+  }
+
+  onSetLogin = (event) => {
+    this.setState({login: event.target.value})
+  }
+
+
   handleVerifyPassword = (event) => {
     if (event.target.value === this.state.password) {
       this.setState({ passwordIdentity: true })
@@ -27,7 +36,7 @@ export class DialogSignup extends Component {
       email: this.state.login,
       password: this.state.password
     }).then(
-      // ...
+      this.props.onSend()
     )
   }
   render() {
@@ -60,7 +69,7 @@ export class DialogSignup extends Component {
               variant="contained"
               color="primary"
               style={{marginTop: '20px'}}
-              onClick={this.onLogin}
+              onClick={this.onSignup}
               disabled={!this.state.login || !this.state.password || !this.state.passwordIdentity}
             >
               Sign Up
@@ -75,4 +84,5 @@ export class DialogSignup extends Component {
 PropTypes.DialogSignup = {
   open: PropTypes.boolean,
   onClose: () => {},
+  onSend: () => {},
 }
