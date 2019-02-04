@@ -48,7 +48,7 @@ def request_loader(request):
 
     return user
 
-@app.route('/Api/User/Login/', methods=['POST'])
+@app.route('/api/user/login/', methods=['POST'])
 def login():
     email = flask.request.form['email']
     if flask.request.form['password'] == users[email]['password']:
@@ -64,7 +64,7 @@ def login():
             'Message': 'Email or Password not allowed.'
         })
 
-@app.route('/Api/User/Registration/', methods=['POST'])
+@app.route('/api/user/registration/', methods=['POST'])
 def registration():
     form = RegisterUserForm(flask.request.form)
     if form.validate():        
