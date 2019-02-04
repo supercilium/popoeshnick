@@ -32,7 +32,7 @@ export class DialogSignup extends Component {
   }
   
   onSignup = () => {
-    axios.post('/user/signup', {
+    axios.post('/api/user/registration', {
       email: this.state.login,
       password: this.state.password
     }).then(

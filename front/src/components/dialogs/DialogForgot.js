@@ -17,14 +17,12 @@ export class DialogForgot extends Component {
     passwordIdentity: false,
   }
 
-  handleVerifyPassword = (event) => {
-    if (event.target.value === this.state.password) {
-      this.setState({ passwordIdentity: true })
-    }
+  onSetLogin = (event) => {
+    this.setState({login: event.target.value})
   }
-  
-  onSignup = () => {
-    axios.post('/user/signup', {
+
+  onForgotPassword = () => {
+    axios.post('/api/user/forgot', {
       email: this.state.login,
       password: this.state.password
     }).then(
