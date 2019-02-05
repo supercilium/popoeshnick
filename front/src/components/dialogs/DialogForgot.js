@@ -8,6 +8,7 @@ import axios from 'axios'
 import PropTypes from 'prop-types'
 
 import './dialog.css'
+import { validateEmail, validatePass } from '../../utils'
 
 
 export class DialogForgot extends Component {
@@ -29,6 +30,11 @@ export class DialogForgot extends Component {
       // ...
     )
   }
+
+  validateEmail = (event) => {
+    this.setState({ emailError: !validateEmail(event.target.value) })
+  }
+
   render() {
     return (
       <Dialog
@@ -42,6 +48,9 @@ export class DialogForgot extends Component {
               label="Enter email"
               margin="normal"
               onChange={this.onSetLogin}
+              error={this.state.emailError}
+              onBlur={this.validateEmail}
+              helperText={this.state.emailError && "enter a valid email"}
             />
             <Button
               variant="contained"
