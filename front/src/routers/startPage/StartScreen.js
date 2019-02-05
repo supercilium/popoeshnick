@@ -1,14 +1,15 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import TextField from '@material-ui/core/TextField'
 import Button from '@material-ui/core/Button'
 import Typography from '@material-ui/core/Typography'
 import axios from 'axios'
 import {
   Redirect,
-} from "react-router-dom";
+} from "react-router-dom"
 
 import './StartScreen.css'
-import { DialogSignup, DialogForgot } from '../../components/dialogs';
+import { DialogSignup, DialogForgot } from '../../components/dialogs'
+import { validateEmail, validatePass } from '../../utils'
 
 export class StartScreen extends Component {
   state = {
@@ -16,15 +17,28 @@ export class StartScreen extends Component {
     password: null,
     openSignup: false,
     openForgot: false,
-    redirect: null
+    redirect: null,
+    emailError: false,
+    passError: false,
   }
 
   onSetPassword = (event) => {
     this.setState({password: event.target.value})
+    this.setState({ passError: !validatePass(event.target.value) })
   }
 
   onSetLogin = (event) => {
     this.setState({login: event.target.value})
+    this.setState({ emailError: !validateEmail(event.target.value) })
+  }
+
+  validateEmail = (event) => {
+    this.setState({ emailError: !validateEmail(event.target.value) })
+    // console.log()
+  }
+
+  validatePass = (event) => {
+    this.setState({ passError: !validatePass(event.target.value) })
   }
 
   onLogin = () => {
@@ -33,7 +47,6 @@ export class StartScreen extends Component {
       password: this.state.password
     }).then(
       // ...
-      // console.log('login')
       this.setState({ redirect:true })
     ).catch(e => {
       
@@ -61,7 +74,6 @@ export class StartScreen extends Component {
 
   render() {
     const { redirect } = this.state;
-
     if (redirect) {
       return <Redirect to='/protected'/>;
     }
@@ -79,7 +91,11 @@ export class StartScreen extends Component {
             required
             label="email"
             margin="normal"
+            type="email"
             onChange={this.onSetLogin}
+            onBlur={this.validateEmail}
+            error={this.state.emailError}
+            helperText={this.state.emailError && "enter a valid email"}
           />
           <TextField
             required
@@ -87,13 +103,16 @@ export class StartScreen extends Component {
             margin="normal"
             type="password"
             onChange={this.onSetPassword}
+            onBlur={this.validatePass}
+            error={this.state.passError}
+            helperText={this.state.passError && "must contain at list 8 charecters"}
           />
           <Button
             variant="contained"
             color="primary"
             style={{marginTop: '10px'}}
             onClick={this.onLogin}
-            disabled={!this.state.login && !this.state.password}
+            disabled={!this.state.login || !this.state.password || (this.state.passError || this.state.emailError)}
           >
             Log in
           </Button>
