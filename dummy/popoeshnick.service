@@ -1,0 +1,13 @@
+[Unit]
+Description=uWSGI instance to Popoeshnick
+After=network.target
+
+[Service]
+User=centos
+Group=nginx
+WorkingDirectory=/opt/popoeshnick/dummy
+Environment="PATH=/home/centos/virtualenv/popoeshnick/bin"
+ExecStart=/home/centos/virtualenv/popoeshnick/bin/uwsgi --ini popoeshnick.ini
+
+[Install]
+WantedBy=multi-user.target
