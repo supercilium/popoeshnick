@@ -8,18 +8,19 @@ import axios from 'axios'
 import PropTypes from 'prop-types'
 
 import './dialog.css'
-import { validateEmail, validatePass } from '../../utils'
+import { validateEmail } from '../../utils'
 
 
 export class DialogForgot extends Component {
   state = {
     login: null,
     password: null,
-    passwordIdentity: false,
+    emailError: false
   }
 
   onSetLogin = (event) => {
     this.setState({login: event.target.value})
+    this.setState({ emailError: !validateEmail(event.target.value) })
   }
 
   onForgotPassword = () => {
@@ -57,7 +58,7 @@ export class DialogForgot extends Component {
               color="primary"
               style={{marginTop: '20px'}}
               onClick={this.onForgotPassword}
-              disabled={!this.state.login}
+              disabled={!this.state.login || this.state.emailError}
             >
               Send
             </Button>
