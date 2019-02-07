@@ -1,8 +1,10 @@
 /* eslint-disable react/jsx-one-expression-per-line */
 import React, { Component } from 'react';
-import TextField from '@material-ui/core/TextField';
-import Button from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography';
+import {
+  TextField,
+  Button,
+  Typography,
+} from '@material-ui/core';
 import axios from 'axios';
 import {
   Redirect,
@@ -43,8 +45,9 @@ export default class StartScreen extends Component {
   }
 
   onLogin = () => {
+    const { login } = this.state;
     axios.post('api/user/login', {
-      login: this.state,
+      email: login,
       password: this.state,
     }).then(
       // ...

@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
-import TextField from '@material-ui/core/TextField';
-import Button from '@material-ui/core/Button';
-import Dialog from '@material-ui/core/Dialog';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import DialogContent from '@material-ui/core/DialogContent';
+import {
+  TextField,
+  Button,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+} from '@material-ui/core';
 import axios from 'axios';
 import PropTypes from 'prop-types';
 
@@ -15,6 +17,8 @@ export default class DialogForgot extends Component {
   state = {
     email: null,
     emailError: false,
+    infoSent: false,
+    response: '',
   }
 
   onSetEmail = (event) => {
@@ -26,10 +30,12 @@ export default class DialogForgot extends Component {
     const { email } = this.state;
     axios.post('/api/user/forgot', {
       email,
-    }).then(
-      // ...
-    ).catch((response) => {
-      console.log(response);
+    }).then((response) => {
+      if (response) {
+        this.setState({ infoSent: true, response: 'Please check your email for further instructions' });
+      }
+    }).catch((response) => {
+      this.setState({ infoSent: true, response: `Sorry, something gone wrong... ${response}` });
     });
   }
 
@@ -37,8 +43,41 @@ export default class DialogForgot extends Component {
     this.setState({ emailError: !validateEmail(event.target.value) });
   }
 
+  onSubmit = (e) => {
+    const { email } = this.state;
+    e.preventDefault();
+    if (validateEmail(email)) {
+      this.onForgotPassword();
+    }
+  }
+
   render() {
     const { open, onClose } = this.props;
+    const { infoSent, response } = this.state;
+    if (infoSent) {
+      return (
+        <Dialog
+          open={open}
+          onClose={onClose}
+        >
+          <DialogTitle>{response}</DialogTitle>
+          <DialogContent>
+            <div className="dialog-style">
+
+              <Button
+                variant="contained"
+                color="primary"
+                style={{ marginTop: '20px' }}
+                onClick={onClose}
+                // eslint-disable-next-line react/jsx-one-expression-per-line
+              >
+                Close
+              </Button>
+            </div>
+          </DialogContent>
+        </Dialog>
+      );
+    }
     return (
       <Dialog
         open={open}
@@ -46,8 +85,12 @@ export default class DialogForgot extends Component {
       >
         <DialogTitle>Enter your email to get confirmation code</DialogTitle>
         <DialogContent>
-          <form className="dialog-style">
+          <form
+            onSubmit={this.onSubmit}
+            className="dialog-style"
+          >
             <TextField
+              required
               label="Enter email"
               margin="normal"
               onChange={this.onSetEmail}
