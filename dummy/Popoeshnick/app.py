@@ -78,7 +78,7 @@ class RedisSessionInterface(SessionInterface):
         response.set_cookie(app.session_cookie_name, session.sid,
                             expires=cookie_exp, httponly=True,
                             domain=domain)
-                            
+
 app.session_interface = RedisSessionInterface()
 
 class User(flask_login.UserMixin):
@@ -128,6 +128,11 @@ def login():
                 return jsonify({
                     'Status': 'Success'
                 })
+            else:
+                return jsonify({
+                        'Status': 'Error',
+                        'Message': 'Email or Password not allowed.'
+                    })
         except KeyError:
             return jsonify({
                     'Status': 'Error',
