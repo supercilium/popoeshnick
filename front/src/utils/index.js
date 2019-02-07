@@ -1,4 +1,4 @@
-export { 
+export {
   validateEmail,
   validatePass,
-} from './validation'
+} from './validation';

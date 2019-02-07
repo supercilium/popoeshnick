@@ -1,2 +1,2 @@
-export { DialogSignup } from './DialogSignup'
-export { DialogForgot } from './DialogForgot'
+export { default as DialogSignup } from './DialogSignup';
+export { default as DialogForgot } from './DialogForgot';
