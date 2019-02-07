@@ -47,7 +47,7 @@ export default class DialogSignup extends Component {
   }
 
   onSignup = () => {
-    axios.post('/api/user/registration', {
+    axios.post('/api/user/registration/', {
       // eslint-disable-next-line react/destructuring-assignment
       email: this.state.login,
       password: this.state,

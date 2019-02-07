@@ -46,7 +46,7 @@ export default class StartScreen extends Component {
 
   onLogin = () => {
     const { login } = this.state;
-    axios.post('api/user/login', {
+    axios.post('/api/user/login/', {
       email: login,
       password: this.state,
     }).then(

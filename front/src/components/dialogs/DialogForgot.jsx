@@ -28,7 +28,7 @@ export default class DialogForgot extends Component {
 
   onForgotPassword = () => {
     const { email } = this.state;
-    axios.post('/api/user/forgot', {
+    axios.post('/api/user/forgot/', {
       email,
     }).then((response) => {
       if (response) {
@@ -55,7 +55,7 @@ export default class DialogForgot extends Component {
     const { onClose } = this.props;
     // TODO remove blinking
     onClose();
-    this.setState({ infoSent: false });
+    this.setState({ infoSent: false, email: null, emailError: false });
   }
 
   render() {
