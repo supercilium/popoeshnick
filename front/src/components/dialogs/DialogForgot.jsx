@@ -18,7 +18,7 @@ export default class DialogForgot extends Component {
     email: null,
     emailError: false,
     infoSent: false,
-    response: '',
+    titleText: '',
   }
 
   onSetEmail = (event) => {
@@ -32,10 +32,10 @@ export default class DialogForgot extends Component {
       email,
     }).then((response) => {
       if (response) {
-        this.setState({ infoSent: true, response: 'Please check your email for further instructions' });
+        this.setState({ infoSent: true, titleText: 'Please check your email for further instructions' });
       }
     }).catch((response) => {
-      this.setState({ infoSent: true, response: `Sorry, something gone wrong... ${response}` });
+      this.setState({ infoSent: true, titleText: `Sorry, something gone wrong... ${response}` });
     });
   }
 
@@ -51,16 +51,23 @@ export default class DialogForgot extends Component {
     }
   }
 
+  onClose = () => {
+    const { onClose } = this.props;
+    // TODO remove blinking
+    onClose();
+    this.setState({ infoSent: false });
+  }
+
   render() {
-    const { open, onClose } = this.props;
-    const { infoSent, response } = this.state;
+    const { open } = this.props;
+    const { infoSent, titleText } = this.state;
     if (infoSent) {
       return (
         <Dialog
           open={open}
-          onClose={onClose}
+          onClose={this.onClose}
         >
-          <DialogTitle>{response}</DialogTitle>
+          <DialogTitle>{titleText}</DialogTitle>
           <DialogContent>
             <div className="dialog-style">
 
@@ -68,7 +75,7 @@ export default class DialogForgot extends Component {
                 variant="contained"
                 color="primary"
                 style={{ marginTop: '20px' }}
-                onClick={onClose}
+                onClick={this.onClose}
                 // eslint-disable-next-line react/jsx-one-expression-per-line
               >
                 Close
@@ -81,7 +88,7 @@ export default class DialogForgot extends Component {
     return (
       <Dialog
         open={open}
-        onClose={onClose}
+        onClose={this.onClose}
       >
         <DialogTitle>Enter your email to get confirmation code</DialogTitle>
         <DialogContent>
