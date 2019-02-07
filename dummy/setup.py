@@ -1,11 +1,12 @@
 from setuptools import setup
 
+
 setup(
     name='Popoeshnick',
-    version='0.001',
+    version='0.002',
     author='Kirill Shirolapov',
     author_email='kirill.shirolapov@gmail.com',
-    packages=['Popoeshnick'],
+    packages=['Popoeshnick', 'Popoeshnick.Sessions'],
     include_package_data=True,
     install_requires=[
         'Flask==1.0.2',
