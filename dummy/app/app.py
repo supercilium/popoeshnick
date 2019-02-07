@@ -15,7 +15,6 @@ from flask.sessions import SessionInterface, SessionMixin
 
 app = flask.Flask(__name__)
 app.secret_key = 'SecretKey'
-app.debug = True
 
 login_manager = flask_login.LoginManager()
 login_manager.init_app(app)
@@ -117,24 +116,37 @@ def request_loader(request):
 
 @app.route('/api/user/login/', methods=['POST'])
 def login():
-    email = flask.request.form['email']
-    if flask.request.form['password'] == users[email]['password']:
-        user = User()
-        user.id = email
-        flask_login.login_user(user)
+    form = RegisterUserForm(flask.request.form)
+    if form.validate():
+        email = form.email.data
+        password = form.password.data
+        try:
+            if password == users[email]['password']:
+                user = User()
+                user.id = email
+                flask_login.login_user(user)
+                return jsonify({
+                    'Status': 'Success'
+                })
+        except KeyError:
+            return jsonify({
+                    'Status': 'Error',
+                    'Message': 'Email or Password not allowed.'
+                })
+    else:
+        errors_json = dict()
+        for field_name, errors in form.errors.items():
+            errors_json[field_name] = errors
         return jsonify({
-            'Status': 'Success'
-        })
-
-    return jsonify({
             'Status': 'Error',
-            'Message': 'Email or Password not allowed.'
-        })
+            'Errors': errors_json
+            })
+
 
 @app.route('/api/user/registration/', methods=['POST'])
 def registration():
     form = RegisterUserForm(flask.request.form)
-    if form.validate():        
+    if form.validate():
         for user in users:
             if user == form.email.data:
                 return jsonify({
