@@ -56,7 +56,6 @@ export default class DialogSignup extends Component {
     }).then((response) => {
       // eslint-disable-next-line react/destructuring-assignment
       this.props.onSend();
-      console.log(response);
     }).catch(async (error) => {
       if (error.response) {
         this.setState({ error: error.response.data });

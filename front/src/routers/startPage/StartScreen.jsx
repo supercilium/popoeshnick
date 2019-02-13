@@ -25,6 +25,11 @@ export default class StartScreen extends Component {
     passError: false,
   }
 
+  // uncomment for test query
+  // componentDidMount() {
+  //   this.setState({ password: 'buhlishko', login: 'alkash@top.one' });
+  // }
+
   onSetPassword = (event) => {
     this.setState({ password: event.target.value });
     this.setState({ passError: !validatePass(event.target.value) });
@@ -49,10 +54,16 @@ export default class StartScreen extends Component {
     axios.post('/api/user/login/', {
       password,
       email: login,
-    }).then(
-      // ...
-      this.setState({ redirect: true }),
-    );
+    }).then((res) => {
+      const { errors, profile, status } = res.data;
+      if (status === 'success') {
+        this.setState({ profile, redirect: true });
+      } else {
+        console.log(errors);
+      }
+    }).catch((error) => {
+      console.log(error);
+    });
   }
 
   handleSendQuery = () => this.setState({ redirect: true })
@@ -73,9 +84,14 @@ export default class StartScreen extends Component {
     this.setState({ openForgot: true });
   }
 
-
   render() {
-    const { redirect } = this.state;
+    const {
+      redirect,
+      login,
+      password,
+      passError,
+      emailError,
+    } = this.state;
     if (redirect) {
       return <Redirect to="/protected" />;
     }
@@ -118,10 +134,7 @@ export default class StartScreen extends Component {
             color="primary"
             style={{ marginTop: '10px' }}
             onClick={this.onLogin}
-            // eslint-disable-next-line react/destructuring-assignment
-            disabled={!this.state.login || !this.state.password
-            // eslint-disable-next-line react/destructuring-assignment
-            || (this.state.passError || this.state.emailError)}
+            disabled={!login || !password || passError || emailError}
           >
             Log in
           </Button>
