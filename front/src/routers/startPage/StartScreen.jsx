@@ -45,10 +45,10 @@ export default class StartScreen extends Component {
   }
 
   onLogin = () => {
-    const { login } = this.state;
+    const { login, password } = this.state;
     axios.post('/api/user/login/', {
+      password,
       email: login,
-      password: this.state,
     }).then(
       // ...
       this.setState({ redirect: true }),
@@ -57,7 +57,6 @@ export default class StartScreen extends Component {
 
   handleSendQuery = () => this.setState({ redirect: true })
 
-  // модальное окно регистрации
   handleCloseSignup = () => {
     this.setState({ openSignup: false });
   }
@@ -66,7 +65,6 @@ export default class StartScreen extends Component {
     this.setState({ openSignup: true });
   }
 
-  // модальное окно забыли пароль
   handleCloseForgot = () => {
     this.setState({ openForgot: false });
   }
