@@ -1,81 +1,67 @@
 import flask
-from flask import jsonify
-import flask_login
+from flask import Flask
+from config import Config
+from flask_sqlalchemy import SQLAlchemy
 from flask_wtf import FlaskForm
-from wtforms.fields.html5 import EmailField
-from wtforms.fields.simple import PasswordField
 from wtforms import Form, StringField, PasswordField, validators
-from Popoeshnick.Sessions.RedisSession import RedisSessionInterface
+from werkzeug.security import generate_password_hash, check_password_hash
+from flask import jsonify
+
+app = Flask(__name__)
+app.config.from_object(Config)
+db = SQLAlchemy(app)
 
 
-app = flask.Flask(__name__)
-app.secret_key = 'SecretKey'
+class User(db.Model):
+    __tablename__ = 'users'
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(64), unique=True)
+    email = db.Column(db.String(120), unique=True)
+    password_hash = db.Column(db.String(128))
 
-login_manager = flask_login.LoginManager()
-login_manager.init_app(app)
 
-users = {}
-
-
-app.session_interface = RedisSessionInterface()
-
-class User(flask_login.UserMixin):
-    pass
-
-class RegisterUserForm(FlaskForm):
-    email = StringField('Email Address', [validators.Email()])
-    password = PasswordField('New Password', [validators.Length(min=8), validators.Regexp('[A-Za-z0-9@#$%^&+=]')])
+class RegLogForm(FlaskForm):
+    email = StringField('Email', [validators.Email()])
+    password = PasswordField('Password', [validators.length(min=8), validators.Regexp('[A-Za-z0-9@#$%^&+=]')])
 
     class Meta:
         csrf = False
 
 
-@login_manager.user_loader
-def user_loader(email):
-    if email not in users:
-        return
-
-    user = User()
-    user.id = email
-    return user
-
-
-@login_manager.request_loader
-def request_loader(request):
-    email = request.form.get('email')
-    if email not in users:
-        return
-
-    user = User()
-    user.id = email
-    user.is_authenticated = request.form['password'] == users[email]['password']
-
-    return user
-
-@app.route('/api/user/login/', methods=['POST'])
+@app.route('/api/user/login/', methods=['GET','POST'])
 def login():
-    form = RegisterUserForm(flask.request.form)
+    form = RegLogForm(flask.request.form)
+    if form.validate():
+        usr = User.query.filter_by(email=form.email.data).first()
+        if usr:
+            psswd = form.password.data
+            if check_password_hash(usr.password_hash, psswd):
+                return jsonify({'Status': 'Success'})
+        return jsonify({'Status': 'Error',
+                        'Message':'Incorrect login-password pair'})
+    else:
+        errors_json = dict()
+        for field_name, errors in form.errors.items():
+            errors_json[field_name] = errors
+        return jsonify({
+            'Status': 'Error',
+            'Errors': errors_json
+        })
+
+
+@app.route('/api/user/registration/', methods=['GET','POST'])
+def registration():
+    form = RegLogForm(flask.request.form)
     if form.validate():
         email = form.email.data
-        password = form.password.data
-        try:
-            if password == users[email]['password']:
-                user = User()
-                user.id = email
-                flask_login.login_user(user)
-                return jsonify({
-                    'Status': 'Success'
-                })
-            else:
-                return jsonify({
-                        'Status': 'Error',
-                        'Message': 'Email or Password not allowed.'
-                    })
-        except KeyError:
-            return jsonify({
-                    'Status': 'Error',
-                    'Message': 'Email or Password not allowed.'
-                })
+        psswd = form.password.data
+        if not User.query.filter_by(email=form.email.data).first():
+            u = User(email=email, password_hash = generate_password_hash(psswd))
+            db.session.add(u)
+            db.session.commit()
+        else: #such user is already here
+            return jsonify({'Status': 'Error',
+                            'Message':'User already registered'})
     else:
         errors_json = dict()
         for field_name, errors in form.errors.items():
@@ -83,28 +69,9 @@ def login():
         return jsonify({
             'Status': 'Error',
             'Errors': errors_json
-            })
+        })
+    return 'User will register here'
 
 
-@app.route('/api/user/registration/', methods=['POST'])
-def registration():
-    form = RegisterUserForm(flask.request.form)
-    if form.validate():
-        for user in users:
-            if user == form.email.data:
-                return jsonify({
-                    'Status': 'Error',
-                    'Message': 'User already created.'
-                })
-        users[form.email.data] = {'password': form.password.data }
-        return jsonify({
-            'Status': 'Success'
-            })
-    else:
-        errors_json = dict()
-        for field_name, errors in form.errors.items():
-            errors_json[field_name] = errors
-        return jsonify({
-            'Status': 'Error',
-            'Errors': errors_json
-            })
+if __name__ == '__main__':
+    app.run()
