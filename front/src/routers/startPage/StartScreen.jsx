@@ -1,72 +1,56 @@
 /* eslint-disable react/jsx-one-expression-per-line */
 import React, { Component } from 'react';
 import {
-  TextField,
   Button,
-  Typography,
 } from '@material-ui/core';
 import axios from 'axios';
-import {
-  Redirect,
-} from 'react-router-dom';
+import _ from 'lodash';
+import Cookies from 'universal-cookie';
+import { API_CONST } from '../../constants';
 
 import './StartScreen.css';
-import { DialogSignup, DialogForgot } from '../../components/dialogs';
-import { validateEmail, validatePass } from '../../utils';
+import {
+  LoginForm,
+  DialogSignup,
+  DialogForgot,
+  Loader,
+  Home,
+} from '../../components';
 
+const cookies = new Cookies();
 export default class StartScreen extends Component {
-  state = {
-    login: null,
-    password: null,
-    openSignup: false,
-    openForgot: false,
-    redirect: null,
-    emailError: false,
-    passError: false,
+  constructor(props) {
+    super(props);
+    this.state = {
+      openSignup: false,
+      openForgot: false,
+      loader: true,
+      profile: {},
+    };
   }
 
-  // uncomment for test query
-  // componentDidMount() {
-  //   this.setState({ password: 'buhlishko', login: 'alkash@top.one' });
-  // }
-
-  onSetPassword = (event) => {
-    this.setState({ password: event.target.value });
-    this.setState({ passError: !validatePass(event.target.value) });
+  componentDidMount() {
+    this.setState({ loader: true });
+    const cookie = cookies.get('session');
+    if (cookie) {
+      axios.get(API_CONST.PROFILE).then((res) => {
+        const { errors, profile, status } = res.data;
+        if (status === 'success') {
+          this.setState({ profile });
+        } else {
+          console.log(errors);
+        }
+      }).catch((error) => {
+        console.log(error);
+      }).then(() => this.setState({ loader: false }));
+    } else {
+      this.setState({ loader: false });
+    }
   }
 
-  onSetLogin = (event) => {
-    this.setState({ login: event.target.value });
-    this.setState({ emailError: !validateEmail(event.target.value) });
-  }
+  handleLogin = profile => this.setState({ profile });
 
-  validateEmail = (event) => {
-    this.setState({ emailError: !validateEmail(event.target.value) });
-    // console.log()
-  }
-
-  validatePass = (event) => {
-    this.setState({ passError: !validatePass(event.target.value) });
-  }
-
-  onLogin = () => {
-    const { login, password } = this.state;
-    axios.post('/api/user/login/', {
-      password,
-      email: login,
-    }).then((res) => {
-      const { errors, profile, status } = res.data;
-      if (status === 'success') {
-        this.setState({ profile, redirect: true });
-      } else {
-        console.log(errors);
-      }
-    }).catch((error) => {
-      console.log(error);
-    });
-  }
-
-  handleSendQuery = () => this.setState({ redirect: true })
+  // handleSendQuery = () => this.setState({ redirect: true })
 
   handleCloseSignup = () => {
     this.setState({ openSignup: false });
@@ -86,58 +70,21 @@ export default class StartScreen extends Component {
 
   render() {
     const {
-      redirect,
-      login,
-      password,
-      passError,
-      emailError,
+      loader,
+      profile,
     } = this.state;
-    if (redirect) {
-      return <Redirect to="/protected" />;
+    if (loader) {
+      return <Loader />;
+    }
+    if (!_.isEmpty(profile)) {
+      return <Home />;
     }
     return (
       <div className="start">
         <header className="App-header">
-          <div id="alkashPicture" />
-          <Typography component="h1" variant="h4" style={{ marginTop: '20px' }}>
-            Hello, Alkash!!!
-          </Typography>
-          <Typography component="h2" variant="subtitle1" style={{ marginTop: '10px' }}>
-            Explore alco-possibilities with new awesome service Popoeshnick
-          </Typography>
-          <TextField
-            required
-            label="email"
-            margin="normal"
-            type="email"
-            onChange={this.onSetLogin}
-            onBlur={this.validateEmail}
-            // eslint-disable-next-line react/destructuring-assignment
-            error={this.state.emailError}
-            // eslint-disable-next-line react/destructuring-assignment
-            helperText={this.state.emailError && 'enter a valid email'}
+          <LoginForm
+            onLogin={this.handleLogin}
           />
-          <TextField
-            required
-            label="password"
-            margin="normal"
-            type="password"
-            onChange={this.onSetPassword}
-            onBlur={this.validatePass}
-            // eslint-disable-next-line react/destructuring-assignment
-            error={this.state.passError}
-            // eslint-disable-next-line react/destructuring-assignment
-            helperText={this.state.passError && 'must contain at list 8 charecters'}
-          />
-          <Button
-            variant="contained"
-            color="primary"
-            style={{ marginTop: '10px' }}
-            onClick={this.onLogin}
-            disabled={!login || !password || passError || emailError}
-          >
-            Log in
-          </Button>
           <Button
             style={{ marginTop: '15px', marginBottom: '15px' }}
             onClick={this.handleOpenForgot}

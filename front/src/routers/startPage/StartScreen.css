@@ -1,11 +1,3 @@
-#alkashPicture {
-  background-image: url(./alkashs.png);
-  width: 260px;
-  height: 193px;
-  border-top-left-radius: 5px;
-  border-top-right-radius: 5px;
-}
-
 .App-header {
   background-color: #fff;
   display: flex;

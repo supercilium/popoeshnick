@@ -6,18 +6,27 @@ const login = (req) => {
     email,
     password,
   } = req.body;
-  if (email === alkash.email && password === alkash.password) {
+  if (email === alkash.validUser.email && password === alkash.validUser.password) {
     return {
-      status: 'success',
-      profile: {},
+      body: {
+        status: 'success',
+        profile: alkash.alkashProfile,
+      },
+      cookie: {
+        key: 'session',
+        value: alkash.validUser.session,
+      },
     };
   }
   return {
-    errors: {
-      email: ['Invalid email address.'],
-      password: ['Field must be at least 8 characters long.', 'Invalid input.'],
+    body: {
+      errors: {
+        login: ['The email or password you entered is incorrect.', 'Please try again.'],
+        email: ['Invalid email address.'],
+        password: ['Field must be at least 8 characters long.', 'Invalid input.'],
+      },
+      status: 'error',
     },
-    status: 'error',
   };
 };
 

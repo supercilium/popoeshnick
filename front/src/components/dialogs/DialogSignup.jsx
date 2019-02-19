@@ -7,29 +7,31 @@ import {
   DialogContent,
 } from '@material-ui/core';
 import PropTypes from 'prop-types';
+import { API_CONST } from '../../constants';
 
 import './dialog.css';
 import { validateEmail, validatePass, instance } from '../../utils';
 
 export default class DialogSignup extends Component {
-  state = {
-    login: null,
-    password: null,
-    passwordIdentity: null,
-    emailError: false,
-    passError: false,
-    loading: false,
-    error: "Wait, i'm load",
+  constructor(props) {
+    super(props);
+    this.state = {
+      login: null,
+      password: null,
+      passwordIdentity: null,
+      emailError: false,
+      passError: false,
+      loading: false,
+      error: "Wait, i'm load",
+    };
   }
 
   onSetPassword = (event) => {
-    this.setState({ password: event.target.value });
-    this.setState({ passError: !validatePass(event.target.value) });
+    this.setState({ password: event.target.value, passError: !validatePass(event.target.value) });
   }
 
   onSetLogin = (event) => {
-    this.setState({ login: event.target.value });
-    this.setState({ emailError: !validateEmail(event.target.value) });
+    this.setState({ login: event.target.value, emailError: !validateEmail(event.target.value) });
   }
 
   validateEmail = (event) => {
@@ -50,7 +52,7 @@ export default class DialogSignup extends Component {
   onSignup = () => {
     const { password, login } = this.state;
     this.setState({ loading: true });
-    instance.post('/api/user/registration/', {
+    instance.post(API_CONST.REGISTER, {
       password,
       email: login,
     }).then((response) => {
@@ -98,10 +100,8 @@ export default class DialogSignup extends Component {
                     label="Enter email"
                     margin="normal"
                     onChange={this.onSetLogin}
-                    // eslint-disable-next-line react/destructuring-assignment
                     error={emailError}
                     onBlur={this.validateEmail}
-                    // eslint-disable-next-line react/destructuring-assignment
                     helperText={emailError && 'enter a valid email'}
                   />
                   <TextField
@@ -109,10 +109,8 @@ export default class DialogSignup extends Component {
                     margin="normal"
                     type="password"
                     onChange={this.onSetPassword}
-                    // eslint-disable-next-line react/destructuring-assignment
                     error={passError}
                     onBlur={this.validatePass}
-                    // eslint-disable-next-line react/destructuring-assignment
                     helperText={passError && 'must contain at list 8 charecters'}
                   />
                   <TextField
@@ -120,9 +118,7 @@ export default class DialogSignup extends Component {
                     margin="normal"
                     type="password"
                     onChange={this.handleVerifyPassword}
-                    // eslint-disable-next-line react/destructuring-assignment
                     error={password && !passwordIdentity}
-                    // eslint-disable-next-line react/destructuring-assignment
                     helperText={password && !passwordIdentity && 'does not match'}
                   />
                   <Button

@@ -5,9 +5,18 @@ import {
   BrowserRouter as Router,
   Route,
 } from 'react-router-dom';
+import { library } from '@fortawesome/fontawesome-svg-core';
+// import font awesome icons
+import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 
 import { StartScreen } from './routers/startPage';
 import { Profile } from './routers/profile';
+import { Footer } from './components/footer';
+import { ROUT_CONST } from './constants';
+
+// font awesome icons add here
+// only added icons will be loaded to bundle
+library.add(faSpinner);
 
 const App = () => (
   <Router>
@@ -15,10 +24,9 @@ const App = () => (
       <div className="App-container">
         {/* <StartScreen /> */}
         <Route exact path="/" component={StartScreen} />
-        <Route path="/protected" component={Profile} />
-        <div id="footer">
-          (c) Popoeshnick team
-        </div>
+        <Route path={`/${ROUT_CONST.PROFILE_PAGE}`} component={Profile} />
+        {/* TODO <Footer> component */}
+        <Footer />
       </div>
     </div>
   </Router>

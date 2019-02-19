@@ -11,14 +11,17 @@ import PropTypes from 'prop-types';
 
 import './dialog.css';
 import { validateEmail } from '../../utils';
-
+import { API_CONST } from '../../constants';
 
 export default class DialogForgot extends Component {
-  state = {
-    email: null,
-    emailError: false,
-    infoSent: false,
-    titleText: '',
+  constructor(props) {
+    super(props);
+    this.state = {
+      email: null,
+      emailError: false,
+      infoSent: false,
+      titleText: '',
+    };
   }
 
   onSetEmail = (event) => {
@@ -26,9 +29,9 @@ export default class DialogForgot extends Component {
     this.setState({ emailError: !validateEmail(event.target.value) });
   }
 
-  onForgotPassword = () => {
+  handlePasswordRecovery = () => {
     const { email } = this.state;
-    axios.post('/api/user/forgot/', {
+    axios.post(API_CONST.PASSWORD, {
       email,
     }).then((response) => {
       if (response) {
@@ -47,7 +50,7 @@ export default class DialogForgot extends Component {
     const { email } = this.state;
     e.preventDefault();
     if (validateEmail(email)) {
-      this.onForgotPassword();
+      this.handlePasswordRecovery();
     }
   }
 
@@ -111,7 +114,7 @@ export default class DialogForgot extends Component {
               variant="contained"
               color="primary"
               style={{ marginTop: '20px' }}
-              onClick={this.onForgotPassword}
+              onClick={this.handlePasswordRecovery}
               // eslint-disable-next-line react/destructuring-assignment
               disabled={!this.state.email || this.state.emailError}
             // eslint-disable-next-line react/jsx-one-expression-per-line
