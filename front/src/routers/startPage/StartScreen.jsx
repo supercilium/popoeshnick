@@ -50,7 +50,7 @@ export default class StartScreen extends Component {
 
   handleLogin = profile => this.setState({ profile });
 
-  // handleSendQuery = () => this.setState({ redirect: true })
+  handleSendQuery = profile => this.setState({ profile })
 
   handleCloseSignup = () => {
     this.setState({ openSignup: false });

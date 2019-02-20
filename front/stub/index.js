@@ -4,7 +4,9 @@ const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const pino = require('express-pino-logger')();
 const login = require('./login');
+const register = require('./reg');
 const profile = require('./profile');
+const recovery = require('./recovery');
 
 const app = express();
 app.use(bodyParser.json()); // for parsing application/json
@@ -21,8 +23,23 @@ app.post('/api/user/login/', (req, res) => {
   res.send(JSON.stringify(result.body));
 });
 
+app.post('/api/user/registration/', (req, res) => {
+  const result = register(req);
+  res.setHeader('Content-Type', 'application/json');
+  if (result.cookie) {
+    res.cookie(result.cookie.key, result.cookie.value);
+  }
+  res.send(JSON.stringify(result.body));
+});
+
 app.get('/api/user/profile/', (req, res) => {
   const result = profile(req.cookies);
+  res.setHeader('Content-Type', 'application/json');
+  res.send(JSON.stringify(result.body));
+});
+
+app.post('/api/user/recovery/', (req, res) => {
+  const result = recovery(req);
   res.setHeader('Content-Type', 'application/json');
   res.send(JSON.stringify(result.body));
 });
