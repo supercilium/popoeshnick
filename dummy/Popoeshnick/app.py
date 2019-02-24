@@ -36,16 +36,16 @@ def login():
         if usr:
             psswd = form.password.data
             if check_password_hash(usr.password_hash, psswd):
-                return jsonify({'Status': 'Success'})
-        return jsonify({'Status': 'Error',
-                        'Message':'Incorrect login-password pair'})
+                return jsonify({'status': 'success'})
+        return jsonify({'status': 'error',
+                        'message':'Incorrect login-password pair'})
     else:
         errors_json = dict()
         for field_name, errors in form.errors.items():
             errors_json[field_name] = errors
         return jsonify({
-            'Status': 'Error',
-            'Errors': errors_json
+            'status': 'error',
+            'errors': errors_json
         })
 
 
@@ -60,15 +60,15 @@ def registration():
             db.session.add(u)
             db.session.commit()
         else: #such user is already here
-            return jsonify({'Status': 'Error',
-                            'Message':'User already registered'})
+            return jsonify({'status': 'error',
+                            'message':'User already registered'})
     else:
         errors_json = dict()
         for field_name, errors in form.errors.items():
             errors_json[field_name] = errors
         return jsonify({
-            'Status': 'Error',
-            'Errors': errors_json
+            'status': 'error',
+            'errors': errors_json
         })
     return 'User will register here'
 
