@@ -15,6 +15,7 @@ import {
   DialogForgot,
   Loader,
   Home,
+  TopMenu,
 } from '../../components';
 
 const cookies = new Cookies();
@@ -81,6 +82,7 @@ export default class StartScreen extends Component {
     }
     return (
       <div className="start">
+        <TopMenu />
         <header className="App-header">
           <LoginForm
             onLogin={this.handleLogin}
