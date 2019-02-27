@@ -51,6 +51,21 @@ export default class StartScreen extends Component {
 
   handleLogin = profile => this.setState({ profile });
 
+  handleLogout = () => {
+    axios.get(API_CONST.LOGOUT).then(() => {
+      this.setState({
+        openSignup: false,
+        openForgot: false,
+        loader: true,
+        profile: {},
+      });
+    }).then(() => {
+      this.setState({
+        loader: false,
+      });
+    });
+  }
+
   handleSendQuery = profile => this.setState({ profile })
 
   handleCloseSignup = () => {
@@ -78,11 +93,22 @@ export default class StartScreen extends Component {
       return <Loader />;
     }
     if (!_.isEmpty(profile)) {
-      return <Home />;
+      return (
+        <div>
+          <TopMenu
+            auth
+            onLogout={this.handleLogout}
+          />
+          <Home />
+        </div>
+      );
     }
     return (
       <div className="start">
-        <TopMenu />
+        <TopMenu
+          auth={false}
+          onLogout={this.handleLogout}
+        />
         <header className="App-header">
           <LoginForm
             onLogin={this.handleLogin}

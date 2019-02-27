@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import {
   AppBar,
   Toolbar,
@@ -11,12 +12,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 export default class TopMenu extends React.Component {
   state = {
-    auth: true,
     anchorEl: null,
-  };
-
-  handleChange = (event) => {
-    this.setState({ auth: event.target.checked });
   };
 
   handleMenu = (event) => {
@@ -28,20 +24,27 @@ export default class TopMenu extends React.Component {
   };
 
   render() {
-    const { auth, anchorEl } = this.state;
+    const { anchorEl } = this.state;
+    const { auth, onLogout } = this.props;
     const open = Boolean(anchorEl);
 
     return (
       <div>
         <AppBar position="static">
-          <Toolbar>
-            <IconButton color="inherit" aria-label="Menu">
-              <FontAwesomeIcon icon="bars" />
-            </IconButton>
-            {/* eslint-disable-next-line react/jsx-one-expression-per-line */}
-            <Typography variant="h6" color="inherit">
-              Popoeshnick.club
-            </Typography>
+          <Toolbar
+            style={{ justifyContent: 'space-between' }}
+          >
+            <div
+              style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}
+            >
+              <IconButton color="inherit" aria-label="Menu">
+                <FontAwesomeIcon icon="bars" />
+              </IconButton>
+              {/* eslint-disable-next-line react/jsx-one-expression-per-line */}
+              <Typography variant="h6" color="inherit">
+                Popoeshnick.club
+              </Typography>
+            </div>
             {auth && (
               <div>
                 <IconButton
@@ -49,6 +52,7 @@ export default class TopMenu extends React.Component {
                   aria-haspopup="true"
                   onClick={this.handleMenu}
                   color="inherit"
+                  style={{ float: 'right' }}
                 >
                   <FontAwesomeIcon icon="user" />
                 </IconButton>
@@ -68,7 +72,7 @@ export default class TopMenu extends React.Component {
                 >
                   <MenuItem onClick={this.handleClose}>Profile</MenuItem>
                   <MenuItem onClick={this.handleClose}>My account</MenuItem>
-                  <MenuItem onClick={this.handleClose}>Log Out</MenuItem>
+                  <MenuItem onClick={onLogout}>Log Out</MenuItem>
                 </Menu>
               </div>
             )}
@@ -78,3 +82,13 @@ export default class TopMenu extends React.Component {
     );
   }
 }
+
+TopMenu.propTypes = {
+  onLogout: PropTypes.func,
+  auth: PropTypes.bool,
+};
+
+TopMenu.defaultProps = {
+  auth: false,
+  onLogout: () => {},
+};

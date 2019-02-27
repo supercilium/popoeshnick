@@ -44,5 +44,11 @@ app.post('/api/user/recovery/', (req, res) => {
   res.send(JSON.stringify(result.body));
 });
 
+app.get('/api/user/logout/', (req, res) => {
+  res.setHeader('Content-Type', 'application/json');
+  res.clearCookie('session');
+  res.send(JSON.stringify({ status: 'success' }));
+});
+
 // eslint-disable-next-line no-console
 app.listen(4000, () => console.log('Express server is running on localhost:4000'));
