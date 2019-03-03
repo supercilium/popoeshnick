@@ -22,8 +22,18 @@ const alkashProfile = {
       buhlishkoList: [
         {
           name: 'wine',
-          amount: 0.7,
-          lygrylity: 4,
+          amount: '0.7',
+          lg: '4',
+        },
+        {
+          name: 'wine',
+          amount: '0.7',
+          lg: '4',
+        },
+        {
+          name: 'wine',
+          amount: '0.7',
+          lg: '4',
         },
       ],
     },

@@ -99,7 +99,7 @@ export default class StartScreen extends Component {
             auth
             onLogout={this.handleLogout}
           />
-          <Home />
+          <Home {...profile} />
         </div>
       );
     }
