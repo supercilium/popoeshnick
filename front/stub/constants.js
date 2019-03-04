@@ -37,6 +37,33 @@ const alkashProfile = {
         },
       ],
     },
+    {
+      dateStart: '2019-02-25T04:06:10.570Z',
+      dateEnd: '2019-02-26T04:06:10.570Z',
+      location: 'outdoor',
+      budget: 3000,
+      currency: 'RUR',
+      mode: 'single',
+      lygrylityAmount: 30,
+      note: 'string note',
+      buhlishkoList: [
+        {
+          name: 'wine',
+          amount: '0.7',
+          lg: '4',
+        },
+        {
+          name: 'wine',
+          amount: '0.7',
+          lg: '4',
+        },
+        {
+          name: 'wine',
+          amount: '0.7',
+          lg: '4',
+        },
+      ],
+    },
   ],
 };
 
