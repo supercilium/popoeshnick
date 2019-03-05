@@ -8,11 +8,17 @@ import {
 import { library } from '@fortawesome/fontawesome-svg-core';
 // import font awesome icons
 import { faSpinner, faBars, faUser } from '@fortawesome/free-solid-svg-icons';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import whyDidYouUpdate from 'why-did-you-update';
 
 import { StartScreen } from './routers/startPage';
 import { Profile } from './routers/profile';
 import { Footer } from './components/footer';
 import { ROUT_CONST } from './constants';
+
+if (process.env.NODE_ENV !== 'production') {
+  whyDidYouUpdate(React);
+}
 
 // font awesome icons add here
 // only added icons will be loaded to bundle

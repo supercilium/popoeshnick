@@ -38,8 +38,8 @@ const alkashProfile = {
       ],
     },
     {
-      dateStart: '2019-02-25T04:06:10.570Z',
-      dateEnd: '2019-02-26T04:06:10.570Z',
+      dateStart: '2019-03-25T04:06:10.570Z',
+      dateEnd: '2019-03-26T04:06:10.570Z',
       location: 'outdoor',
       budget: 3000,
       currency: 'RUR',

@@ -96,7 +96,7 @@ export default class LoginForm extends Component {
     }).then((res) => {
       const { errors, profile, status } = res.data;
       if (status === 'success') {
-        onLogin({ profile });
+        onLogin(profile);
       } else {
         this.setState({
           errors: {

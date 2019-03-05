@@ -1,12 +1,21 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { PopoykaList } from '../popoyka';
 
-export default (props) => {
-  const { popoykaList } = props;
-  return (
-    <div>
-      <h2>Hello Alkash!</h2>
-      <PopoykaList {...props} />
-    </div>
-  );
+const Home = ({ popoykaList }) => (
+  <div>
+    <h2>Hello Alkash!</h2>
+    <PopoykaList data={popoykaList} />
+  </div>
+);
+
+
+Home.propTypes = {
+  popoykaList: PropTypes.array,
 };
+
+Home.defaultProps = {
+  popoykaList: [],
+};
+
+export default Home;

@@ -2,20 +2,14 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Buhlishko from './buhlishko';
 
-export const BuhlishkoList = (props) => {
-  const { buhlishkoList } = props;
-  return (
-    buhlishkoList.map((item, i) => <Buhlishko key={`${item.name}_${i}`} {...item} />)
-  );
-};
-
+export const BuhlishkoList = ({ data }) => data.map(item => <Buhlishko key={`${item.name}_${item.amount}_${item.lg}`} {...item} />);
 
 BuhlishkoList.propTypes = {
-  buhlishkoList: PropTypes.array,
+  data: PropTypes.array,
 };
 
 BuhlishkoList.defaultProps = {
-  buhlishkoList: [],
+  data: [],
 };
 
 export default BuhlishkoList;

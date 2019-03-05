@@ -1,11 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-export const Buhlishko = props => (
+const Buhlishko = ({ name, amount, lg }) => (
   <div>
-    <span>{props.name}</span>
-    <span>{props.amount}</span>
-    <span>{props.lg}</span>
+    <span style={{ display: 'inline-block', padding: '5px 15px' }}>{name}</span>
+    <span style={{ display: 'inline-block', padding: '5px 15px' }}>{amount}</span>
+    <span style={{ display: 'inline-block', padding: '5px 15px' }}>{lg}</span>
   </div>
 );
 

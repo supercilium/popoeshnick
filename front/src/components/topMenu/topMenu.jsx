@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { NavLink } from 'react-router-dom';
 import {
   AppBar,
   Toolbar,
@@ -37,9 +38,9 @@ export default class TopMenu extends React.Component {
             <div
               style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}
             >
-              <IconButton color="inherit" aria-label="Menu">
+              {/* <IconButton color="inherit" aria-label="Menu">
                 <FontAwesomeIcon icon="bars" />
-              </IconButton>
+              </IconButton> */}
               {/* eslint-disable-next-line react/jsx-one-expression-per-line */}
               <Typography variant="h6" color="inherit">
                 Popoeshnick.club
@@ -70,8 +71,12 @@ export default class TopMenu extends React.Component {
                   open={open}
                   onClose={this.handleClose}
                 >
-                  <MenuItem onClick={this.handleClose}>Profile</MenuItem>
-                  <MenuItem onClick={this.handleClose}>My account</MenuItem>
+                  <MenuItem onClick={this.handleClose}>
+                    <NavLink to="/profile">Profile</NavLink>
+                  </MenuItem>
+                  <MenuItem onClick={this.handleClose}>
+                    <NavLink to="/">Home</NavLink>
+                  </MenuItem>
                   <MenuItem onClick={onLogout}>Log Out</MenuItem>
                 </Menu>
               </div>
