@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 
 const Buhlishko = ({ name, amount, lg }) => (
   <div>
-    <span style={{ display: 'inline-block', padding: '5px 15px' }}>{name}</span>
-    <span style={{ display: 'inline-block', padding: '5px 15px' }}>{amount}</span>
-    <span style={{ display: 'inline-block', padding: '5px 15px' }}>{lg}</span>
+    <span style={{ display: 'inline-block', padding: '0 10px' }}>{name}</span>
+    <span style={{ display: 'inline-block', padding: '0 10px' }}>{`${amount} l`}</span>
+    <span style={{ display: 'inline-block', padding: '0 10px' }}>{`+ ${lg} LG`}</span>
   </div>
 );
 
