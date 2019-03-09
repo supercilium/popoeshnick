@@ -27,7 +27,6 @@ const Home = ({ popoykaList }) => (
   </div>
 );
 
-
 Home.propTypes = {
   popoykaList: PropTypes.array,
 };
