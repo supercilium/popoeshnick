@@ -85,10 +85,45 @@ export default class StartScreen extends Component {
     this.setState({ openForgot: true });
   }
 
+  renderContent = () => {
+    const { auth, profile } = this.state;
+    if (auth) {
+      return <Home {...profile} />;
+    }
+    return (
+      <header className="App-header">
+        <LoginForm
+          onLogin={this.handleLogin}
+        />
+        <Button
+          style={{ marginTop: '15px', marginBottom: '15px' }}
+          onClick={this.handleOpenForgot}
+        >
+          Forgot password?
+        </Button>
+        <Button
+          onClick={this.handleOpenSignup}
+        >
+          Registration
+        </Button>
+        <DialogSignup
+          // eslint-disable-next-line react/destructuring-assignment
+          open={this.state.openSignup}
+          onClose={this.handleCloseSignup}
+          onSend={this.handleSendQuery}
+        />
+        <DialogForgot
+          // eslint-disable-next-line react/destructuring-assignment
+          open={this.state.openForgot}
+          onClose={this.handleCloseForgot}
+        />
+      </header>
+    );
+  }
+
   render() {
     const {
       loader,
-      profile,
       auth,
     } = this.state;
     return (
@@ -96,39 +131,7 @@ export default class StartScreen extends Component {
         auth={auth}
         handleLogout={this.handleLogout}
       >
-        {loader && <Loader />}
-        {auth
-          ? <Home {...profile} />
-          : (
-            <header className="App-header">
-              <LoginForm
-                onLogin={this.handleLogin}
-              />
-              <Button
-                style={{ marginTop: '15px', marginBottom: '15px' }}
-                onClick={this.handleOpenForgot}
-              >
-                Forgot password?
-              </Button>
-              <Button
-                onClick={this.handleOpenSignup}
-              >
-                Registration
-              </Button>
-              <DialogSignup
-                // eslint-disable-next-line react/destructuring-assignment
-                open={this.state.openSignup}
-                onClose={this.handleCloseSignup}
-                onSend={this.handleSendQuery}
-              />
-              <DialogForgot
-                // eslint-disable-next-line react/destructuring-assignment
-                open={this.state.openForgot}
-                onClose={this.handleCloseForgot}
-              />
-            </header>
-          )
-        }
+        {loader ? <Loader /> : this.renderContent()}
       </Container>
     );
   }
