@@ -59,7 +59,7 @@ const Popoyka = ({
   const endDate = new Date(dateEnd);
   const period = (endDate - startDate) / 3600000;
   return (
-    <div style={{ padding: '0 16px' }}>
+    <div>
       <ExpansionPanel>
         <ExpansionPanelSummary classes={{ root: classes.root, content: classes.content }}>
           <div className={classes.innerFlex}>

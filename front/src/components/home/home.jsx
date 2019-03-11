@@ -4,6 +4,7 @@ import {
   Grid,
   Typography,
   Avatar,
+  Paper,
   withStyles,
 } from '@material-ui/core';
 import { PopoykaList } from '../popoyka';
@@ -17,6 +18,10 @@ const styles = ({
     width: 60,
     height: 60,
   },
+  wrapper: {
+    flexGrow: '1',
+    padding: '28px 8px 0',
+  },
 });
 
 
@@ -26,15 +31,19 @@ const Home = ({
   popoykaList,
   classes,
 }) => (
-  <div style={{ flexGrow: '1', padding: '28px 8px 0' }}>
+  <div className={classes.wrapper}>
     <Grid container spacing={16}>
       <Grid item xs={12}>
         <Typography variant="h2" gutterBottom>Hello Alkash!</Typography>
       </Grid>
       <Grid item xs={4} justify="center" alignItems="center">
-        <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" className={classes.bigAvatar} />
-        <Typography variant="body1" gutterBottom>{name}</Typography>
-        <Typography variant="body1" gutterBottom>{email}</Typography>
+        {/* TODO move to separate component AlkashCommons */}
+        <Typography variant="h6" gutterBottom>Your alkash profile</Typography>
+        <Paper style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '20px 0' }}>
+          <Avatar alt="Remy Sharp" className={classes.bigAvatar} />
+          <Typography variant="body1" gutterBottom>{name}</Typography>
+          <Typography variant="body1" gutterBottom>{email}</Typography>
+        </Paper>
       </Grid>
       <Grid item xs={4}>
         <Typography variant="h6" gutterBottom>Alkash regards</Typography>
