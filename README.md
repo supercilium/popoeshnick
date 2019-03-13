@@ -8,11 +8,16 @@ Features:
 - complete your current Popoyka and be in competition with over Alkashs in lygryls competition
 
 ## File structure:
-front/ - web interface
---src/ - source code
----components/ -react silly components
---stub/ - local mock server
-dummy/ - backend mock server
+```
+  front/ - web interface
+    src/ - source code
+      components/ - react silly components
+      constants/
+      routes/ - routes
+      utils/
+    stub/ - local mock server
+  dummy/ - backend mock server
+```
 
 ## Tech
 
