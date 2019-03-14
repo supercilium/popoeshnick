@@ -25,7 +25,7 @@ const styles = ({
 });
 
 
-const Home = ({
+const Home = React.memo(({
   name,
   email,
   popoykaList,
@@ -36,7 +36,7 @@ const Home = ({
       <Grid item xs={12}>
         <Typography variant="h2" gutterBottom>Hello Alkash!</Typography>
       </Grid>
-      <Grid item xs={4} justify="center" alignItems="center">
+      <Grid item xs={4}>
         {/* TODO move to separate component AlkashCommons */}
         <Typography variant="h6" gutterBottom>Your alkash profile</Typography>
         <Paper style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '20px 0' }}>
@@ -54,7 +54,7 @@ const Home = ({
       </Grid>
     </Grid>
   </div>
-);
+));
 
 
 Home.propTypes = {

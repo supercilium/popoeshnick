@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import {
   Button,
   Dialog,
@@ -14,7 +14,7 @@ import './dialog.css';
 import { validateEmail, validatePass, instance } from '../../utils';
 import { Loader } from '../loader';
 
-export default class DialogSignup extends Component {
+export default class DialogSignup extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {

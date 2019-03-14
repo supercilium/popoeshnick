@@ -43,7 +43,7 @@ const styles = theme => ({
   // },
 });
 
-const Popoyka = ({
+const Popoyka = React.memo(({
   buhlishkoList,
   dateStart,
   dateEnd,
@@ -82,7 +82,7 @@ const Popoyka = ({
       </ExpansionPanel>
     </div>
   );
-};
+});
 
 Popoyka.propTypes = {
   buhlishkoList: PropTypes.array,

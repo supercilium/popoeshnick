@@ -11,7 +11,7 @@ import {
 } from '@material-ui/core';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-export default class TopMenu extends React.Component {
+export default class TopMenu extends React.PureComponent {
   state = {
     anchorEl: null,
   };

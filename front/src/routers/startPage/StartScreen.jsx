@@ -1,5 +1,5 @@
 /* eslint-disable react/jsx-one-expression-per-line */
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import {
   Button,
 } from '@material-ui/core';
@@ -18,7 +18,7 @@ import {
 } from '../../components';
 
 const cookies = new Cookies();
-export default class StartScreen extends Component {
+export default class StartScreen extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {

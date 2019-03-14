@@ -5,7 +5,7 @@ import { TopMenu } from '../../components';
 import { API_CONST } from '../../constants';
 
 
-export default class Profile extends React.Component {
+export default class Profile extends React.PureComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -33,4 +33,4 @@ export default class Profile extends React.Component {
       </div>
     );
   }
-};
+}
