@@ -1,5 +1,5 @@
 /* eslint-disable react/jsx-one-expression-per-line */
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import {
   TextField,
   Button,
@@ -48,7 +48,7 @@ const INPUT = {
   width: '260px',
 };
 
-export default class LoginForm extends Component {
+export default class LoginForm extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -96,7 +96,7 @@ export default class LoginForm extends Component {
     }).then((res) => {
       const { errors, profile, status } = res.data;
       if (status === 'success') {
-        onLogin({ profile });
+        onLogin(profile);
       } else {
         this.setState({
           errors: {

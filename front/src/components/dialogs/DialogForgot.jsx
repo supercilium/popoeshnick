@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import {
   TextField,
   Button,
@@ -15,7 +15,7 @@ import './dialog.css';
 import { validateEmail } from '../../utils';
 import { API_CONST } from '../../constants';
 
-export default class DialogForgot extends Component {
+export default class DialogForgot extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {

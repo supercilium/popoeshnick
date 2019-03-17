@@ -1,10 +1,9 @@
 /* eslint-disable react/jsx-one-expression-per-line */
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import {
   Button,
 } from '@material-ui/core';
 import axios from 'axios';
-import _ from 'lodash';
 import Cookies from 'universal-cookie';
 import { API_CONST } from '../../constants';
 
@@ -15,16 +14,18 @@ import {
   DialogForgot,
   Loader,
   Home,
+  Container,
 } from '../../components';
 
 const cookies = new Cookies();
-export default class StartScreen extends Component {
+export default class StartScreen extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
       openSignup: false,
       openForgot: false,
       loader: true,
+      auth: null,
       profile: {},
     };
   }
@@ -36,7 +37,7 @@ export default class StartScreen extends Component {
       axios.get(API_CONST.PROFILE).then((res) => {
         const { errors, profile, status } = res.data;
         if (status === 'success') {
-          this.setState({ profile });
+          this.setState({ profile, auth: true });
         } else {
           console.log(errors);
         }
@@ -44,11 +45,27 @@ export default class StartScreen extends Component {
         console.log(error);
       }).then(() => this.setState({ loader: false }));
     } else {
-      this.setState({ loader: false });
+      this.setState({ loader: false, auth: false });
     }
   }
 
-  handleLogin = profile => this.setState({ profile });
+  handleLogin = profile => this.setState({ profile, auth: true });
+
+  handleLogout = () => {
+    axios.get(API_CONST.LOGOUT).then(() => {
+      this.setState({
+        openSignup: false,
+        openForgot: false,
+        loader: true,
+        profile: {},
+        auth: false,
+      });
+    }).then(() => {
+      this.setState({
+        loader: false,
+      });
+    });
+  }
 
   handleSendQuery = profile => this.setState({ profile })
 
@@ -68,47 +85,54 @@ export default class StartScreen extends Component {
     this.setState({ openForgot: true });
   }
 
+  renderContent = () => {
+    const { auth, profile } = this.state;
+    if (auth) {
+      return <Home {...profile} />;
+    }
+    return (
+      <header className="App-header">
+        <LoginForm
+          onLogin={this.handleLogin}
+        />
+        <Button
+          style={{ marginTop: '15px', marginBottom: '15px' }}
+          onClick={this.handleOpenForgot}
+        >
+          Forgot password?
+        </Button>
+        <Button
+          onClick={this.handleOpenSignup}
+        >
+          Registration
+        </Button>
+        <DialogSignup
+          // eslint-disable-next-line react/destructuring-assignment
+          open={this.state.openSignup}
+          onClose={this.handleCloseSignup}
+          onSend={this.handleSendQuery}
+        />
+        <DialogForgot
+          // eslint-disable-next-line react/destructuring-assignment
+          open={this.state.openForgot}
+          onClose={this.handleCloseForgot}
+        />
+      </header>
+    );
+  }
+
   render() {
     const {
       loader,
-      profile,
+      auth,
     } = this.state;
-    if (loader) {
-      return <Loader />;
-    }
-    if (!_.isEmpty(profile)) {
-      return <Home />;
-    }
     return (
-      <div className="start">
-        <header className="App-header">
-          <LoginForm
-            onLogin={this.handleLogin}
-          />
-          <Button
-            style={{ marginTop: '15px', marginBottom: '15px' }}
-            onClick={this.handleOpenForgot}
-          >
-            Forgot password?
-          </Button>
-          <Button
-            onClick={this.handleOpenSignup}
-          >
-            Registration
-          </Button>
-          <DialogSignup
-            // eslint-disable-next-line react/destructuring-assignment
-            open={this.state.openSignup}
-            onClose={this.handleCloseSignup}
-            onSend={this.handleSendQuery}
-          />
-          <DialogForgot
-            // eslint-disable-next-line react/destructuring-assignment
-            open={this.state.openForgot}
-            onClose={this.handleCloseForgot}
-          />
-        </header>
-      </div>
+      <Container
+        auth={auth}
+        handleLogout={this.handleLogout}
+      >
+        {loader ? <Loader /> : this.renderContent()}
+      </Container>
     );
   }
 }
