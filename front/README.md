@@ -27,6 +27,15 @@ Your app is ready to be deployed!
 
 See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
+### `npm run dev`
+
+Starts app with mock backend server Express served at localhost:4000.
+
+### `npm run analyze`
+
+Analyze source-maps of the bundle.
+To try it change in the `.env` file parameter `GENERATE_SOURCEMAP` to `true` and run `npm run build` then `npm run analyze`
+
 ### `npm run eject`
 
 **Note: this is a one-way operation. Once you `eject`, you can’t go back!**
