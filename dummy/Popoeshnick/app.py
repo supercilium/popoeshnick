@@ -15,8 +15,8 @@ db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 
 
-class User(db.Model):
-    __tablename__ = 'users'
+class Alkash(db.Model):
+    __tablename__ = 'alkashi'
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(64), unique=True)
     email = db.Column(db.String(120), unique=True)
@@ -24,7 +24,7 @@ class User(db.Model):
 
 #SPIZDILA, HZ KAK ONO RABOTAET
     @classmethod
-    def add_user(cls, **kw):
+    def add_alkash(cls, **kw):
         obj = cls(**kw)
         db.session.add(obj)
         db.session.commit()
@@ -34,19 +34,19 @@ class User(db.Model):
         else: return False
 
 
-    def get_user_by_uname(self, username):
+    def get_alkash_by_uname(self, username):
         pass
 
-    def get_user_by_id(self, id):
+    def get_alkash_by_id(self, id):
         pass
 
-    def get_user_by_email(self, email):
+    def get_alkash_by_email(self, email):
         pass
 
 
 
-class Popoika(db.Model):
-    __tablename__ = 'popoika'
+class Popoyka(db.Model):
+    __tablename__ = 'popoyka'
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(120))
     dtbeg = db.Column(db.DateTime)
@@ -55,10 +55,10 @@ class Popoika(db.Model):
     location = db.Column(db.String(120))
     ligrylity = db.Column(db.Integer)
 
-    def get_popoika_by_id(self, id):
+    def get_popoyka_by_id(self, id):
         pass
 
-    def add_popoika(self):
+    def add_popoyka(self):
         pass
 
 
@@ -78,13 +78,13 @@ class Bukhlishko(db.Model):
 
 alk_to_popo = db.Table('alk_to_popo',
     db.Column('id', db.Integer, primary_key=True),
-    db.Column('alk_id', db.Integer, db.ForeignKey('users.id')),
-    db.Column('popo_id', db.Integer, db.ForeignKey('popoika.id'))
+    db.Column('alk_id', db.Integer, db.ForeignKey('alkashi.id')),
+    db.Column('popo_id', db.Integer, db.ForeignKey('popoyka.id'))
 )
 
-popo_to_bubkh = db.Table('popo_to_bubkh',
+popo_to_bubkh = db.Table('popo_to_bukh',
     db.Column('id', db.Integer, primary_key=True),
-    db.Column('popo_id', db.Integer, db.ForeignKey('popoika.id')),
+    db.Column('popo_id', db.Integer, db.ForeignKey('popoyka.id')),
     db.Column('bukh_id', db.Integer, db.ForeignKey('bukhlishko.id'))
 
 )
@@ -102,7 +102,7 @@ class RegLogForm(FlaskForm):
 def login():
     form = RegLogForm(flask.request.form)
     if form.validate():
-        usr = User()
+        usr = Alkash()
         if usr.is_registered_email(email=form.email.data):
             psswd = form.password.data
             if check_password_hash(usr.password_hash, psswd):
@@ -122,7 +122,7 @@ def login():
 @app.route('/api/user/registration/', methods=['GET','POST'])
 def registration():
     form = RegLogForm(flask.request.form)
-    usr = User()
+    usr = Alkash()
     if form.validate():
         if not usr.is_registered_email(email=form.email.data):
             usr.add_user(email=form.email.data, password_hash = generate_password_hash(form.password.data))
