@@ -6,6 +6,7 @@ import {
   Avatar,
   Paper,
   withStyles,
+  Button,
 } from '@material-ui/core';
 import { PopoykaList } from '../popoyka';
 
@@ -35,6 +36,7 @@ const Home = React.memo(({
     <Grid container spacing={16}>
       <Grid item xs={12}>
         <Typography variant="h2" gutterBottom>Hello Alkash!</Typography>
+        <Button variant="contained" color="primary">Start New Popoyka</Button>
       </Grid>
       <Grid item xs={4}>
         {/* TODO move to separate component AlkashCommons */}

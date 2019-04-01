@@ -5,34 +5,48 @@ import {
   AppBar,
   Toolbar,
   Typography,
-  IconButton,
-  MenuItem,
-  Menu,
+  withStyles,
+  // IconButton,
+  // MenuItem,
+  // Menu,
 } from '@material-ui/core';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-export default class TopMenu extends React.PureComponent {
-  state = {
-    anchorEl: null,
-  };
+// eslint-disable-next-line no-unused-vars
+const styles = theme => ({
+  navLink: {
+    color: '#fff',
+    textDecoration: 'none',
+  },
+});
 
-  handleMenu = (event) => {
-    this.setState({ anchorEl: event.currentTarget });
-  };
+export class TopMenu extends React.PureComponent {
+  // state = {
+  //   anchorEl: null,
+  // };
 
-  handleClose = () => {
-    this.setState({ anchorEl: null });
-  };
+  // handleMenu = (event) => {
+  //   this.setState({ anchorEl: event.currentTarget });
+  // };
+
+  // handleClose = () => {
+  //   this.setState({ anchorEl: null });
+  // };
 
   render() {
-    const { anchorEl } = this.state;
-    const { auth, onLogout } = this.props;
-    const open = Boolean(anchorEl);
+    // const { anchorEl } = this.state;
+    const {
+      auth,
+      classes,
+      // onLogout
+    } = this.props;
+    // const open = Boolean(anchorEl);
 
     return (
       <div>
         <AppBar position="static">
           <Toolbar
+            variant="dense"
             style={{ justifyContent: 'space-between' }}
           >
             <div
@@ -43,12 +57,13 @@ export default class TopMenu extends React.PureComponent {
               </IconButton> */}
               {/* eslint-disable-next-line react/jsx-one-expression-per-line */}
               <Typography variant="h6" color="inherit">
-                Popoeshnick.club
+                <NavLink className={classes.navLink} to="/">Popoeshnick.club</NavLink>
               </Typography>
             </div>
             {auth && (
               <div>
-                <IconButton
+                <NavLink className={classes.navLink} to="/profile">Profile</NavLink>
+                {/* <IconButton
                   aria-owns={open ? 'menu-appbar' : undefined}
                   aria-haspopup="true"
                   onClick={this.handleMenu}
@@ -72,13 +87,11 @@ export default class TopMenu extends React.PureComponent {
                   onClose={this.handleClose}
                 >
                   <MenuItem onClick={this.handleClose}>
-                    <NavLink to="/profile">Profile</NavLink>
                   </MenuItem>
                   <MenuItem onClick={this.handleClose}>
-                    <NavLink to="/">Home</NavLink>
                   </MenuItem>
                   <MenuItem onClick={onLogout}>Log Out</MenuItem>
-                </Menu>
+                </Menu> */}
               </div>
             )}
           </Toolbar>
@@ -89,11 +102,15 @@ export default class TopMenu extends React.PureComponent {
 }
 
 TopMenu.propTypes = {
+  classes: PropTypes.any,
   onLogout: PropTypes.func,
   auth: PropTypes.bool,
 };
 
 TopMenu.defaultProps = {
+  classes: {},
   auth: false,
   onLogout: () => {},
 };
+
+export default withStyles(styles)(TopMenu);
