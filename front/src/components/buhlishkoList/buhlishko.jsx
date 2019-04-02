@@ -1,11 +1,24 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { withStyles } from '@material-ui/core';
 
-const Buhlishko = React.memo(({ name, amount, lg }) => (
+const styles = {
+  span: {
+    display: 'inline-block',
+    padding: '0 10px',
+  },
+};
+
+const Buhlishko = React.memo(({
+  name,
+  amount,
+  lg,
+  classes,
+}) => (
   <div>
-    <span style={{ display: 'inline-block', padding: '0 10px' }}>{name}</span>
-    <span style={{ display: 'inline-block', padding: '0 10px' }}>{`${amount} l`}</span>
-    <span style={{ display: 'inline-block', padding: '0 10px' }}>{`+ ${lg} LG`}</span>
+    <span className={classes.span}>{name}</span>
+    <span className={classes.span}>{`${amount} l`}</span>
+    <span className={classes.span}>{`+ ${lg} LG`}</span>
   </div>
 ));
 
@@ -13,6 +26,7 @@ Buhlishko.propTypes = {
   name: PropTypes.string,
   amount: PropTypes.string,
   lg: PropTypes.string,
+  classes: PropTypes.object.isRequired,
 };
 
 Buhlishko.defaultProps = {
@@ -21,4 +35,4 @@ Buhlishko.defaultProps = {
   lg: '',
 };
 
-export default Buhlishko;
+export default withStyles(styles)(Buhlishko);

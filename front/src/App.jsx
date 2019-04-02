@@ -7,7 +7,13 @@ import {
 } from 'react-router-dom';
 import { library } from '@fortawesome/fontawesome-svg-core';
 // import font awesome icons
-import { faSpinner, faBars, faUser } from '@fortawesome/free-solid-svg-icons';
+import {
+  faSpinner,
+  faBars,
+  faUser,
+  faSignOutAlt,
+  faUserCog,
+} from '@fortawesome/free-solid-svg-icons';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import whyDidYouUpdate from 'why-did-you-update';
 
@@ -19,13 +25,14 @@ import { ROUT_CONST } from './constants';
 if (process.env.NODE_ENV !== 'production') {
   whyDidYouUpdate(React);
 }
-
 // font awesome icons add here
 // only added icons will be loaded to bundle
 library.add(
   faSpinner,
   faBars,
   faUser,
+  faSignOutAlt,
+  faUserCog,
 );
 
 const App = () => (

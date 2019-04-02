@@ -6,17 +6,22 @@ import {
   Toolbar,
   Typography,
   withStyles,
+  IconButton,
   // IconButton,
   // MenuItem,
   // Menu,
 } from '@material-ui/core';
-// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-// eslint-disable-next-line no-unused-vars
 const styles = theme => ({
   navLink: {
     color: '#fff',
     textDecoration: 'none',
+  },
+  btnRoot: {
+    color: '#fff',
+    fontSize: theme.typography.pxToRem(16),
+    padding: 8,
   },
 });
 
@@ -38,7 +43,7 @@ export class TopMenu extends React.PureComponent {
     const {
       auth,
       classes,
-      // onLogout
+      onLogout,
     } = this.props;
     // const open = Boolean(anchorEl);
 
@@ -62,7 +67,14 @@ export class TopMenu extends React.PureComponent {
             </div>
             {auth && (
               <div>
-                <NavLink className={classes.navLink} to="/profile">Profile</NavLink>
+                <IconButton classes={{ root: classes.btnRoot }}>
+                  <NavLink className={classes.navLink} to="/profile" title="Profile">
+                    <FontAwesomeIcon icon="user" />
+                  </NavLink>
+                </IconButton>
+                <IconButton classes={{ root: classes.btnRoot }} title="Log Out" onClick={onLogout}>
+                  <FontAwesomeIcon icon="sign-out-alt" />
+                </IconButton>
                 {/* <IconButton
                   aria-owns={open ? 'menu-appbar' : undefined}
                   aria-haspopup="true"
@@ -70,7 +82,6 @@ export class TopMenu extends React.PureComponent {
                   color="inherit"
                   style={{ float: 'right' }}
                 >
-                  <FontAwesomeIcon icon="user" />
                 </IconButton>
                 <Menu
                   id="menu-appbar"

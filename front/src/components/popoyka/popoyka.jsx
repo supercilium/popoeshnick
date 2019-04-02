@@ -9,8 +9,7 @@ import {
 } from '@material-ui/core';
 import { BuhlishkoList } from '../buhlishkoList';
 
-// eslint-disable-next-line no-unused-vars
-const styles = theme => ({
+const styles = {
   root: {
     flexDirection: 'row',
   },
@@ -41,7 +40,7 @@ const styles = theme => ({
   //   backgroundColor: '#ddd',
   //   lineHeight: '48px',
   // },
-});
+};
 
 const Popoyka = React.memo(({
   buhlishkoList,
@@ -94,7 +93,7 @@ Popoyka.propTypes = {
   mode: PropTypes.string,
   lygrylityAmount: PropTypes.number,
   note: PropTypes.string,
-  classes: PropTypes.object,
+  classes: PropTypes.object.isRequired,
 };
 
 Popoyka.defaultProps = {
@@ -107,7 +106,6 @@ Popoyka.defaultProps = {
   mode: '',
   lygrylityAmount: 0,
   note: '',
-  classes: {},
 };
 
 export default withStyles(styles)(Popoyka);

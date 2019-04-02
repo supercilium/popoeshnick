@@ -8,6 +8,7 @@ import {
   withStyles,
   Button,
 } from '@material-ui/core';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { PopoykaList } from '../popoyka';
 
 const styles = ({
@@ -23,7 +24,38 @@ const styles = ({
     flexGrow: '1',
     padding: '28px 8px 0',
   },
+  btnRoot: {
+    minWidth: '24px',
+  },
 });
+
+const AlkshCard = ({ classes, name, email }) => (
+  <Paper
+    style={{
+      display: 'flex',
+      flexDirection: 'row',
+      alignItems: 'center',
+      padding: '20px 0',
+      justifyContent: 'space-between',
+    }}
+  >
+    <div style={{ padding: '0 20px' }}>
+      <Avatar alt="Remy Sharp" className={classes.bigAvatar} />
+    </div>
+    <div style={{ textAlign: 'left' }}>
+      <Typography variant="body1" gutterBottom>{name}</Typography>
+      <Typography variant="body1" gutterBottom>{email}</Typography>
+      <Typography variant="body1" gutterBottom>Your rank is &quot;Newbie&quot;</Typography>
+    </div>
+    <div>
+      <Button
+        classes={{ root: classes.btnRoot }}
+      >
+        <FontAwesomeIcon icon="user-cog" />
+      </Button>
+    </div>
+  </Paper>
+);
 
 
 const Home = React.memo(({
@@ -35,17 +67,13 @@ const Home = React.memo(({
   <div className={classes.wrapper}>
     <Grid container spacing={16}>
       <Grid item xs={12}>
-        <Typography variant="h2" gutterBottom>Hello Alkash!</Typography>
+        <Typography variant="h4" gutterBottom>Hello Alkash!</Typography>
         <Button variant="contained" color="primary">Start New Popoyka</Button>
       </Grid>
       <Grid item xs={4}>
         {/* TODO move to separate component AlkashCommons */}
         <Typography variant="h6" gutterBottom>Your alkash profile</Typography>
-        <Paper style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '20px 0' }}>
-          <Avatar alt="Remy Sharp" className={classes.bigAvatar} />
-          <Typography variant="body1" gutterBottom>{name}</Typography>
-          <Typography variant="body1" gutterBottom>{email}</Typography>
-        </Paper>
+        <AlkshCard {...{ classes, name, email }} />
       </Grid>
       <Grid item xs={4}>
         <Typography variant="h6" gutterBottom>Alkash regards</Typography>

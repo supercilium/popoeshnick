@@ -1,13 +1,12 @@
 /* eslint-disable react/jsx-one-expression-per-line */
 import React, { PureComponent } from 'react';
 import {
-  Button,
+  Button, withStyles,
 } from '@material-ui/core';
 import axios from 'axios';
 import Cookies from 'universal-cookie';
 import { API_CONST } from '../../constants';
 
-import './StartScreen.css';
 import {
   LoginForm,
   DialogSignup,
@@ -17,8 +16,21 @@ import {
   Container,
 } from '../../components';
 
+const styles = {
+  appHeader: {
+    backgroundColor: '#fff',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    // fontSize: calc(10px + 2vmin),
+    color: 'rgb(223, 17, 17)',
+    minHeight: '100vh',
+    /* padding: 0 30px 40px; */
+  },
+};
 const cookies = new Cookies();
-export default class StartScreen extends PureComponent {
+export class StartScreen extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -87,11 +99,12 @@ export default class StartScreen extends PureComponent {
 
   renderContent = () => {
     const { auth, profile } = this.state;
+    const { classes } = this.props;
     if (auth) {
       return <Home {...profile} />;
     }
     return (
-      <header className="App-header">
+      <header className={classes.appHeader}>
         <LoginForm
           onLogin={this.handleLogin}
         />
@@ -136,3 +149,5 @@ export default class StartScreen extends PureComponent {
     );
   }
 }
+
+export default withStyles(styles)(StartScreen);
