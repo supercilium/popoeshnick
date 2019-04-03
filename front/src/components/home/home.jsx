@@ -4,9 +4,13 @@ import {
   Grid,
   Typography,
   Avatar,
-  Paper,
+  Card,
+  CardHeader,
+  CardContent,
+  CardActions,
   withStyles,
   Button,
+  IconButton,
 } from '@material-ui/core';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { PopoykaList } from '../popoyka';
@@ -29,40 +33,61 @@ const styles = ({
   },
 });
 
-const AlkshCard = ({ classes, name, email }) => (
-  <Paper
-    style={{
-      display: 'flex',
-      flexDirection: 'row',
-      alignItems: 'center',
-      padding: '20px 0',
-      justifyContent: 'space-between',
-    }}
+const AlkashCard = ({ name, email, lygrylity }) => (
+  <Card
+    style={{ textAlign: 'left' }}
   >
-    <div style={{ padding: '0 20px' }}>
+    <CardHeader
+      avatar={
+        (
+          // eslint-disable-next-line react/jsx-one-expression-per-line
+          <Avatar aria-label="Recipe">
+            R
+          </Avatar>
+        )
+      }
+      action={
+        (
+          <IconButton>
+            <FontAwesomeIcon icon="user-cog" />
+          </IconButton>
+        )
+      }
+      title={name}
+      subheader={email}
+    />
+    {/* <div style={{ padding: '0 20px' }}>
       <Avatar alt="Remy Sharp" className={classes.bigAvatar} />
-    </div>
-    <div style={{ textAlign: 'left' }}>
-      <Typography variant="body1" gutterBottom>{name}</Typography>
-      <Typography variant="body1" gutterBottom>{email}</Typography>
-      <Typography variant="body1" gutterBottom>Your rank is &quot;Newbie&quot;</Typography>
-    </div>
-    <div>
-      <Button
-        classes={{ root: classes.btnRoot }}
-      >
-        <FontAwesomeIcon icon="user-cog" />
-      </Button>
-    </div>
-  </Paper>
+    </div> */}
+    <CardContent>
+      <Typography paragraph>{`You have ${lygrylity} lygryls`}</Typography>
+      <Typography paragraph>Your rank is &quot;Newbie&quot;</Typography>
+    </CardContent>
+    <CardActions>
+      <Button>Overview</Button>
+      <Button>More info</Button>
+    </CardActions>
+  </Card>
 );
 
+AlkashCard.propTypes = {
+  name: PropTypes.string,
+  email: PropTypes.string,
+  lygrylity: PropTypes.number,
+};
+
+AlkashCard.defaultProps = {
+  name: 'Unnamed',
+  email: 'unnamed@nowhere',
+  lygrylity: 0,
+};
 
 const Home = React.memo(({
   name,
   email,
   popoykaList,
   classes,
+  lygrylity,
 }) => (
   <div className={classes.wrapper}>
     <Grid container spacing={16}>
@@ -72,8 +97,8 @@ const Home = React.memo(({
       </Grid>
       <Grid item xs={4}>
         {/* TODO move to separate component AlkashCommons */}
-        <Typography variant="h6" gutterBottom>Your alkash profile</Typography>
-        <AlkshCard {...{ classes, name, email }} />
+        {/* <Typography variant="h6" gutterBottom>Your alkash profile</Typography> */}
+        <AlkashCard {...{ name, email, lygrylity }} />
       </Grid>
       <Grid item xs={4}>
         <Typography variant="h6" gutterBottom>Alkash regards</Typography>
@@ -92,12 +117,14 @@ Home.propTypes = {
   email: PropTypes.string,
   classes: PropTypes.object.isRequired,
   popoykaList: PropTypes.array,
+  lygrylity: PropTypes.number,
 };
 
 Home.defaultProps = {
   name: '',
   email: '',
   popoykaList: [],
+  lygrylity: 0,
 };
 
 
