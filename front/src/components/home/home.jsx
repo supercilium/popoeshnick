@@ -25,11 +25,28 @@ const styles = ({
     height: 60,
   },
   wrapper: {
+    display: 'flex',
+    flexWrap: 'wrap',
     flexGrow: '1',
-    padding: '28px 8px 0',
+    padding: '8px',
+  },
+  leftWrapper: {
+    flexGrow: '0.7',
+    padding: '0 8px',
+  },
+  rightWrapper: {
+    flexGrow: '0.3',
+    margin: '-8px',
+    backgroundColor: '#fff',
+    height: '100vh',
   },
   btnRoot: {
-    minWidth: '24px',
+    marginLeft: '24px',
+  },
+  typographyRoot: {
+    // textAlign: 'left',
+    marginTop: '25px',
+    color: '#fff',
   },
 });
 
@@ -90,24 +107,43 @@ const Home = React.memo(({
   lygrylity,
 }) => (
   <div className={classes.wrapper}>
-    <Grid container spacing={16}>
-      <Grid item xs={12}>
-        <Typography variant="h4" gutterBottom>Hello Alkash!</Typography>
-        <Button variant="contained" color="primary">Start New Popoyka</Button>
+    {/* <Grid container spacing={16}> */}
+    <div className={classes.leftWrapper}>
+      <Grid container xs={12} spacing={16}>
+        <Grid item xs={12}>
+          <Typography
+            variant="h5"
+            classes={{ root: classes.typographyRoot }}
+            gutterBottom
+            // eslint-disable-next-line react/jsx-one-expression-per-line
+          >
+            Hello Alkash!
+            <Button
+              variant="contained"
+              color="primary"
+              classes={{ root: classes.btnRoot }}
+            // eslint-disable-next-line react/jsx-one-expression-per-line
+            >
+              Start New Popoyka
+            </Button>
+          </Typography>
+        </Grid>
+        <Grid item xs={6}>
+          <AlkashCard {...{ name, email, lygrylity }} />
+        </Grid>
+        <Grid item xs={6}>
+          {/* <div style={{ marginTop: '56px' }} /> */}
+          <AlkashCard {...{ name: 'Team Score', email: 'placeholder', lygrylity: 25 }} />
+          {/* <AlkashCard {...{ name: 'Mr. Liver\'s advices', email: 'placeholder', lygrylity: 25 }} /> */}
+        </Grid>
       </Grid>
-      <Grid item xs={4}>
-        {/* TODO move to separate component AlkashCommons */}
-        {/* <Typography variant="h6" gutterBottom>Your alkash profile</Typography> */}
-        <AlkashCard {...{ name, email, lygrylity }} />
-      </Grid>
-      <Grid item xs={4}>
-        <Typography variant="h6" gutterBottom>Alkash regards</Typography>
-        <Typography variant="h6" gutterBottom style={{ marginTop: '100px' }}>Mr&apos;s Liver advices</Typography>
-      </Grid>
-      <Grid item xs={4}>
-        <PopoykaList data={popoykaList} />
-      </Grid>
-    </Grid>
+    </div>
+    <div className={classes.rightWrapper}>
+      {/* <Grid item xs={4} classes={{ item: classes.item }}> */}
+      <PopoykaList data={popoykaList} />
+      {/* </Grid> */}
+    </div>
+    {/* </Grid> */}
   </div>
 ));
 

@@ -1,6 +1,6 @@
 /* eslint-disable react/jsx-one-expression-per-line */
 import React from 'react';
-import './App.css';
+import PropTypes from 'prop-types';
 import {
   BrowserRouter as Router,
   Route,
@@ -14,12 +14,16 @@ import {
   faSignOutAlt,
   faUserCog,
 } from '@fortawesome/free-solid-svg-icons';
+import {
+  withStyles,
+} from '@material-ui/core';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import whyDidYouUpdate from 'why-did-you-update';
+import Image from './bg.jpg';
 
 import { StartScreen } from './routers/startPage';
 import { Profile } from './routers/profile';
-import { Footer } from './components/footer';
+// import { Footer } from './components/footer';
 import { ROUT_CONST } from './constants';
 
 if (process.env.NODE_ENV !== 'production') {
@@ -35,19 +39,32 @@ library.add(
   faUserCog,
 );
 
-const App = () => (
+const styles = {
+  app: {
+    textAlign: 'center',
+  },
+  appContainer: {
+    minHeight: '100vh',
+    backgroundImage: `url(${Image})`,
+  },
+};
+
+const App = ({ classes }) => (
   <Router>
-    <div className="App">
-      <div className="App-container">
+    <div className={classes.app}>
+      <div className={classes.appContainer}>
         {/* <StartScreen /> */}
         <Route exact path="/" component={StartScreen} />
         <Route path={`/${ROUT_CONST.PROFILE_PAGE}`} component={Profile} />
         {/* TODO <Footer> component */}
-        <Footer />
+        {/* <Footer /> */}
       </div>
     </div>
   </Router>
 );
 
+App.propTypes = {
+  classes: PropTypes.object.isRequired,
+};
 
-export default App;
+export default withStyles(styles)(App);
