@@ -6,6 +6,7 @@ import {
   DialogTitle,
   DialogContent,
   Typography,
+  withStyles,
 } from '@material-ui/core';
 import axios from 'axios';
 import _ from 'lodash';
@@ -15,7 +16,12 @@ import './dialog.css';
 import { validateEmail } from '../../utils';
 import { API_CONST } from '../../constants';
 
-export default class DialogForgot extends PureComponent {
+const styles = ({
+  button: {
+    marginTop: '20px',
+  },
+});
+export class DialogForgot extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -92,7 +98,7 @@ export default class DialogForgot extends PureComponent {
   }
 
   render() {
-    const { open, onClose } = this.props;
+    const { open, onClose, classes } = this.props;
     const {
       infoSent,
       titleText,
@@ -111,15 +117,7 @@ export default class DialogForgot extends PureComponent {
           <DialogContent>
             <div className="dialog-style">
               {errors.recovery && <Typography component="subtitle1" variant="subtitle1">{errors.recovery}</Typography>}
-              <Button
-                variant="contained"
-                color="primary"
-                style={{ marginTop: '20px' }}
-                onClick={onClose}
-                // eslint-disable-next-line react/jsx-one-expression-per-line
-              >
-                Close
-              </Button>
+              <Button>Close</Button>
             </div>
           </DialogContent>
         </Dialog>
@@ -148,7 +146,7 @@ export default class DialogForgot extends PureComponent {
             <Button
               variant="contained"
               color="primary"
-              style={{ marginTop: '20px' }}
+              classes={{ root: classes.button }}
               type="submit"
               disabled={!email || emailError}
             // eslint-disable-next-line react/jsx-one-expression-per-line
@@ -165,4 +163,7 @@ export default class DialogForgot extends PureComponent {
 DialogForgot.propTypes = {
   open: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
+  classes: PropTypes.any.isRequired,
 };
+
+export default withStyles(styles)(DialogForgot);

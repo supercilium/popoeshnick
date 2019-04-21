@@ -5,6 +5,7 @@ import {
   DialogTitle,
   DialogContent,
   TextField,
+  withStyles,
 } from '@material-ui/core';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
@@ -14,7 +15,12 @@ import './dialog.css';
 import { validateEmail, validatePass, instance } from '../../utils';
 import { Loader } from '../loader';
 
-export default class DialogSignup extends PureComponent {
+const styles = ({
+  button: {
+    marginTop: '20px',
+  },
+});
+export class DialogSignup extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -126,7 +132,7 @@ export default class DialogSignup extends PureComponent {
   }
 
   render() {
-    const { open, onClose } = this.props;
+    const { open, onClose, classes } = this.props;
     const {
       loading,
       errors,
@@ -176,7 +182,7 @@ export default class DialogSignup extends PureComponent {
                   <Button
                     variant="contained"
                     color="primary"
-                    style={{ marginTop: '20px' }}
+                    classes={{ root: classes.button }}
                     type="submit"
                     disabled={!email || !password || !passwordIdentity || (passError || emailError)}
                   // eslint-disable-next-line react/jsx-one-expression-per-line
@@ -196,4 +202,7 @@ DialogSignup.propTypes = {
   open: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
   onSend: PropTypes.func.isRequired,
+  classes: PropTypes.any.isRequired,
 };
+
+export default withStyles(styles)(DialogSignup);

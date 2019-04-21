@@ -5,7 +5,9 @@ import {
 } from '@material-ui/core';
 import axios from 'axios';
 import Cookies from 'universal-cookie';
+import PropTypes from 'prop-types';
 import { API_CONST } from '../../constants';
+
 
 import {
   LoginForm,
@@ -15,6 +17,7 @@ import {
   Home,
   Container,
 } from '../../components';
+
 
 const styles = {
   appHeader: {
@@ -27,6 +30,10 @@ const styles = {
     color: 'rgb(223, 17, 17)',
     minHeight: '100vh',
     /* padding: 0 30px 40px; */
+  },
+  button: {
+    marginTop: '15px',
+    marginBottom: '15px',
   },
 };
 const cookies = new Cookies();
@@ -109,7 +116,7 @@ export class StartScreen extends PureComponent {
           onLogin={this.handleLogin}
         />
         <Button
-          style={{ marginTop: '15px', marginBottom: '15px' }}
+          classes={{ root: classes.button }}
           onClick={this.handleOpenForgot}
         >
           Forgot password?
@@ -149,5 +156,9 @@ export class StartScreen extends PureComponent {
     );
   }
 }
+
+StartScreen.propTypes = {
+  classes: PropTypes.any.isRequired,
+};
 
 export default withStyles(styles)(StartScreen);
