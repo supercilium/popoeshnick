@@ -14,6 +14,14 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const styles = theme => ({
+  toolbar: {
+    justifyContent: 'space-between',
+  },
+  div: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
   navLink: {
     color: '#fff',
     textDecoration: 'none',
@@ -52,10 +60,10 @@ export class TopMenu extends React.PureComponent {
         <AppBar position="static">
           <Toolbar
             variant="dense"
-            style={{ justifyContent: 'space-between' }}
+            classes={{ root: classes.toolbar }}
           >
             <div
-              style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}
+              classes={{ root: classes.div }}
             >
               {/* <IconButton color="inherit" aria-label="Menu">
                 <FontAwesomeIcon icon="bars" />

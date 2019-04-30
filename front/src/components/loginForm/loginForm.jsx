@@ -45,6 +45,9 @@ const styles = theme => ({
   input: {
     width: '260px',
   },
+  button: {
+    marginTop: '10px',
+  },
 });
 
 export class LoginForm extends PureComponent {
@@ -176,7 +179,7 @@ export class LoginForm extends PureComponent {
           type="submit"
           variant="contained"
           color="primary"
-          style={{ marginTop: '10px' }}
+          classes={{ root: classes.button }}
           // onClick={this.handleLogin}
           disabled={!email || !password || passError || emailError || !_.isEmpty(errors.loginError)}
         >

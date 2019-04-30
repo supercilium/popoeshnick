@@ -50,9 +50,20 @@ const styles = ({
   },
 });
 
-const AlkashCard = ({ name, email, lygrylity }) => (
+const cardStyles = ({
+  card: {
+    textAlign: 'left',
+  },
+});
+
+const AlkashCard = withStyles(cardStyles)(({
+  name,
+  email,
+  lygrylity,
+  classes,
+}) => (
   <Card
-    style={{ textAlign: 'left' }}
+    classes={{ root: classes.card }}
   >
     <CardHeader
       avatar={
@@ -85,12 +96,13 @@ const AlkashCard = ({ name, email, lygrylity }) => (
       <Button>More info</Button>
     </CardActions>
   </Card>
-);
+));
 
 AlkashCard.propTypes = {
   name: PropTypes.string,
   email: PropTypes.string,
   lygrylity: PropTypes.number,
+  classes: PropTypes.any.isRequired,
 };
 
 AlkashCard.defaultProps = {
