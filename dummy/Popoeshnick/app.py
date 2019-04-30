@@ -1,7 +1,6 @@
 import flask
 from flask import Flask
 from flask_migrate import Migrate
-from config import Config
 from flask_sqlalchemy import SQLAlchemy
 from flask_wtf import FlaskForm
 from wtforms import Form, StringField, PasswordField, validators
@@ -9,12 +8,14 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask import jsonify
 
 app = Flask(__name__)
-app.config.from_object(Config)
+app.config['SECRET_KEY'] = 'this-really-needs-to-be-changed'
+app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://popo:123@db:5432/popo"
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
 migrate = Migrate(app, db)
 
-
+# huipizda
 class Alkash(db.Model):
     __tablename__ = 'alkashi'
     id = db.Column(db.Integer, primary_key=True)
@@ -125,7 +126,7 @@ def registration():
     usr = Alkash()
     if form.validate():
         if not usr.is_registered_email(email=form.email.data):
-            usr.add_user(email=form.email.data, password_hash = generate_password_hash(form.password.data))
+            usr.add_alkash(email=form.email.data, password_hash = generate_password_hash(form.password.data))
         else: #such user is already here
             return jsonify({'status': 'error',
                             'message':'User already registered'})
