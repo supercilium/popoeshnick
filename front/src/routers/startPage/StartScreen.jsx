@@ -1,12 +1,14 @@
 /* eslint-disable react/jsx-one-expression-per-line */
 import React, { PureComponent } from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import {
   Button, withStyles,
 } from '@material-ui/core';
 import axios from 'axios';
-import Cookies from 'universal-cookie';
 import PropTypes from 'prop-types';
 import { API_CONST } from '../../constants';
+import * as alkashActions from '../../__data__/actions/alkashActions';
 
 
 import {
@@ -36,39 +38,19 @@ const styles = {
     marginBottom: '15px',
   },
 };
-const cookies = new Cookies();
 export class StartScreen extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
       openSignup: false,
       openForgot: false,
-      loader: true,
-      auth: null,
-      profile: {},
+      loader: false,
     };
   }
 
-  componentDidMount() {
-    this.setState({ loader: true });
-    const cookie = cookies.get('session');
-    if (cookie) {
-      axios.get(API_CONST.PROFILE).then((res) => {
-        const { errors, profile, status } = res.data;
-        if (status === 'success') {
-          this.setState({ profile, auth: true });
-        } else {
-          console.log(errors);
-        }
-      }).catch((error) => {
-        console.log(error);
-      }).then(() => this.setState({ loader: false }));
-    } else {
-      this.setState({ loader: false, auth: false });
-    }
-  }
-
-  handleLogin = profile => this.setState({ profile, auth: true });
+  handleLogin = (profile) => {
+    this.props.alkashActions.setAlkash(profile);
+  };
 
   handleLogout = () => {
     axios.get(API_CONST.LOGOUT).then(() => {
@@ -76,17 +58,16 @@ export class StartScreen extends PureComponent {
         openSignup: false,
         openForgot: false,
         loader: true,
-        profile: {},
-        auth: false,
       });
     }).then(() => {
       this.setState({
         loader: false,
       });
+      this.props.alkashActions.setAlkash({});
     });
   }
 
-  handleSendQuery = profile => this.setState({ profile })
+  handleSendQuery = profile => this.props.alkashActions.setAlkash(profile);
 
   handleCloseSignup = () => {
     this.setState({ openSignup: false });
@@ -105,10 +86,9 @@ export class StartScreen extends PureComponent {
   }
 
   renderContent = () => {
-    const { auth, profile } = this.state;
-    const { classes } = this.props;
-    if (auth) {
-      return <Home {...profile} />;
+    const { classes, alkash } = this.props;
+    if (alkash) {
+      return <Home {...alkash} />;
     }
     return (
       <header className={classes.appHeader}>
@@ -144,11 +124,13 @@ export class StartScreen extends PureComponent {
   render() {
     const {
       loader,
-      auth,
     } = this.state;
+    const {
+      alkash,
+    } = this.props;
     return (
       <Container
-        auth={auth}
+        auth={!!alkash}
         handleLogout={this.handleLogout}
       >
         {loader ? <Loader /> : this.renderContent()}
@@ -161,4 +143,16 @@ StartScreen.propTypes = {
   classes: PropTypes.any.isRequired,
 };
 
-export default withStyles(styles)(StartScreen);
+function mapStateToProps(state) {
+  return {
+    alkash: state.alkash,
+  };
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    alkashActions: bindActionCreators(alkashActions, dispatch),
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(StartScreen));
