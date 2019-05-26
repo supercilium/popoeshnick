@@ -1,20 +1,18 @@
 /* eslint-disable react/jsx-one-expression-per-line */
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
+import axios from 'axios';
 import { bindActionCreators } from 'redux';
 import {
-  Button, withStyles,
+  withStyles,
 } from '@material-ui/core';
-import axios from 'axios';
 import PropTypes from 'prop-types';
-import { API_CONST } from '../../constants';
+import _ from 'lodash';
 import * as alkashActions from '../../__data__/actions/alkashActions';
+import { API_CONST } from '../../constants';
 
 
 import {
-  LoginForm,
-  DialogSignup,
-  DialogForgot,
   Loader,
   Home,
   Container,
@@ -42,21 +40,13 @@ export class StartScreen extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      openSignup: false,
-      openForgot: false,
       loader: false,
     };
   }
 
-  handleLogin = (profile) => {
-    this.props.alkashActions.setAlkash(profile);
-  };
-
   handleLogout = () => {
     axios.get(API_CONST.LOGOUT).then(() => {
       this.setState({
-        openSignup: false,
-        openForgot: false,
         loader: true,
       });
     }).then(() => {
@@ -67,60 +57,6 @@ export class StartScreen extends PureComponent {
     });
   }
 
-  handleSendQuery = profile => this.props.alkashActions.setAlkash(profile);
-
-  handleCloseSignup = () => {
-    this.setState({ openSignup: false });
-  }
-
-  handleOpenSignup = () => {
-    this.setState({ openSignup: true });
-  }
-
-  handleCloseForgot = () => {
-    this.setState({ openForgot: false });
-  }
-
-  handleOpenForgot = () => {
-    this.setState({ openForgot: true });
-  }
-
-  renderContent = () => {
-    const { classes, alkash } = this.props;
-    if (alkash) {
-      return <Home {...alkash} />;
-    }
-    return (
-      <header className={classes.appHeader}>
-        <LoginForm
-          onLogin={this.handleLogin}
-        />
-        <Button
-          classes={{ root: classes.button }}
-          onClick={this.handleOpenForgot}
-        >
-          Forgot password?
-        </Button>
-        <Button
-          onClick={this.handleOpenSignup}
-        >
-          Registration
-        </Button>
-        <DialogSignup
-          // eslint-disable-next-line react/destructuring-assignment
-          open={this.state.openSignup}
-          onClose={this.handleCloseSignup}
-          onSend={this.handleSendQuery}
-        />
-        <DialogForgot
-          // eslint-disable-next-line react/destructuring-assignment
-          open={this.state.openForgot}
-          onClose={this.handleCloseForgot}
-        />
-      </header>
-    );
-  }
-
   render() {
     const {
       loader,
@@ -128,12 +64,13 @@ export class StartScreen extends PureComponent {
     const {
       alkash,
     } = this.props;
+    const isAuth = !_.isEmpty(alkash);
     return (
       <Container
-        auth={!!alkash}
+        auth={isAuth}
         handleLogout={this.handleLogout}
       >
-        {loader ? <Loader /> : this.renderContent()}
+        {loader ? <Loader /> : <Home {...alkash} />}
       </Container>
     );
   }
