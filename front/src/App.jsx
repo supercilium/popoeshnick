@@ -19,20 +19,13 @@ import {
   faSignOutAlt,
   faUserCog,
 } from '@fortawesome/free-solid-svg-icons';
-import {
-  withStyles,
-  Button,
-} from '@material-ui/core';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import whyDidYouUpdate from 'why-did-you-update';
 import {
   Loader,
-  LoginForm,
-  DialogSignup,
-  DialogForgot,
 } from './components';
-import Image from './bg.jpg';
 
+import { LoginPage } from './routers/login';
 import { StartScreen } from './routers/startPage';
 import { Profile } from './routers/profile';
 // import { Footer } from './components/footer';
@@ -52,16 +45,6 @@ library.add(
   faUserCog,
 );
 
-const styles = {
-  app: {
-    textAlign: 'center',
-  },
-  appContainer: {
-    minHeight: '100vh',
-    backgroundImage: `url(${Image})`,
-    backgroundSize: 'cover',
-  },
-};
 const cookies = new Cookies();
 
 class App extends React.PureComponent {
@@ -69,12 +52,11 @@ class App extends React.PureComponent {
     super(props);
     this.state = {
       loader: true,
-      openSignup: false,
-      openForgot: false,
     };
   }
 
   componentDidMount() {
+    // eslint-disable-next-line react/destructuring-assignment
     const { setAlkash } = this.props.alkashActions;
     this.setState({ loader: true });
     const cookie = cookies.get('session');
@@ -94,77 +76,23 @@ class App extends React.PureComponent {
     }
   }
 
-  handleLogin = (profile) => {
-    this.props.alkashActions.setAlkash(profile);
-  };
-
-  handleSendQuery = profile => this.props.alkashActions.setAlkash(profile);
-
-  handleCloseSignup = () => {
-    this.setState({ openSignup: false });
-  }
-
-  handleOpenSignup = () => {
-    this.setState({ openSignup: true });
-  }
-
-  handleCloseForgot = () => {
-    this.setState({ openForgot: false });
-  }
-
-  handleOpenForgot = () => {
-    this.setState({ openForgot: true });
-  }
-
-  renderContent = (classes) => {
+  renderContent = () => {
     const {
-      alkash
+      alkash,
     } = this.props;
+    // TODO do redirect to LoginPage then not auth
+    // like this example https://stackoverflow.com/questions/48497510/simple-conditional-routing-in-reactjs
     const isAuth = !_.isEmpty(alkash);
     return (
-      isAuth
-        ? (
-          <Router>
-            <div className={classes.app}>
-              <div className={classes.appContainer}>
-                {/* <StartScreen /> */}
-                <Route exact path="/" component={StartScreen} />
-                <Route path={`/${ROUT_CONST.PROFILE_PAGE}`} component={Profile} />
-                {/* TODO <Footer> component */}
-                {/* <Footer /> */}
-              </div>
-            </div>
-          </Router>
-        )
-        : (
-          <header className={classes.appHeader}>
-            <LoginForm
-              onLogin={this.handleLogin}
-            />
-            <Button
-              classes={{ root: classes.button }}
-              onClick={this.handleOpenForgot}
-            >
-              Forgot password?
-            </Button>
-            <Button
-              onClick={this.handleOpenSignup}
-            >
-            Registration
-            </Button>
-            <DialogSignup
-              // eslint-disable-next-line react/destructuring-assignment
-              open={this.state.openSignup}
-              onClose={this.handleCloseSignup}
-              onSend={this.handleSendQuery}
-            />
-            <DialogForgot
-              // eslint-disable-next-line react/destructuring-assignment
-              open={this.state.openForgot}
-              onClose={this.handleCloseForgot}
-            />
-          </header>
-        )
+      // isAuth
+      <Router>
+        {/* <StartScreen /> */}
+        <Route exact path="/" component={StartScreen} />
+        <Route path="/login" component={LoginPage} />
+        <Route path={`/${ROUT_CONST.PROFILE_PAGE}`} component={Profile} />
+        {/* TODO <Footer> component */}
+        {/* <Footer /> */}
+      </Router>
     );
   }
 
@@ -180,9 +108,15 @@ class App extends React.PureComponent {
     );
   }
 }
+
 App.propTypes = {
+  alkash: PropTypes.any,
   classes: PropTypes.object.isRequired,
   alkashActions: PropTypes.object.isRequired,
+};
+
+App.defaultProps = {
+  alkash: {},
 };
 
 function mapStateToProps(state) {
@@ -197,4 +131,4 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(App));
+export default connect(mapStateToProps, mapDispatchToProps)(App);
