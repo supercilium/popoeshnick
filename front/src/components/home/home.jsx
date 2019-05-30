@@ -14,6 +14,7 @@ import {
 } from '@material-ui/core';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { PopoykaList } from '../popoyka';
+import Image from '../../vodka.jpg';
 
 const styles = ({
   avatar: {
@@ -25,6 +26,8 @@ const styles = ({
     height: 60,
   },
   wrapper: {
+    backgroundImage: `url(${Image})`,
+    backgroundSize: 'cover',
     display: 'flex',
     flexWrap: 'wrap',
     flexGrow: '1',

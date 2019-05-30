@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import {
   BrowserRouter as Router,
   Route,
+  Redirect,
 } from 'react-router-dom';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { connect } from 'react-redux';
@@ -87,9 +88,10 @@ class App extends React.PureComponent {
       // isAuth
       <Router>
         {/* <StartScreen /> */}
-        <Route exact path="/" component={StartScreen} />
+        {/* <Route exact path="/" component={StartScreen} /> */}
         <Route path="/login" component={LoginPage} />
-        <Route path={`/${ROUT_CONST.PROFILE_PAGE}`} component={Profile} />
+        <ProtectedRoute path='/' auth={isAuth} component={StartScreen} />
+        {/* <Route path={`/${ROUT_CONST.PROFILE_PAGE}`} component={Profile} /> */}
         {/* TODO <Footer> component */}
         {/* <Footer /> */}
       </Router>
@@ -106,6 +108,23 @@ class App extends React.PureComponent {
     return (
       loader ? <Loader /> : this.renderContent(classes)
     );
+  }
+}
+
+class ProtectedRoute extends React.Component {
+  render() {
+    const { component: Component, ...props } = this.props
+    return (
+      <Route
+        {...props}
+        render={props => (
+          this.props.isAuth ?
+            <Component {...props} /> :
+            // <Redirect to='/login' />
+            <div></div>
+        )}
+      />
+    )
   }
 }
 
