@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import {
   BrowserRouter as Router,
   Route,
+  Switch,
   Redirect,
 } from 'react-router-dom';
 import { library } from '@fortawesome/fontawesome-svg-core';
@@ -87,13 +88,15 @@ class App extends React.PureComponent {
     return (
       // isAuth
       <Router>
-        {/* <StartScreen /> */}
-        {/* <Route exact path="/" component={StartScreen} /> */}
-        <Route path="/login" component={LoginPage} />
-        <ProtectedRoute path='/' auth={isAuth} component={StartScreen} />
-        {/* <Route path={`/${ROUT_CONST.PROFILE_PAGE}`} component={Profile} /> */}
-        {/* TODO <Footer> component */}
-        {/* <Footer /> */}
+        <Switch>
+          {/* <StartScreen /> */}
+          {/* <Route exact path="/" component={StartScreen} /> */}
+          <ProtectedRoute path="/" auth={isAuth} component={StartScreen} exact />
+          <ProtectedRoute path={`/${ROUT_CONST.PROFILE_PAGE}`} auth={isAuth} component={Profile} />
+          <Route path="/login" component={LoginPage} />
+          {/* TODO <Footer> component */}
+          {/* <Footer /> */}
+        </Switch>
       </Router>
     );
   }
@@ -118,10 +121,10 @@ class ProtectedRoute extends React.Component {
       <Route
         {...props}
         render={props => (
-          this.props.isAuth ?
+          // имя пропса перепутал с переменной, которую присваеваешь ему
+          this.props.auth ?
             <Component {...props} /> :
-            // <Redirect to='/login' />
-            <div></div>
+            <Redirect to='/login' />
         )}
       />
     )

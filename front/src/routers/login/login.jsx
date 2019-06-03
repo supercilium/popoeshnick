@@ -8,6 +8,10 @@ import {
   Button,
 } from '@material-ui/core';
 import {
+  Redirect,
+} from 'react-router-dom';
+import _ from 'lodash';
+import {
   LoginForm,
   DialogSignup,
   DialogForgot,
@@ -70,30 +74,35 @@ export class LoginPage extends React.PureComponent {
   render() {
     const {
       classes,
+      alkash,
     } = this.props;
     return (
-      <header className={classes.appHeader}>
-        <LoginForm
-          onLogin={this.handleLogin}
-        />
-        <Button classes={{ root: classes.button }} onClick={this.handleOpenForgot}>
-          Forgot password?
-        </Button>
-        <Button onClick={this.handleOpenSignup}>
-          Registration
-        </Button>
-        <DialogSignup
-          // eslint-disable-next-line react/destructuring-assignment
-          open={this.state.openSignup}
-          onClose={this.handleCloseSignup}
-          onSend={this.handleSendQuery}
-        />
-        <DialogForgot
-          // eslint-disable-next-line react/destructuring-assignment
-          open={this.state.openForgot}
-          onClose={this.handleCloseForgot}
-        />
-      </header>
+      _.isEmpty(alkash)
+        ? (
+          <header className={classes.appHeader}>
+            <LoginForm
+              onLogin={this.handleLogin}
+            />
+            <Button classes={{ root: classes.button }} onClick={this.handleOpenForgot}>
+              Forgot password?
+            </Button>
+            <Button onClick={this.handleOpenSignup}>
+              Registration
+            </Button>
+            <DialogSignup
+              // eslint-disable-next-line react/destructuring-assignment
+              open={this.state.openSignup}
+              onClose={this.handleCloseSignup}
+              onSend={this.handleSendQuery}
+            />
+            <DialogForgot
+              // eslint-disable-next-line react/destructuring-assignment
+              open={this.state.openForgot}
+              onClose={this.handleCloseForgot}
+            />
+          </header>
+        )
+        : (<Redirect to="/" />)
     );
   }
 }
@@ -101,6 +110,7 @@ export class LoginPage extends React.PureComponent {
 LoginPage.propTypes = {
   classes: PropTypes.object.isRequired,
   alkashActions: PropTypes.object.isRequired,
+  alkash: PropTypes.any.isRequired,
 };
 
 function mapStateToProps(state) {
