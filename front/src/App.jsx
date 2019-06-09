@@ -114,22 +114,23 @@ class App extends React.PureComponent {
   }
 }
 
-class ProtectedRoute extends React.Component {
-  render() {
-    const { component: Component, ...props } = this.props
-    return (
-      <Route
-        {...props}
-        render={props => (
-          // имя пропса перепутал с переменной, которую присваеваешь ему
-          this.props.auth ?
-            <Component {...props} /> :
-            <Redirect to='/login' />
-        )}
-      />
-    )
-  }
-}
+const ProtectedRoute = ({ component: Component, auth, ...tail }) => (
+  <Route
+    {...tail}
+    render={props => (
+      // имя пропса перепутал с переменной, которую присваеваешь ему
+      auth
+        ? <Component {...props} />
+        : <Redirect to="/login" />
+    )}
+  />
+);
+
+
+ProtectedRoute.propTypes = {
+  component: PropTypes.any.isRequired,
+  auth: PropTypes.bool.isRequired,
+};
 
 App.propTypes = {
   alkash: PropTypes.any,
