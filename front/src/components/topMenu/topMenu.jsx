@@ -75,11 +75,11 @@ export class TopMenu extends React.PureComponent {
             </div>
             {auth && (
               <div>
-                <IconButton classes={{ root: classes.btnRoot }}>
-                  <NavLink className={classes.navLink} to="/profile" title="Profile">
+                <NavLink className={classes.navLink} to="/profile" title="Profile">
+                  <IconButton classes={{ root: classes.btnRoot }}>
                     <FontAwesomeIcon icon="user" />
-                  </NavLink>
-                </IconButton>
+                  </IconButton>
+                </NavLink>
                 <IconButton classes={{ root: classes.btnRoot }} title="Log Out" onClick={onLogout}>
                   <FontAwesomeIcon icon="sign-out-alt" />
                 </IconButton>
