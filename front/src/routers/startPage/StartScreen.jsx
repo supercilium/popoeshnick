@@ -1,157 +1,58 @@
 /* eslint-disable react/jsx-one-expression-per-line */
 import React, { PureComponent } from 'react';
-import {
-  Button, withStyles,
-} from '@material-ui/core';
+import { connect } from 'react-redux';
 import axios from 'axios';
-import Cookies from 'universal-cookie';
+import { bindActionCreators } from 'redux';
 import PropTypes from 'prop-types';
+import _ from 'lodash';
+import * as alkashActions from '../../__data__/actions/alkashActions';
 import { API_CONST } from '../../constants';
 
-
 import {
-  LoginForm,
-  DialogSignup,
-  DialogForgot,
   Loader,
   Home,
   Container,
 } from '../../components';
 
-
-const styles = {
-  appHeader: {
-    backgroundColor: '#fff',
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'center',
-    // fontSize: calc(10px + 2vmin),
-    color: 'rgb(223, 17, 17)',
-    minHeight: '100vh',
-    /* padding: 0 30px 40px; */
-  },
-  button: {
-    marginTop: '15px',
-    marginBottom: '15px',
-  },
-};
-const cookies = new Cookies();
 export class StartScreen extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      openSignup: false,
-      openForgot: false,
-      loader: true,
-      auth: null,
-      profile: {},
+      loader: false,
     };
   }
 
-  componentDidMount() {
-    this.setState({ loader: true });
-    const cookie = cookies.get('session');
-    if (cookie) {
-      axios.get(API_CONST.PROFILE).then((res) => {
-        const { errors, profile, status } = res.data;
-        if (status === 'success') {
-          this.setState({ profile, auth: true });
-        } else {
-          console.log(errors);
-        }
-      }).catch((error) => {
-        console.log(error);
-      }).then(() => this.setState({ loader: false }));
-    } else {
-      this.setState({ loader: false, auth: false });
-    }
-  }
-
-  handleLogin = profile => this.setState({ profile, auth: true });
-
   handleLogout = () => {
+    const {
+      // eslint-disable-next-line no-shadow
+      alkashActions,
+    } = this.props;
     axios.get(API_CONST.LOGOUT).then(() => {
       this.setState({
-        openSignup: false,
-        openForgot: false,
         loader: true,
-        profile: {},
-        auth: false,
       });
     }).then(() => {
       this.setState({
         loader: false,
       });
+      alkashActions.setAlkash({});
     });
-  }
-
-  handleSendQuery = profile => this.setState({ profile })
-
-  handleCloseSignup = () => {
-    this.setState({ openSignup: false });
-  }
-
-  handleOpenSignup = () => {
-    this.setState({ openSignup: true });
-  }
-
-  handleCloseForgot = () => {
-    this.setState({ openForgot: false });
-  }
-
-  handleOpenForgot = () => {
-    this.setState({ openForgot: true });
-  }
-
-  renderContent = () => {
-    const { auth, profile } = this.state;
-    const { classes } = this.props;
-    if (auth) {
-      return <Home {...profile} />;
-    }
-    return (
-      <header className={classes.appHeader}>
-        <LoginForm
-          onLogin={this.handleLogin}
-        />
-        <Button
-          classes={{ root: classes.button }}
-          onClick={this.handleOpenForgot}
-        >
-          Forgot password?
-        </Button>
-        <Button
-          onClick={this.handleOpenSignup}
-        >
-          Registration
-        </Button>
-        <DialogSignup
-          // eslint-disable-next-line react/destructuring-assignment
-          open={this.state.openSignup}
-          onClose={this.handleCloseSignup}
-          onSend={this.handleSendQuery}
-        />
-        <DialogForgot
-          // eslint-disable-next-line react/destructuring-assignment
-          open={this.state.openForgot}
-          onClose={this.handleCloseForgot}
-        />
-      </header>
-    );
   }
 
   render() {
     const {
       loader,
-      auth,
     } = this.state;
+    const {
+      alkash,
+    } = this.props;
+    const isAuth = !_.isEmpty(alkash);
     return (
       <Container
-        auth={auth}
+        auth={isAuth}
         handleLogout={this.handleLogout}
       >
-        {loader ? <Loader /> : this.renderContent()}
+        {loader ? <Loader /> : <Home {...alkash} />}
       </Container>
     );
   }
@@ -159,6 +60,20 @@ export class StartScreen extends PureComponent {
 
 StartScreen.propTypes = {
   classes: PropTypes.any.isRequired,
+  alkashActions: PropTypes.any.isRequired,
+  alkash: PropTypes.any.isRequired,
 };
 
-export default withStyles(styles)(StartScreen);
+function mapStateToProps(state) {
+  return {
+    alkash: state.alkash,
+  };
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    alkashActions: bindActionCreators(alkashActions, dispatch),
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(StartScreen);

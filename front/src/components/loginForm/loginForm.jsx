@@ -16,7 +16,7 @@ import { validateEmail, validatePass } from '../../utils';
 import { API_CONST } from '../../constants';
 
 // eslint-disable-next-line no-unused-vars
-const styles = theme => ({
+const styles = {
   form: {
     display: 'flex',
     flexDirection: 'column',
@@ -32,7 +32,6 @@ const styles = theme => ({
     marginTop: '10px',
   },
   img: {
-    flex: '1',
     backgroundImage: `url(${Image})`,
     width: '260px',
     height: '193px',
@@ -48,7 +47,7 @@ const styles = theme => ({
   button: {
     marginTop: '10px',
   },
-});
+};
 
 export class LoginForm extends PureComponent {
   constructor(props) {
