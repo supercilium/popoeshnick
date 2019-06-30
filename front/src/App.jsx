@@ -20,6 +20,7 @@ import {
   faUser,
   faSignOutAlt,
   faUserCog,
+  faAngry,
 } from '@fortawesome/free-solid-svg-icons';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import whyDidYouUpdate from 'why-did-you-update';
@@ -45,6 +46,7 @@ library.add(
   faUser,
   faSignOutAlt,
   faUserCog,
+  faAngry,
 );
 
 const cookies = new Cookies();

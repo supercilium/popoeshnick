@@ -12,6 +12,7 @@ import {
   // Menu,
 } from '@material-ui/core';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import QuickUserInfo from '../quickUserInfo';
 
 const styles = theme => ({
   toolbar: {
@@ -75,11 +76,12 @@ export class TopMenu extends React.PureComponent {
             </div>
             {auth && (
               <div>
-                <NavLink className={classes.navLink} to="/profile" title="Profile">
+                <QuickUserInfo />
+                {/* <NavLink className={classes.navLink} to="/profile" title="Profile">
                   <IconButton classes={{ root: classes.btnRoot }}>
                     <FontAwesomeIcon icon="user" />
                   </IconButton>
-                </NavLink>
+                </NavLink> */}
                 <IconButton classes={{ root: classes.btnRoot }} title="Log Out" onClick={onLogout}>
                   <FontAwesomeIcon icon="sign-out-alt" />
                 </IconButton>
