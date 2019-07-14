@@ -2,13 +2,29 @@ import React from 'react';
 import axios from 'axios';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { withStyles } from '@material-ui/core';
+import {
+  withStyles,
+  Tab,
+  Tabs,
+} from '@material-ui/core';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
 import { Container } from '../../components';
 import { API_CONST } from '../../constants';
 import * as alkashActions from '../../__data__/actions/alkashActions';
 import Image from './1.jpg';
+import { UserInfo } from '../../components/userInfo';
+
+const avatar = {
+  float: 'left',
+  height: '64px',
+  width: '64px',
+  backgroundColor: '#ddd',
+  borderRadius: '6px',
+  lineHeight: '64px',
+  textAlign: 'center',
+  margin: '0 24px',
+};
 
 const styles = ({
   wrapper: {
@@ -20,6 +36,15 @@ const styles = ({
 });
 
 export class Profile extends React.PureComponent {
+  constructor(props) {
+    super(props);
+    this.state = { value: 0 };
+  }
+
+  handleChange = (event, value) => this.setState({
+    value,
+  })
+
   handleLogout = () => {
     const {
       // eslint-disable-next-line no-shadow
@@ -32,6 +57,10 @@ export class Profile extends React.PureComponent {
 
   render() {
     const {
+      value,
+    } = this.state;
+
+    const {
       alkash,
       classes,
     } = this.props;
@@ -43,7 +72,16 @@ export class Profile extends React.PureComponent {
           handleLogout={this.handleLogout}
         >
           <div className={classes.wrapper}>
-            <h2>Hello Alkash!</h2>
+            <div style={avatar}>V</div>
+            <h2>{alkash.name}</h2>
+            <div className={classes.root}>
+              <Tabs value={value} onChange={this.handleChange}>
+                <Tab label="Profile" />
+                <Tab label="Password" />
+              </Tabs>
+              {value === 0 && <UserInfo {...alkash} />}
+              {value === 1 && <p>тряси</p>}
+            </div>
           </div>
         </Container>
       </div>
