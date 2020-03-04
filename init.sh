@@ -11,3 +11,7 @@ sudo mount --bind ~/vagrant_node_modules/ /vagrant_data/front/node_modules/
 cd /vagrant_data/front/
 npm i
 npm run build
+
+sudo apt install nginx -y
+sudo ln -s /vagrant_data/confs/site.conf /etc/nginx/sites-enabled/
+sudo nginx -s reload
