@@ -28,10 +28,10 @@ import {
   Loader,
 } from './components';
 
-import { LoginPage } from './routers/login';
-import { StartScreen } from './routers/startPage';
-import { Profile } from './routers/profile';
-// import { Footer } from './components/footer';
+import {
+  Root,
+  LoginPage,
+} from './routers';
 import { ROUT_CONST, API_CONST } from './constants';
 import * as alkashActions from './__data__/actions/alkashActions';
 
@@ -80,59 +80,26 @@ class App extends React.PureComponent {
     }
   }
 
-  renderContent = () => {
-    const {
-      alkash,
-    } = this.props;
-    // TODO do redirect to LoginPage then not auth
-    // like this example https://stackoverflow.com/questions/48497510/simple-conditional-routing-in-reactjs
-    const isAuth = !_.isEmpty(alkash);
+  render() {
     return (
-      // isAuth
       <Router>
         <Switch>
-          {/* <StartScreen /> */}
-          {/* <Route exact path="/" component={StartScreen} /> */}
-          <ProtectedRoute path="/" auth={isAuth} component={StartScreen} exact />
-          <ProtectedRoute path={`/${ROUT_CONST.PROFILE_PAGE}`} auth={isAuth} component={Profile} />
+          <Route path="/" component={Root} exact />
           <Route path="/login" component={LoginPage} />
-          {/* TODO <Footer> component */}
-          {/* <Footer /> */}
         </Switch>
       </Router>
     );
-  }
-
-  render() {
-    const {
-      loader,
-    } = this.state;
-    const {
-      classes,
-    } = this.props;
-    return (
-      loader ? <Loader /> : this.renderContent(classes)
-    );
+    // const {
+    //   loader,
+    // } = this.state;
+    // const {
+    //   classes,
+    // } = this.props;
+    // return (
+    //   loader ? <Loader /> : this.renderContent(classes)
+    // );
   }
 }
-
-const ProtectedRoute = ({ component: Component, auth, ...tail }) => (
-  <Route
-    {...tail}
-    render={props => (
-      // имя пропса перепутал с переменной, которую присваеваешь ему
-      auth
-        ? <Component {...props} />
-        : <Redirect to="/login" />
-    )}
-  />
-);
-
-
-ProtectedRoute.propTypes = {
-  component: PropTypes.any.isRequired,
-  auth: PropTypes.bool.isRequired,
-};
 
 App.propTypes = {
   alkash: PropTypes.any,
