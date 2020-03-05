@@ -5,6 +5,7 @@ import {
   DialogTitle,
   DialogContent,
   TextField,
+  CircularProgress,
   withStyles,
 } from '@material-ui/core';
 import PropTypes from 'prop-types';
@@ -13,7 +14,6 @@ import { API_CONST } from '../../constants';
 
 import './dialog.css';
 import { validateEmail, validatePass, instance } from '../../utils';
-import { Loader } from '../loader';
 
 const styles = ({
   button: {
@@ -150,7 +150,7 @@ export class DialogSignup extends PureComponent {
       >
         <DialogTitle>Registration</DialogTitle>
         <DialogContent>
-          {loading && <Loader />}
+          {loading && <CircularProgress />}
           {
             errors.registration
               ? <div>{errors.registration}</div>

@@ -1,3 +1,20 @@
+# Hey there! This is Popoeshnick!
+
+
+## For local development you need:
+- NodeJs version >= 8 (use actual LTS version btw)
+- npm version >= 6
+
+## There are two ways to start app:
+- use __npm run dev__ for standalone work with stubs express server
+- use __npm start__ for launch webpack dev-server only. Be sure your backend server is running and listening 5000 port
+
+Open localhost:3000 in you browser. All requests will be proxying to localhost:5000.
+
+All credentials of local user you can find in stubs/constants.js. To discard current user session you can clear cookies or use "logout" method when it will be implemented.
+
+## Other commands are below (this peace of text is served from a react-create-app boilerplate)
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts

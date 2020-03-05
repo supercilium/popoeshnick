@@ -51,4 +51,4 @@ app.get('/api/user/logout/', (req, res) => {
 });
 
 // eslint-disable-next-line no-console
-app.listen(4000, () => console.log('Express server is running on localhost:4000'));
+app.listen(5000, () => console.log('Express server is running on localhost:4000'));

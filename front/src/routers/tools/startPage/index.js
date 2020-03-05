@@ -1,2 +1,3 @@
-// eslint-disable-next-line import/prefer-default-export
-export { default as StartScreen } from './StartScreen';
+import StartScreen from './StartScreen'
+
+export default StartScreen
