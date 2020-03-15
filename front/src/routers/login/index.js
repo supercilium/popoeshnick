@@ -1,2 +1,3 @@
-// eslint-disable-next-line import/prefer-default-export
-export { default as LoginPage } from './loginPage';
+import { default as LoginPage } from './loginPage'
+
+export default LoginPage

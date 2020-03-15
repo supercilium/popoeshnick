@@ -5,7 +5,7 @@ import { bindActionCreators } from 'redux';
 import { withStyles } from '@material-ui/core';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
-import { Container } from '../../components';
+import { Layout } from '../../components';
 import { API_CONST } from '../../constants';
 import * as alkashActions from '../../__data__/actions/alkashActions';
 import Image from './1.jpg';
@@ -38,14 +38,14 @@ export class Profile extends React.PureComponent {
     const isAuth = !_.isEmpty(alkash);
     return (
       <div>
-        <Container
+        <Layout
           auth={isAuth}
           handleLogout={this.handleLogout}
         >
           <div className={classes.wrapper}>
             <h2>Hello Alkash!</h2>
           </div>
-        </Container>
+        </Layout>
       </div>
     );
   }

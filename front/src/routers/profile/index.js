@@ -1,2 +1,3 @@
-// eslint-disable-next-line import/prefer-default-export
-export { default as Profile } from './Profile';
+import Profile from './Profile';
+
+export default Profile

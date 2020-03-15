@@ -12,7 +12,6 @@ import {
   Button,
   IconButton,
 } from '@material-ui/core';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { PopoykaList } from '../popoyka';
 import Image from '../../vodka.jpg';
 
@@ -80,7 +79,7 @@ const AlkashCard = withStyles(cardStyles)(({
       action={
         (
           <IconButton>
-            <FontAwesomeIcon icon="user-cog" />
+            stub
           </IconButton>
         )
       }

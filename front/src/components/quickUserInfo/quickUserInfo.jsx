@@ -13,7 +13,7 @@ export class QuickUserInfo extends React.Component {
       <NavLink to="/profile" title="Profile">
         {this.props.alkash.name}
       </NavLink>
-      <span>{this.props.alkash.rank}</span>
+      {/* <span>{this.props.alkash.rank}</span> */}
     </div>
   )
 

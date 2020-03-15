@@ -5,14 +5,16 @@ import axios from 'axios';
 import { bindActionCreators } from 'redux';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
-import * as alkashActions from '../../__data__/actions/alkashActions';
-import { API_CONST } from '../../constants';
+import * as alkashActions from '../../../__data__/actions/alkashActions';
+import { API_CONST } from '../../../constants';
+import {
+  CircularProgress
+} from '@material-ui/core';
 
 import {
-  Loader,
   Home,
-  Container,
-} from '../../components';
+  Layout,
+} from '../../../components';
 
 export class StartScreen extends PureComponent {
   constructor(props) {
@@ -48,12 +50,12 @@ export class StartScreen extends PureComponent {
     } = this.props;
     const isAuth = !_.isEmpty(alkash);
     return (
-      <Container
+      <Layout
         auth={isAuth}
         handleLogout={this.handleLogout}
       >
-        {loader ? <Loader /> : <Home {...alkash} />}
-      </Container>
+        {loader ? <CircularProgress /> : <Home {...alkash} />}
+      </Layout>
     );
   }
 }
