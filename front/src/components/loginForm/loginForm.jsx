@@ -11,7 +11,6 @@ import PropTypes, { any } from 'prop-types';
 import _ from 'lodash';
 import axios from 'axios';
 
-import Image from './alkashs.png';
 import { validateEmail, validatePass } from '../../utils';
 import { API_CONST } from '../../constants';
 
@@ -146,7 +145,6 @@ export class LoginForm extends PureComponent {
         onChange={this.handleFormChange}
         className={classes.form}
       >
-        <div id="alkashPicture" className={classes.img} />
         <Typography component="h1" variant="h4" classes={{ root: classes.title }}>
           Hello, Alkash!!!
         </Typography>

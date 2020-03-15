@@ -13,7 +13,6 @@ import {
   IconButton,
 } from '@material-ui/core';
 import { PopoykaList } from '../popoyka';
-import Image from '../../vodka.jpg';
 
 const styles = ({
   avatar: {
@@ -25,7 +24,6 @@ const styles = ({
     height: 60,
   },
   wrapper: {
-    backgroundImage: `url(${Image})`,
     backgroundSize: 'cover',
     display: 'flex',
     flexWrap: 'wrap',

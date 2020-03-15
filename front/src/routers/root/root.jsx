@@ -1,13 +1,9 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import _ from 'lodash';
+import React from 'react'
 import {
   Paper,
   makeStyles,
   Link,
 } from '@material-ui/core'
-
-import { Layout } from '../../components/'
 
 const useStyles = makeStyles(theme => ({
   header: {
@@ -28,15 +24,13 @@ const useStyles = makeStyles(theme => ({
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
-    }
+    },
   },
-}));
+}))
 
 export const Root = () => {
-  const classes = useStyles();
-  
+  const classes = useStyles()
   return (
-  <Layout>
     <header className={classes.header}>
       <h1>PoPoTools</h1>
       <div className={classes.root}>
@@ -46,5 +40,7 @@ export const Root = () => {
         <Paper elevation={3}><Link href="/">Popo Assistent</Link></Paper>
       </div>
     </header>
-  </Layout>
-)}
+  )
+}
+
+export default Root

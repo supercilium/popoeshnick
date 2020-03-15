@@ -1,10 +1,12 @@
+import LoginForm from './loginForm'
+
 export {
   DialogForgot,
   DialogSignup,
-} from './dialogs';
+} from './dialogs'
+export { Home } from './home'
+export { Layout } from './layout'
 
-export { Footer } from './footer';
-export { LoginForm } from './loginForm';
-export { Home } from './home';
-export { TopMenu } from './topMenu';
-export { Layout } from './layout';
+export {
+  LoginForm,
+}
