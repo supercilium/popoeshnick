@@ -1,10 +1,13 @@
 {
     "parser": "babel-eslint",
     "extends": "airbnb",
+    "env": {
+      "browser": true,
+      "node": true
+    },
     "rules": {
         "linebreak-style": 0,
-        "react/forbid-prop-types": {
-          "forbid": []
-        }
+        "semi": [2, "never"],
+        "import/no-named-as-default": 0
     }
 }

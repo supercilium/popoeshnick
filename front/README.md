@@ -1,6 +1,18 @@
 # Hey there! This is Popoeshnick!
 
 
+## File structure:
+```
+  front/ - web interface
+    src/ - source code
+      components/ - react silly components
+      constants/
+      routes/ - routes
+      utils/
+    stub/ - local mock server
+  dummy/ - backend mock server
+```
+
 ## For local development you need:
 - NodeJs version >= 8 (use actual LTS version btw)
 - npm version >= 6

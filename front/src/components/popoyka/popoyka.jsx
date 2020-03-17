@@ -1,13 +1,13 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React from 'react'
+import PropTypes from 'prop-types'
 import {
   ExpansionPanel,
   ExpansionPanelDetails,
   ExpansionPanelSummary,
   Typography,
   withStyles,
-} from '@material-ui/core';
-import { BuhlishkoList } from '../buhlishkoList';
+} from '@material-ui/core'
+import { BuhlishkoList } from '../buhlishkoList'
 
 const styles = {
   root: {
@@ -40,7 +40,7 @@ const styles = {
   //   backgroundColor: '#ddd',
   //   lineHeight: '48px',
   // },
-};
+}
 
 const Popoyka = React.memo(({
   buhlishkoList,
@@ -54,9 +54,9 @@ const Popoyka = React.memo(({
   note,
   classes,
 }) => {
-  const startDate = new Date(dateStart);
-  const endDate = new Date(dateEnd);
-  const period = (endDate - startDate) / 3600000;
+  const startDate = new Date(dateStart)
+  const endDate = new Date(dateEnd)
+  const period = (endDate - startDate) / 3600000
   return (
     <div>
       <ExpansionPanel>
@@ -80,8 +80,8 @@ const Popoyka = React.memo(({
         </ExpansionPanelDetails>
       </ExpansionPanel>
     </div>
-  );
-});
+  )
+})
 
 Popoyka.propTypes = {
   buhlishkoList: PropTypes.array,
@@ -94,7 +94,7 @@ Popoyka.propTypes = {
   lygrylityAmount: PropTypes.number,
   note: PropTypes.string,
   classes: PropTypes.object.isRequired,
-};
+}
 
 Popoyka.defaultProps = {
   buhlishkoList: [],
@@ -106,6 +106,6 @@ Popoyka.defaultProps = {
   mode: '',
   lygrylityAmount: 0,
   note: '',
-};
+}
 
-export default withStyles(styles)(Popoyka);
+export default withStyles(styles)(Popoyka)

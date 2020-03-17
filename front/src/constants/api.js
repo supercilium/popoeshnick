@@ -1,8 +1,8 @@
-const LOGIN = '/api/user/login/';
-const LOGOUT = '/api/user/logout/';
-const REGISTER = '/api/user/registration/';
-const PROFILE = '/api/user/profile/';
-const PASSWORD = '/api/user/recovery/';
+const LOGIN = '/api/user/login/'
+const LOGOUT = '/api/user/logout/'
+const REGISTER = '/api/user/registration/'
+const PROFILE = '/api/user/profile/'
+const PASSWORD = '/api/user/recovery/'
 
 export default {
   LOGIN,
@@ -10,4 +10,4 @@ export default {
   REGISTER,
   PROFILE,
   PASSWORD,
-};
+}

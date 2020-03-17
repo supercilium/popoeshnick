@@ -1,3 +1,3 @@
-import { default as LoginPage } from './loginPage'
+import LoginPage from './loginPage'
 
 export default LoginPage
