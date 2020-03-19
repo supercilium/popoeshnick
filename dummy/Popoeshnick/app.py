@@ -119,9 +119,12 @@ def login():
         })
 
 
-@app.route('/api/user/registration11/', methods=['GET','POST'])
+@app.route('/api/user/registration/', methods=['POST'])
 def registration():
-    form = RegLogForm(flask.request.form)
+    req_data = request.get_json()
+    form = RegLogForm(request.form)
+    form.email.data = req_data['email']
+    form.password.data = req_data['password']
     usr = Alkash()
     if form.validate():
         if not usr.is_registered_email(email=form.email.data):
@@ -142,44 +145,6 @@ def registration():
                     'email': form.email.data})
 
 
-@app.route('/api/user/registration/', methods=['POST'])
-def test():
-
-    # TODO: refactor, optimize passing email and password values to validator if necessary/possible
-    req_data = request.get_json()
-
-    print('!!111!', req_data)
-
-    email = req_data['email']
-    password = req_data['password']
-
-    print('22222222222', 'MYLO',  email, 'POROL', password)
-
-    result = request.form.to_dict(flat=False)
-    print('!!!', result)
-
-    form = RegLogForm(request.form)
-    form.email.data = email
-    form.password.data = password
-    print('333', 'MYLO', form.email.data, 'POROL', form.password.data)
-    usr = Alkash()
-    if form.validate():
-        if not usr.is_registered_email(email=form.email.data):
-            usr.add_alkash(email=form.email.data, password_hash=generate_password_hash(form.password.data))
-        else:  # such user is already here
-            return jsonify({'status': 'error',
-                            'message': 'User already registered'})
-    else:
-        errors_json = dict()
-        for field_name, errors in form.errors.items():
-            errors_json[field_name] = errors
-        return jsonify({
-            'status': 'error',
-            'errors': errors_json
-        })
-    return jsonify({'status': 'success',
-                    'profile': {'email': form.email.data}}
-                    )
 
 
 if __name__ == '__main__':
