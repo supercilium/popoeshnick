@@ -1,3 +1,4 @@
+/* eslint-disable react/forbid-prop-types */
 import React from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'

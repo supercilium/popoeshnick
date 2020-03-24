@@ -1,18 +1,18 @@
 /* eslint-disable react/jsx-one-expression-per-line */
-import React, { PureComponent } from 'react';
+import React, { PureComponent } from 'react'
 import {
   TextField,
   Button,
   Typography,
   withStyles,
-} from '@material-ui/core';
-import red from '@material-ui/core/colors/red';
-import PropTypes, { any } from 'prop-types';
-import _ from 'lodash';
-import axios from 'axios';
+} from '@material-ui/core'
+import red from '@material-ui/core/colors/red'
+import PropTypes, { any } from 'prop-types'
+import _ from 'lodash'
+import axios from 'axios'
 
-import { validateEmail, validatePass } from '../../utils';
-import { API_CONST } from '../../constants';
+import { validateEmail, validatePass } from '../../utils'
+import { API_CONST } from '../../constants'
 
 // eslint-disable-next-line no-unused-vars
 const styles = {
@@ -46,11 +46,11 @@ const styles = {
   button: {
     marginTop: '10px',
   },
-};
+}
 
 export class LoginForm extends PureComponent {
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
       email: null,
       password: null,
@@ -59,44 +59,44 @@ export class LoginForm extends PureComponent {
         password: [],
         login: [],
       },
-    };
+    }
   }
 
   handleSetPassword = (event) => {
-    const errMsg = ['must contain at list 8 charecters'];
+    const errMsg = ['must contain at list 8 charecters']
     this.setState({
       password: event.target.value,
       errors: {
         password: validatePass(event.target.value) ? [] : errMsg,
       },
-    });
+    })
   }
 
   handleSetLogin = (event) => {
-    const errMsg = ['invailid email address'];
+    const errMsg = ['invailid email address']
     this.setState({
       email: event.target.value,
       errors: {
         email: validateEmail(event.target.value) ? [] : errMsg,
       },
-    });
+    })
   }
 
   handleLogin = () => {
     const {
       email,
       password,
-    } = this.state;
+    } = this.state
     const {
       onLogin,
-    } = this.props;
+    } = this.props
     axios.post(API_CONST.LOGIN, {
       password,
       email,
     }).then((res) => {
-      const { errors, profile, status } = res.data;
+      const { errors, profile, status } = res.data
       if (status === 'success') {
-        onLogin(profile);
+        onLogin(profile)
       } else {
         this.setState({
           errors: {
@@ -104,28 +104,28 @@ export class LoginForm extends PureComponent {
             email: errors.email,
             password: errors.password,
           },
-        });
+        })
       }
     }).catch((error) => {
-      console.log(error);
-    });
+      console.log(error)
+    })
   }
 
   handleSubmit = (e) => {
     const {
       errors,
-    } = this.state;
-    const passError = !_.isEmpty(errors.password);
-    const emailError = !_.isEmpty(errors.email);
+    } = this.state
+    const passError = !_.isEmpty(errors.password)
+    const emailError = !_.isEmpty(errors.email)
     if (!emailError && !passError) {
-      this.handleLogin();
+      this.handleLogin()
     }
-    e.preventDefault();
+    e.preventDefault()
   }
 
   renderError = (msgs) => {
-    const { classes } = this.props;
-    return msgs && msgs.map(msg => <Typography key={msg} classes={{ root: classes.error }} variant="body2">{msg}</Typography>);
+    const { classes } = this.props
+    return msgs && msgs.map(msg => <Typography key={msg} classes={{ root: classes.error }} variant="body2">{msg}</Typography>)
   }
 
   render() {
@@ -133,11 +133,11 @@ export class LoginForm extends PureComponent {
       password,
       email,
       errors,
-    } = this.state;
-    const { classes } = this.props;
+    } = this.state
+    const { classes } = this.props
     // eslint-disable-next-line react/destructuring-assignment
-    const passError = !_.isEmpty(errors.password);
-    const emailError = !_.isEmpty(errors.email);
+    const passError = !_.isEmpty(errors.password)
+    const emailError = !_.isEmpty(errors.email)
     return (
       <form
         id="loginForm"
@@ -183,18 +183,19 @@ export class LoginForm extends PureComponent {
           Log in
         </Button>
       </form>
-    );
+    )
   }
 }
 
 LoginForm.propTypes = {
   onLogin: PropTypes.func,
+  // eslint-disable-next-line react/forbid-prop-types
   classes: any,
-};
+}
 
 LoginForm.defaultProps = {
   onLogin: () => {},
   classes: {},
-};
+}
 
-export default withStyles(styles)(LoginForm);
+export default withStyles(styles)(LoginForm)

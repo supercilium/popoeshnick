@@ -1,5 +1,5 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React from 'react'
+import PropTypes from 'prop-types'
 import {
   Grid,
   Typography,
@@ -11,8 +11,8 @@ import {
   withStyles,
   Button,
   IconButton,
-} from '@material-ui/core';
-import { PopoykaList } from '../popoyka';
+} from '@material-ui/core'
+import { PopoykaList } from '../popoyka'
 
 const styles = ({
   avatar: {
@@ -48,13 +48,13 @@ const styles = ({
     marginTop: '25px',
     color: '#fff',
   },
-});
+})
 
 const cardStyles = ({
   card: {
     textAlign: 'left',
   },
-});
+})
 
 const AlkashCard = withStyles(cardStyles)(({
   name,
@@ -96,20 +96,21 @@ const AlkashCard = withStyles(cardStyles)(({
       <Button>More info</Button>
     </CardActions>
   </Card>
-));
+))
 
 AlkashCard.propTypes = {
   name: PropTypes.string,
   email: PropTypes.string,
   lygrylity: PropTypes.number,
+  // eslint-disable-next-line react/forbid-prop-types
   classes: PropTypes.any.isRequired,
-};
+}
 
 AlkashCard.defaultProps = {
   name: 'Unnamed',
   email: 'unnamed@nowhere',
   lygrylity: 0,
-};
+}
 
 const Home = React.memo(({
   name,
@@ -146,7 +147,6 @@ const Home = React.memo(({
         <Grid item xs={6}>
           {/* <div style={{ marginTop: '56px' }} /> */}
           <AlkashCard {...{ name: 'Team Score', email: 'placeholder', lygrylity: 25 }} />
-          {/* <AlkashCard {...{ name: 'Mr. Liver\'s advices', email: 'placeholder', lygrylity: 25 }} /> */}
         </Grid>
       </Grid>
     </div>
@@ -157,23 +157,25 @@ const Home = React.memo(({
     </div>
     {/* </Grid> */}
   </div>
-));
+))
 
 
 Home.propTypes = {
   name: PropTypes.string,
   email: PropTypes.string,
+  // eslint-disable-next-line react/forbid-prop-types
   classes: PropTypes.object.isRequired,
+  // eslint-disable-next-line react/forbid-prop-types
   popoykaList: PropTypes.array,
   lygrylity: PropTypes.number,
-};
+}
 
 Home.defaultProps = {
   name: '',
   email: '',
   popoykaList: [],
   lygrylity: 0,
-};
+}
 
 
-export default withStyles(styles)(Home);
+export default withStyles(styles)(Home)

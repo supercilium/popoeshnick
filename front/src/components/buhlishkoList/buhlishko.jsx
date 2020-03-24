@@ -26,6 +26,7 @@ Buhlishko.propTypes = {
   name: PropTypes.string,
   amount: PropTypes.string,
   lg: PropTypes.string,
+  // eslint-disable-next-line react/forbid-prop-types
   classes: PropTypes.object.isRequired,
 }
 
