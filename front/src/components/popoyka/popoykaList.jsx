@@ -13,6 +13,7 @@ const PopoykaList = React.memo(({ data }) => (
 ))
 
 PopoykaList.propTypes = {
+  // eslint-disable-next-line react/forbid-prop-types
   data: PropTypes.array,
 }
 

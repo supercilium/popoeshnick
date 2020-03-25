@@ -84,6 +84,7 @@ const Popoyka = React.memo(({
 })
 
 Popoyka.propTypes = {
+  // eslint-disable-next-line react/forbid-prop-types
   buhlishkoList: PropTypes.array,
   dateStart: PropTypes.string,
   dateEnd: PropTypes.string,
@@ -93,6 +94,7 @@ Popoyka.propTypes = {
   mode: PropTypes.string,
   lygrylityAmount: PropTypes.number,
   note: PropTypes.string,
+  // eslint-disable-next-line react/forbid-prop-types
   classes: PropTypes.object.isRequired,
 }
 

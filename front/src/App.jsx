@@ -100,12 +100,13 @@ class App extends React.PureComponent {
     } = this.state
     return (
       <Layout
+        // eslint-disable-next-line react/destructuring-assignment
         auth={!_.isEmpty(this.props.alkash)}
         handleLogout={this.handleLogout}
       >
         {loader ? <CircularProgress disableShrink /> : this.getRoutes()}
       </Layout>
-    );
+    )
   }
 }
 
@@ -122,12 +123,15 @@ const ProtectedRoute = ({ component: Component, auth, ...tail }) => (
 
 
 ProtectedRoute.propTypes = {
+  // eslint-disable-next-line react/forbid-prop-types
   component: PropTypes.any.isRequired,
   auth: PropTypes.bool.isRequired,
 }
 
 App.propTypes = {
+  // eslint-disable-next-line react/forbid-prop-types
   alkash: PropTypes.any,
+  // eslint-disable-next-line react/forbid-prop-types
   alkashActions: PropTypes.object.isRequired,
 }
 

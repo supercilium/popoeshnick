@@ -202,6 +202,7 @@ DialogSignup.propTypes = {
   open: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
   onSend: PropTypes.func.isRequired,
+  // eslint-disable-next-line react/forbid-prop-types
   classes: PropTypes.any.isRequired,
 }
 

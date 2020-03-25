@@ -163,6 +163,7 @@ export class DialogForgot extends PureComponent {
 DialogForgot.propTypes = {
   open: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
+  // eslint-disable-next-line react/forbid-prop-types
   classes: PropTypes.any.isRequired,
 }
 

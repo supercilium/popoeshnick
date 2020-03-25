@@ -12,6 +12,7 @@ import _ from 'lodash'
 
 import Footer from '../footer'
 
+// eslint-disable-next-line no-unused-vars
 const useStyles = makeStyles(theme => ({
   grow: {
     justifyContent: 'space-between',
@@ -45,14 +46,8 @@ export const Layout = ({ alkash, children, handleLogout }) => {
   )
 }
 
-const LoggedInBtns = ({ action }) => (
-  <div>
-    <Button href="/profile" color="inherit">Profile</Button>
-    <Button onClick={action} color="inherit">Logout</Button>
-  </div>
-)
-
 Layout.propTypes = {
+  // eslint-disable-next-line react/forbid-prop-types
   alkash: PropTypes.object,
   children: PropTypes.element,
   handleLogout: PropTypes.func,
@@ -62,6 +57,17 @@ Layout.defaultProps = {
   alkash: {},
   children: {},
   handleLogout: () => { },
+}
+
+const LoggedInBtns = ({ action }) => (
+  <div>
+    <Button href="/profile" color="inherit">Profile</Button>
+    <Button onClick={action} color="inherit">Logout</Button>
+  </div>
+)
+
+LoggedInBtns.propTypes = {
+  action: PropTypes.func.isRequired,
 }
 
 function mapStateToProps(state) {

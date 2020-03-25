@@ -37,7 +37,7 @@ export const Root = () => {
         <Paper elevation={3}><Link href="/">Share Bill</Link></Paper>
         <Paper elevation={3}><Link href="/">Theme Counter</Link></Paper>
         <Paper elevation={3}><Link href="/">Statistics</Link></Paper>
-        <Paper elevation={3}><Link href="/">Popo Assistent</Link></Paper>
+        <Paper elevation={3}><Link href="/protected">Popo Assistent</Link></Paper>
       </div>
     </header>
   )

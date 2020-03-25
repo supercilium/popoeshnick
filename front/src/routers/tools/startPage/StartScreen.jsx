@@ -1,3 +1,4 @@
+/* eslint-disable react/forbid-prop-types */
 import React, { PureComponent } from 'react'
 import { connect } from 'react-redux'
 import axios from 'axios'
