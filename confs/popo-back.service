@@ -1,0 +1,24 @@
+[Unit]
+Description=Startup script for Popoeshnik backend server
+After=local-fs.target network.target
+
+[Service]
+Type=forking
+#PIDFile=/run/popo-back.pid
+PIDFile=/tmp/popoeshnick.pid
+#ExecStartPre=/usr/sbin/sw-cp-serverd -q -t
+ExecStart=/home/vagrant/popo/bin/uwsgi --ini /vagrant_data/dummy/Popoeshnick/wsgi.ini
+
+#ExecStart=/usr/sbin/sw-cp-serverd -c /etc/sw-cp-server/config
+#ExecReload=/usr/sbin/sw-cp-serverd -q -t
+#ExecReload=/usr/sbin/sw-cp-serverd -c /etc/sw-cp-server/config -s reload
+
+
+WorkingDirectory=/home/vagrant/popo/
+User=vagrant
+Group=vagrant
+
+TimeoutSec=100
+
+[Install]
+WantedBy=multi-user.target
