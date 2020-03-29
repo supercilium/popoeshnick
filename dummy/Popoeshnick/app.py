@@ -1,15 +1,15 @@
 import flask
-from flask import Flask
+from flask import Flask, request, jsonify
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 from flask_wtf import FlaskForm
 from wtforms import Form, StringField, PasswordField, validators
 from werkzeug.security import generate_password_hash, check_password_hash
-from flask import jsonify
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'this-really-needs-to-be-changed'
-app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://popo:123@db:5432/popo"
+# app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://popo:123@db:5432/popo"
+app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://postgres:123@127.0.0.1:5432/popo"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
@@ -43,7 +43,6 @@ class Alkash(db.Model):
 
     def get_alkash_by_email(self, email):
         pass
-
 
 
 class Popoyka(db.Model):
@@ -92,8 +91,8 @@ popo_to_bubkh = db.Table('popo_to_bukh',
 
 
 class RegLogForm(FlaskForm):
-    email = StringField('Email', [validators.Email()])
-    password = PasswordField('Password', [validators.length(min=8), validators.Regexp('[A-Za-z0-9@#$%^&+=]')])
+    email = StringField('email', [validators.Email()])
+    password = PasswordField('password', [validators.length(min=6), validators.Regexp('[A-Za-z0-9!@#$%^&+=]')])
 
     class Meta:
         csrf = False
@@ -120,9 +119,12 @@ def login():
         })
 
 
-@app.route('/api/user/registration/', methods=['GET','POST'])
+@app.route('/api/user/registration/', methods=['POST'])
 def registration():
-    form = RegLogForm(flask.request.form)
+    req_data = request.get_json()
+    form = RegLogForm(request.form)
+    form.email.data = req_data['email']
+    form.password.data = req_data['password']
     usr = Alkash()
     if form.validate():
         if not usr.is_registered_email(email=form.email.data):
@@ -141,6 +143,8 @@ def registration():
     return jsonify({'status': 'success',
                     'message': 'User registered successfully',
                     'email': form.email.data})
+
+
 
 
 if __name__ == '__main__':
