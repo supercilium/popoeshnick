@@ -1,21 +1,16 @@
 import click
 import flask
-from flask import Flask
+from flask import Flask, request, jsonify
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 from flask_wtf import FlaskForm
 from wtforms import Form, StringField, PasswordField, validators
 from werkzeug.security import generate_password_hash, check_password_hash
-from flask import jsonify
 
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'this-really-needs-to-be-changed'
-<<<<<<< Updated upstream
-app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://popo:123@db:5432/popo"
-=======
 app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://postgres:123@127.0.0.1:5432/popo"
->>>>>>> Stashed changes
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
@@ -125,29 +120,7 @@ def login():
         })
 
 
-<<<<<<< Updated upstream
-@app.route('/api/user/registration/', methods=['GET','POST'])
-def registration():
-    form = RegLogForm(flask.request.form)
-    usr = Alkash()
-    if form.validate():
-        if not usr.is_registered_email(email=form.email.data):
-            usr.add_alkash(email=form.email.data, password_hash = generate_password_hash(form.password.data))
-        else: #such user is already here
-            return jsonify({'status': 'error',
-                            'message':'User already registered'})
-    else:
-        errors_json = dict()
-        for field_name, errors in form.errors.items():
-            errors_json[field_name] = errors
-        return jsonify({
-            'status': 'error',
-            'errors': errors_json
-        })
-    return jsonify({'status': 'success',
-                    'message': 'User registered successfully',
-                    'email': form.email.data})
-=======
+
 @app.cli.command("register-user")
 @click.argument("email")
 @click.argument("password")
@@ -174,7 +147,6 @@ def registration(email, password):
         return jsonify({'status': 'success',
                         'message': 'User registered successfully',
                         'email': form.email.data})
->>>>>>> Stashed changes
 
 
 if __name__ == '__main__':
