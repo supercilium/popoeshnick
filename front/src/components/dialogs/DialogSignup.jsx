@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React, { PureComponent } from 'react'
 import {
   Button,
   Dialog,
@@ -7,22 +7,22 @@ import {
   TextField,
   CircularProgress,
   withStyles,
-} from '@material-ui/core';
-import PropTypes from 'prop-types';
-import _ from 'lodash';
-import { API_CONST } from '../../constants';
+} from '@material-ui/core'
+import PropTypes from 'prop-types'
+import _ from 'lodash'
+import { API_CONST } from '../../constants'
 
-import './dialog.css';
-import { validateEmail, validatePass, instance } from '../../utils';
+import './dialog.css'
+import { validateEmail, validatePass, instance } from '../../utils'
 
 const styles = ({
   button: {
     marginTop: '20px',
   },
-});
+})
 export class DialogSignup extends PureComponent {
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
       loading: false,
       email: null,
@@ -34,7 +34,7 @@ export class DialogSignup extends PureComponent {
         registration: '',
         passwordIdentity: '',
       },
-    };
+    }
   }
 
   handleOnExited = () => {
@@ -45,55 +45,55 @@ export class DialogSignup extends PureComponent {
         registration: '',
         passwordIdentity: '',
       },
-    });
+    })
   }
 
   handleSetPassword = (event) => {
-    const errMsg = ['must contain at list 8 charecters'];
+    const errMsg = ['must contain at list 8 charecters']
     this.setState({
       password: event.target.value,
       errors: {
         password: validatePass(event.target.value) ? [] : errMsg,
       },
-    });
+    })
   }
 
   handleSetEmail = (event) => {
-    const errMsg = ['invailid email address'];
+    const errMsg = ['invailid email address']
     this.setState({
       email: event.target.value,
       errors: {
         email: validateEmail(event.target.value) ? [] : errMsg,
       },
-    });
+    })
   }
 
   handleVerifyPassword = (event) => {
-    const { password } = this.state;
+    const { password } = this.state
     if (event.target.value === password) {
       this.setState({
         errors: { passwordIdentity: 'does not match' },
         passwordIdentity: true,
-      });
+      })
     } else {
       this.setState({
         errors: { passwordIdentity: 'does not match' },
         passwordIdentity: false,
-      });
+      })
     }
   }
 
   handleSignup = () => {
-    const { password, email } = this.state;
-    this.setState({ loading: true });
-    const { onSend } = this.props;
+    const { password, email } = this.state
+    this.setState({ loading: true })
+    const { onSend } = this.props
     instance.post(API_CONST.REGISTER, {
       password,
       email,
     }).then((res) => {
-      const { errors, profile, status } = res.data;
+      const { errors, profile, status } = res.data
       if (status === 'success') {
-        onSend(profile || {});
+        onSend(profile || {})
       } else {
         this.setState({
           errors: {
@@ -101,47 +101,47 @@ export class DialogSignup extends PureComponent {
             email: errors.email,
             password: errors.password,
           },
-        });
+        })
       }
     }).catch(async (error) => {
       if (error.response) {
-        this.setState({ errors: { registration: error.response.data } });
+        this.setState({ errors: { registration: error.response.data } })
       } else if (error.request) {
         // The request was made but no response was received
         // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
         // http.ClientRequest in node.js
-        // this.setState({ error: error.request });
+        // this.setState({ error: error.request })
       } else {
         // Something happened in setting up the request that triggered an Error
-        // this.setState({ error: error.message });
+        // this.setState({ error: error.message })
       }
-    });
-    this.setState({ loading: false });
+    })
+    this.setState({ loading: false })
   }
 
   handleSubmit = (e) => {
     const {
       errors,
-    } = this.state;
-    const passError = !_.isEmpty(errors.password);
-    const emailError = !_.isEmpty(errors.email);
+    } = this.state
+    const passError = !_.isEmpty(errors.password)
+    const emailError = !_.isEmpty(errors.email)
     if (!emailError && !passError) {
-      this.handleSignup();
+      this.handleSignup()
     }
-    e.preventDefault();
+    e.preventDefault()
   }
 
   render() {
-    const { open, onClose, classes } = this.props;
+    const { open, onClose, classes } = this.props
     const {
       loading,
       errors,
       email,
       password,
       passwordIdentity,
-    } = this.state;
-    const passError = !_.isEmpty(errors.password);
-    const emailError = !_.isEmpty(errors.email);
+    } = this.state
+    const passError = !_.isEmpty(errors.password)
+    const emailError = !_.isEmpty(errors.email)
     return (
       <Dialog
         open={open}
@@ -194,7 +194,7 @@ export class DialogSignup extends PureComponent {
           }
         </DialogContent>
       </Dialog>
-    );
+    )
   }
 }
 
@@ -202,7 +202,8 @@ DialogSignup.propTypes = {
   open: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
   onSend: PropTypes.func.isRequired,
+  // eslint-disable-next-line react/forbid-prop-types
   classes: PropTypes.any.isRequired,
-};
+}
 
-export default withStyles(styles)(DialogSignup);
+export default withStyles(styles)(DialogSignup)

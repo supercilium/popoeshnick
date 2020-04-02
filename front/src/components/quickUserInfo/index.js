@@ -1,4 +1,3 @@
-import QuickUserInfo from './quickUserInfo';
+import QuickUserInfo from './quickUserInfo'
 
-export default QuickUserInfo;
-
+export default QuickUserInfo
