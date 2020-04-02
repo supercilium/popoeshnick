@@ -1,3 +1,4 @@
+import click
 import flask
 from flask import Flask, request, jsonify
 from flask_migrate import Migrate
@@ -6,16 +7,16 @@ from flask_wtf import FlaskForm
 from wtforms import Form, StringField, PasswordField, validators
 from werkzeug.security import generate_password_hash, check_password_hash
 
+
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'this-really-needs-to-be-changed'
-# app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://popo:123@db:5432/popo"
 app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://postgres:123@127.0.0.1:5432/popo"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
 migrate = Migrate(app, db)
 
-# huipizda
+
 class Alkash(db.Model):
     __tablename__ = 'alkashi'
     id = db.Column(db.Integer, primary_key=True)
@@ -23,7 +24,6 @@ class Alkash(db.Model):
     email = db.Column(db.String(120), unique=True)
     password_hash = db.Column(db.String(128))
 
-#SPIZDILA, HZ KAK ONO RABOTAET
     @classmethod
     def add_alkash(cls, **kw):
         obj = cls(**kw)
@@ -119,32 +119,32 @@ def login():
         })
 
 
-@app.route('/api/user/registration/', methods=['POST'])
-def registration():
-    req_data = request.get_json()
-    form = RegLogForm(request.form)
-    form.email.data = req_data['email']
-    form.password.data = req_data['password']
-    usr = Alkash()
-    if form.validate():
-        if not usr.is_registered_email(email=form.email.data):
-            usr.add_alkash(email=form.email.data, password_hash = generate_password_hash(form.password.data))
-        else: #such user is already here
-            return jsonify({'status': 'error',
-                            'message':'User already registered'})
-    else:
-        errors_json = dict()
-        for field_name, errors in form.errors.items():
-            errors_json[field_name] = errors
-        return jsonify({
-            'status': 'error',
-            'errors': errors_json
-        })
-    return jsonify({'status': 'success',
-                    'message': 'User registered successfully',
-                    'email': form.email.data})
-
-
+@app.cli.command("register-user")
+@click.argument("email")
+@click.argument("password")
+def registration(email, password):
+    with app.test_request_context():
+        form = RegLogForm(request.form)
+        form.email.data = email
+        form.password.data = password
+        usr = Alkash()
+        if form.validate():
+            if not usr.is_registered_email(email=form.email.data):
+                usr.add_alkash(email=form.email.data, password_hash = generate_password_hash(form.password.data))
+            else: #such user is already here
+                return jsonify({'status': 'error',
+                                'message':'User already registered'})
+        else:
+            errors_json = dict()
+            for field_name, errors in form.errors.items():
+                errors_json[field_name] = errors
+            return jsonify({
+                'status': 'error',
+                'errors': errors_json
+            })
+        return jsonify({'status': 'success',
+                        'message': 'User registered successfully',
+                        'email': form.email.data})
 
 
 if __name__ == '__main__':
