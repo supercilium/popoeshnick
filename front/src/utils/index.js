@@ -1,6 +1,6 @@
 export {
   validateEmail,
   validatePass,
-} from './validation';
+} from './validation'
 
-export { default as instance } from './axiosMiddleware';
+export { default as instance } from './axiosMiddleware'

@@ -1,2 +1,3 @@
-// eslint-disable-next-line import/prefer-default-export
-export { default as LoginForm } from './loginForm';
+import LoginForm from './loginForm'
+
+export default LoginForm

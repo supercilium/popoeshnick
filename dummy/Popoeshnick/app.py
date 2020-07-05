@@ -45,7 +45,6 @@ class Alkash(db.Model):
         pass
 
 
-
 class Popoyka(db.Model):
     __tablename__ = 'popoyka'
     id = db.Column(db.Integer, primary_key=True)
@@ -92,8 +91,8 @@ popo_to_bubkh = db.Table('popo_to_bukh',
 
 
 class RegLogForm(FlaskForm):
-    email = StringField('Email', [validators.Email()])
-    password = PasswordField('Password', [validators.length(min=8), validators.Regexp('[A-Za-z0-9@#$%^&+=]')])
+    email = StringField('email', [validators.Email()])
+    password = PasswordField('password', [validators.length(min=6), validators.Regexp('[A-Za-z0-9!@#$%^&+=]')])
 
     class Meta:
         csrf = False
