@@ -119,10 +119,19 @@ def login():
         })
 
 
+#Todo: add echo after registration - success/fail + errors
 @app.cli.command("register-user")
 @click.argument("email")
 @click.argument("password")
 def registration(email, password):
+    """
+    Function to register new users from CLI.
+
+    :param email: string give email of the new user
+    :param password: string guess what
+    :return: status
+    """
+
     with app.test_request_context():
         form = RegLogForm(request.form)
         form.email.data = email
@@ -145,6 +154,7 @@ def registration(email, password):
         return jsonify({'status': 'success',
                         'message': 'User registered successfully',
                         'email': form.email.data})
+
 
 
 if __name__ == '__main__':
