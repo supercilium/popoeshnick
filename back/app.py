@@ -1,22 +1,28 @@
 from flask import Flask
 from flask_restful import Resource, Api
 
-
 app = Flask(__name__)
 api = Api(app)
 
-class HelloWorld(Resource):
-    def get(self):
-        return {'hello':'world'}
+users = [
+        {'name': 'John',
+         'score': 12,
+         'budget': 1400},
+        {'name': 'Bob',
+         'score': 29,
+         'budget': 2800},
+        ]
 
-# here we add register resource with API
-# pass class name (not the instance)
-# and the second argument is the URL where
-# this resource will be accessible
+
+class User(Resource):
+    def get(self, name):
+        for user in users:
+            if user['name'].lower() == name.lower():
+                return user
+        return {'name': None}, 404
 
 
-# CHANGED LINE!!!
-api.add_resource(HelloWorld, '/')
+api.add_resource(User, '/user/<string:name>')
 
 
 if __name__=='__main__':
