@@ -13,6 +13,9 @@ class HelloWorld(Resource):
 # pass class name (not the instance)
 # and the second argument is the URL where
 # this resource will be accessible
+
+
+# CHANGED LINE!!!
 api.add_resource(HelloWorld, '/')
 
 
