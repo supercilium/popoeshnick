@@ -45,7 +45,7 @@ $ npm run dev
 
 **Backend**
 
-The steps below are provided for venv, however any other virtual environment manager can be used. Python version is 3.8.3.
+The steps below are provided for venv, however any other virtual environment manager can be used. Python version is 3.7.8.
 
 1. Create virtual environment:
 python -m venv <env_name>
