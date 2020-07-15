@@ -34,7 +34,7 @@ export const Root = () => {
     <header className={classes.header}>
       <h1>PoPoTools</h1>
       <div className={classes.root}>
-        <Paper elevation={3}><Link href="/">Share Bill</Link></Paper>
+        <Paper elevation={3}><Link href="/share-bill">Share bill</Link></Paper>
         <Paper elevation={3}><Link href="/">Theme Counter</Link></Paper>
         <Paper elevation={3}><Link href="/">Statistics</Link></Paper>
         <Paper elevation={3}><Link href="/protected">Popo Assistent</Link></Paper>
