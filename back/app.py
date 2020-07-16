@@ -15,17 +15,30 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 Migrate(app, db)
 
+
+users_to_parties = db.Table('users_to_parties',
+    db.Column('user_id', db.Integer, db.ForeignKey('user.id'), nullable=False),
+    db.Column('party_id', db.Integer, db.ForeignKey('party.id'), nullable=False),
+    db.PrimaryKeyConstraint('user_id', 'party_id')
+    )
+
+
+
 class User(db.Model):
     __tablename__ = 'user'
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(64), unique=True)
-    email = db.Column(db.String(120), unique=True, primary_key=True)
+    email = db.Column(db.String(120), unique=True)
     password_hash = db.Column(db.String(128))
     lg_score = db.Column(db.Float())
     is_active = db.Column(db.Boolean, unique=False, default=True)
+    parties = db.relationship('Party', secondary=users_to_parties, backref='user')
 
     def __init__(self, email):
         self.email = email
+
+    def __repr__(self):
+        return f'User: #{self.id}, email - {self.email}'
 
     def anon(self):
         # procedure to anonymize user's data
@@ -44,9 +57,14 @@ class Party(db.Model):
     lg_score = db.Column(db.Float())
     note = db.Column(db.String(250))
     line_items = db.relationship('LineItem', backref='party', lazy=True)
+    users = db.relationship('User', secondary=users_to_parties, backref='party')
 
     def __init__(self, name):
         self.name = name
+
+    def __repr__(self):
+        return f'Party: #{self.id}, name - {self.name}'
+
 
 
 
@@ -65,6 +83,9 @@ class LineItem(db.Model):
     def __init__(self, name, party_id):
         self.name = name
         self.party_id = party_id
+
+    def __repr__(self):
+        return f'Item: #{self.id}, name - {self.name}, party #{self.party.id}'
 
 
 class UserRes(Resource):
