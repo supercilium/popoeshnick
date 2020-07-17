@@ -17,22 +17,30 @@ Migrate(app, db)
 
 
 users_to_parties = db.Table('users_to_parties',
-    db.Column('user_id', db.Integer, db.ForeignKey('user.id'), nullable=False),
-    db.Column('party_id', db.Integer, db.ForeignKey('party.id'), nullable=False),
+    db.Column('user_id', db.Integer, db.ForeignKey('users.id'), nullable=False),
+    db.Column('party_id', db.Integer, db.ForeignKey('parties.id'), nullable=False),
     db.PrimaryKeyConstraint('user_id', 'party_id')
+    )
+
+
+users_to_items = db.Table('users_to_items',
+    db.Column('user_id', db.Integer, db.ForeignKey('users.id'), nullable=False),
+    db.Column('item_id', db.Integer, db.ForeignKey('items.id'), nullable=False),
+    db.PrimaryKeyConstraint('user_id', 'item_id')
     )
 
 
 
 class User(db.Model):
-    __tablename__ = 'user'
+    __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(64), unique=True)
     email = db.Column(db.String(120), unique=True)
     password_hash = db.Column(db.String(128))
     lg_score = db.Column(db.Float())
     is_active = db.Column(db.Boolean, unique=False, default=True)
-    parties = db.relationship('Party', secondary=users_to_parties, backref='user')
+    parties = db.relationship('Party', secondary=users_to_parties, backref='users_p', lazy=True)
+    items = db.relationship('Item', secondary=users_to_items, backref='users_i', lazy=True)
 
     def __init__(self, email):
         self.email = email
@@ -46,7 +54,7 @@ class User(db.Model):
 
 
 class Party(db.Model):
-    __tablename__ = 'party'
+    __tablename__ = 'parties'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(64))
     start = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
@@ -56,8 +64,8 @@ class Party(db.Model):
     currency = db.Column(db.String(10))
     lg_score = db.Column(db.Float())
     note = db.Column(db.String(250))
-    line_items = db.relationship('LineItem', backref='party', lazy=True)
-    users = db.relationship('User', secondary=users_to_parties, backref='party')
+    items = db.relationship('Item', backref='parties_i', lazy=True)
+    users = db.relationship('User', secondary=users_to_parties, backref='parties_u', lazy=True)
 
     def __init__(self, name):
         self.name = name
@@ -68,8 +76,8 @@ class Party(db.Model):
 
 
 
-class LineItem(db.Model):
-    __tablename__ = 'line_item'
+class Item(db.Model):
+    __tablename__ = 'items'
     id = db.Column(db.Integer, primary_key=True)
 # TODO: do we need is_alc as a separate bool? maybe leave potency !=0 as indicator?
     is_alc = db.Column(db.Boolean, unique=False, default=True)
@@ -78,14 +86,15 @@ class LineItem(db.Model):
     lg_score = db.Column(db.Float())
     price = db.Column(db.Float())
     potency = db.Column(db.Float())
-    party_id = db.Column(db.Integer, db.ForeignKey('party.id'))
+    party_id = db.Column(db.Integer, db.ForeignKey('parties.id'))
+    users = db.relationship('User', secondary=users_to_items, backref='items_u', lazy=True)
 
     def __init__(self, name, party_id):
         self.name = name
         self.party_id = party_id
 
     def __repr__(self):
-        return f'Item: #{self.id}, name - {self.name}, party #{self.party.id}'
+        return f'Item: #{self.id}, name - {self.name}, party #{self.party_id}'
 
 
 class UserRes(Resource):
