@@ -14,5 +14,5 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 Migrate(app, db)
 
-from popo.resources import UserRes
-api.add_resource(UserRes, '/api/user/registration/')
+from popo.resources import UserReg
+api.add_resource(UserReg, '/api/user/registration/')
