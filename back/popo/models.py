@@ -31,6 +31,9 @@ class User(db.Model):
         self.email = email
         self.password_hash = generate_password_hash(password)
 
+    def __repr__(self):
+        return f'User: #{self.id}, email - {self.email}'
+
     def check_password(self, password):
         return check_password_hash(self.password_hash,password)
 
@@ -38,37 +41,79 @@ class User(db.Model):
         self.password_hash = generate_password_hash(password)
 
 
-    def get_rank_by_lg_score(self):
-# TODO - change to dict-based
-        if self.lg_score < 3:
-            return 'noob'
-        elif self.lg_score < 7:
-            return 'rank 1'
-        elif self.lg_score < 10:
-            return 'rank 2'
-        elif self.lg_score < 15:
-            return 'rank 3'
-        elif self.lg_score < 20:
-            return 'rank 4'
+    def get_lg_score(self):
+        '''
+        get lg_score for all user's recorded items
+        '''
 
+        res = db.session.execute('''
+        select item_id, count(distinct user_id), potency, amount
+        from users_to_items as u2i
+        inner join items as i on i.id=u2i.item_id
+        where item_id in
+        (select item_id from users_to_items where user_id = :uid)
+        group by item_id, potency, amount;
+        ''', {'uid': self.id})
+
+        lg_score = sum([r[2]*r[3]/r[1] for r in res])
+
+        return "%.2f" % lg_score
+
+
+    def get_rank_by_lg_score(self):
+        score = float(self.get_lg_score())
+
+        if 1 <= score < 6:
+            return 'rank 1'
+        elif 6 <= score < 11:
+            return 'rank 2'
+        elif 11 <= score < 16:
+            return 'rank 3'
+        elif 16 <= score <= 1000:
+            return 'rank 4'
+        else:
+            raise ValueError('Unsupported score: {}'.format(roll))
+
+
+    def get_budget(self):
+        '''
+        get total budget for user -- all recorded expenses
+        '''
+
+        res = db.session.execute('''
+        select sum(i.price)
+        from items as i
+        left outer join users_to_items as u2i on i.id=u2i.item_id
+        left outer join users as u on u.id=u2i.user_id
+        where u.id = :uid;
+        ''', {'uid': self.id}).fetchone()
+
+        return res[0]
+
+
+    def get_budget_per_party():
+        '''
+        get expenses list for a party for a user:
+        items-prices-shared
+        total
+        '''
+# TODO: add
+        pass
+
+
+    def anon(self):
+# TODO: add anonymization for user account
+        pass
 
     def json_profile(self):
         return {
         'username': self.username,
         'email': self.email,
-        'lg_score': self.lg_score,
+        'lg_score': self.get_lg_score(),
         'rank': self.get_rank_by_lg_score(),
+        'budget': self.get_budget(),
+        'parties_list': [p.json_party() for p in self.parties],
         }
-
-
-
-
-    def __repr__(self):
-        return f'User: #{self.id}, email - {self.email}'
-
-    def anon(self):
-# TODO: add anonymization for user account
-        pass
 
 
 class Party(db.Model):
@@ -106,7 +151,7 @@ class Party(db.Model):
         return "%.2f" % lg_score
 
 
-    def get_intencity(self):
+    def get_intensity(self):
 # TODO: add intensity
         '''
         Measure party intensity - in lg/hours
@@ -122,6 +167,7 @@ class Party(db.Model):
         'location': self.location,
         'budget':self.get_budget(),
         'lg_score': self.get_lg_score(),
+# TODO: do we want to get only user's items, or all items for a party?
         'items_list': [i.json_item() for i in self.items],
         }
 
