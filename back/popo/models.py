@@ -180,7 +180,7 @@ class Item(db.Model):
     price = db.Column(db.Float())
 # TODO: move currency to enumerate in DB? is there a special type for currency
 # on postgresql level?
-    currency = db.Column(db.String(10))
+    currency = db.Column(db.String(3))
     potency = db.Column(db.Float())
     party_id = db.Column(db.Integer, db.ForeignKey('parties.id'))
     users = db.relationship('User', secondary=users_to_items, backref='items_u', lazy=True)
