@@ -5,11 +5,14 @@ from flask_migrate import Migrate
 
 
 app = Flask(__name__)
-api = Api(app)
 
-app.config['SECRET_KEY'] = 'govna piroga'
-app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://popo:123@127.0.0.1:5432/popo"
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+# export FLASK_ENV variable
+if app.config["ENV"] == "production":
+    app.config.from_object("config.ProdConfig")
+else:
+    app.config.from_object("config.DevConfig")
+
+api = Api(app)
 
 db = SQLAlchemy(app)
 Migrate(app, db)
