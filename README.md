@@ -51,11 +51,18 @@ The steps below are provided for venv, however any other virtual environment man
 python -m venv <env_name>
 
 2. Activate the environment:
-\<env_name>\Scripts\Activate.ps1
 
+- Windows:    
+\<env_name>\Scripts\Activate.ps1
 Activate.ps1 is the activation script for PowerShell. In cmd, use .bat one.
 
-3. Run the app:
+- Linux: 
+source <env_name>/bin/activate
+
+3. Install the dependencies:
+pip install -r requirements.txt 
+
+4. Run the app:
 python app.py 
 
 
