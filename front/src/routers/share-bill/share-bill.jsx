@@ -12,6 +12,11 @@ import { makeStyles } from '@material-ui/core/styles'
 import Grid from '@material-ui/core/Grid'
 import _ from 'lodash'
 
+import { validateRegexp } from '../../utils'
+
+// eslint-disable-next-line no-useless-escape
+const itemsRegexp = /([^;,.]+)(,[\d\.]+){1,};*/gm
+
 const useStyles = makeStyles({
   root: {
     paddingBottom: '50px',
@@ -77,6 +82,7 @@ export default () => {
   const [user, setUsers] = useState('')
   const [sums, setSums] = useState([])
   const [users, setUserChecks] = useState({})
+  const [itemsError, setError] = useState(false)
   const classes = useStyles()
   let categoryDividers = []
 
@@ -98,6 +104,11 @@ export default () => {
       }
       return Object.assign({}, prevUsers, { [name]: arr.map(() => 0) })
     })
+  }
+
+  const handleChangeSums = (e) => {
+    setValue(e.target.value)
+    setError(!validateRegexp(e.target.value, itemsRegexp))
   }
 
   const items = parseItems(value)
@@ -135,12 +146,13 @@ export default () => {
                 helperText="Input format: user1,user2,...,userN"
               />
               <TextField
+                error={itemsError}
                 multiline
                 id="items"
                 label="Enter items"
                 fullWidth
                 value={value}
-                onChange={e => setValue(e.target.value)}
+                onChange={handleChangeSums}
                 margin="normal"
                 helperText="Input format: itemName1,itemPrice1[,itemQuantity1,itemDiscount1];..."
               />
@@ -278,7 +290,9 @@ export default () => {
                             {
                               users[item].reduce((sum, flag, i) => (
                                 categoryDividers[i]
-                                  ? sum + flag * sums[i].quantity * sums[i].price * (1 - sums[i].discount) / categoryDividers[i]
+                                  ? sum
+                                    + flag * sums[i].quantity
+                                    * sums[i].price * (1 - sums[i].discount) / categoryDividers[i]
                                   : sum
                               ), 0).toFixed(2)
                             }
