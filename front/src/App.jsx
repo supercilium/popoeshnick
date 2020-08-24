@@ -49,9 +49,11 @@ class App extends React.PureComponent {
         if (status === 'success') {
           setAlkash(profile)
         } else {
+          // eslint-disable-next-line no-console
           console.log(errors)
         }
       }).catch((error) => {
+        // eslint-disable-next-line no-console
         console.log(error)
       }).then(() => this.setState({ loader: false }))
     } else {
