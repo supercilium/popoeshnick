@@ -4,7 +4,7 @@ from flask import request
 from flask_restful import Resource
 
 
-class UserReg(Resource):
+class Users(Resource):
 
     def post(self):
         email = request.get_json()['email']
@@ -12,3 +12,10 @@ class UserReg(Resource):
         user = User(email=email, password=password)
         db.session.add(user)
         db.session.commit()
+
+        id = User.query.filter_by(email=email).first().id
+
+        return {'user_id': id}, 201
+
+    def get(self):
+        pass
