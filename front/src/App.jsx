@@ -21,10 +21,11 @@ import {
   LoginPage,
   StartScreen,
   Profile,
+  ShareBill,
 } from './routers'
 import { Layout } from './components'
 import { ROUT_CONST, API_CONST } from './constants'
-import alkashActions from './__data__/actions'
+import * as alkashActions from './__data__/actions'
 
 
 const cookies = new Cookies()
@@ -48,9 +49,11 @@ class App extends React.PureComponent {
         if (status === 'success') {
           setAlkash(profile)
         } else {
+          // eslint-disable-next-line no-console
           console.log(errors)
         }
       }).catch((error) => {
+        // eslint-disable-next-line no-console
         console.log(error)
       }).then(() => this.setState({ loader: false }))
     } else {
@@ -87,6 +90,7 @@ class App extends React.PureComponent {
         <Switch>
           <Route path="/" component={Root} exact />
           <Route path="/login" component={LoginPage} />
+          <Route path="/share-bill" component={ShareBill} />
           <ProtectedRoute path={`/${ROUT_CONST.PROFILE_PAGE}`} auth={isAuth} component={Profile} />
           <ProtectedRoute path="/protected" auth={isAuth} component={StartScreen} />
         </Switch>

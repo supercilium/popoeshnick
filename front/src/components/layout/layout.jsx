@@ -14,6 +14,10 @@ import Footer from '../footer'
 
 // eslint-disable-next-line no-unused-vars
 const useStyles = makeStyles(theme => ({
+  root: {
+    position: 'relative',
+    minHeight: '100vh',
+  },
   grow: {
     justifyContent: 'space-between',
   },
@@ -25,6 +29,7 @@ export const Layout = ({ alkash, children, handleLogout }) => {
   return (
     <Container
       maxWidth={false}
+      className={classes.root}
       disableGutters
     >
       <AppBar

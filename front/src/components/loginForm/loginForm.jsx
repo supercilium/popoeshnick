@@ -107,6 +107,7 @@ export class LoginForm extends PureComponent {
         })
       }
     }).catch((error) => {
+      // eslint-disable-next-line no-console
       console.log(error)
     })
   }

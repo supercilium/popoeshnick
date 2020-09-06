@@ -11,7 +11,8 @@
     "server": "node-env-run stub --exec nodemon | pino-colada",
     "dev": "run-p server start"
   },
-  "proxy": "http://localhost:5000",
+  "proxy": "http://localhost:4000",
+  "secure": false,
   "eslintConfig": {
     "extends": "eslint-config-airbnb"
   },
@@ -36,7 +37,7 @@
     "@fortawesome/fontawesome-svg-core": "^1.2.27",
     "@fortawesome/free-solid-svg-icons": "^5.12.1",
     "@fortawesome/react-fontawesome": "^0.1.8",
-    "@material-ui/core": "^4.9.5",
+    "@material-ui/core": "^4.11.0",
     "@svgr/webpack": "4.3.3",
     "axios": "^0.18.0",
     "babel-loader": "8.1.0",

@@ -4,3 +4,5 @@ export const validateEmail = (email) => {
 }
 
 export const validatePass = password => password.length >= 8
+
+export const validateRegexp = (str, regexp) => regexp.test(str)

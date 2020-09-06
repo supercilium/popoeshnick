@@ -37,6 +37,10 @@ const styles = {
 export class LoginPage extends React.PureComponent {
   constructor(props) {
     super(props)
+
+    const { dispatch } = props
+    this.actions = bindActionCreators(alkashActions, dispatch)
+
     this.state = {
       openSignup: false,
       openForgot: false,
@@ -44,7 +48,7 @@ export class LoginPage extends React.PureComponent {
   }
 
   // eslint-disable-next-line react/destructuring-assignment
-  handleLogin = profile => this.props.alkashActions.setAlkash(profile)
+  handleLogin = profile => this.actions.setAlkash(profile)
 
   // eslint-disable-next-line react/destructuring-assignment
   handleSendQuery = profile => this.props.alkashActions.setAlkash(profile)
@@ -97,6 +101,7 @@ LoginPage.propTypes = {
   classes: PropTypes.object.isRequired,
   alkashActions: PropTypes.object.isRequired,
   alkash: PropTypes.any.isRequired,
+  dispatch: PropTypes.any.isRequired,
 }
 
 function mapStateToProps(state) {
@@ -105,10 +110,4 @@ function mapStateToProps(state) {
   }
 }
 
-function mapDispatchToProps(dispatch) {
-  return {
-    alkashActions: bindActionCreators(alkashActions, dispatch),
-  }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(LoginPage))
+export default connect(mapStateToProps)(withStyles(styles)(LoginPage))
