@@ -25,7 +25,7 @@ import {
 } from './routers'
 import { Layout } from './components'
 import { ROUT_CONST, API_CONST } from './constants'
-import alkashActions from './__data__/actions'
+import * as alkashActions from './__data__/actions'
 
 
 const cookies = new Cookies()
