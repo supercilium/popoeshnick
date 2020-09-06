@@ -1,5 +1,5 @@
-*__pycache__/*
-*migrations/*
-*penv/*
-*schemes/*
+**/__pycache__/*
+*/migrations/*
+*/penv/*
+*/schemes/*
 *.vagrant*

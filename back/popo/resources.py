@@ -5,6 +5,8 @@ from flask_restful import Resource
 from sqlalchemy.exc import IntegrityError
 
 
+
+
 class Users(Resource):
 
     def post(self):
@@ -37,8 +39,35 @@ class Users(Resource):
 
 
 class UserID(Resource):
-    
+
     def post(self):
+
+        alkashProfile = {
+        "name": 'Vasya',
+        "email": 'alkash@top.one',
+        "lygrylity": 12,
+        "rank": 'Newbie',
+        "popoykaList": [
+            {
+            "dateStart": '2019-02-25T04:06:10.570Z',
+            "dateEnd": '2019-02-26T04:06:10.570Z',
+            "location": 'outdoor',
+            "budget": 3000,
+            "currency": 'RUR',
+            "mode": 'single',
+            "lygrylityAmount": 30,
+            "note": 'string note',
+            "buhlishkoList": [
+                {
+                "name": 'wine',
+                "amount": '0.7',
+                "lg": '0.4',
+                },
+                            ],
+            },
+        ],
+        }
+
         email = request.get_json()['email']
         password = request.get_json()['password']
 
@@ -55,9 +84,11 @@ class UserID(Resource):
                     }
         else:
             if u.check_password(password):
+                # set session cookie
                 return {
                         "status": "success",
-                        "profile":  u.json_profile()
+                        #"profile":  u.json_profile(),
+                        "profile":  alkashProfile,
                        }
             else:
                 return {
