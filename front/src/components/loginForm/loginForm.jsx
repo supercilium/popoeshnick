@@ -1,4 +1,3 @@
-/* eslint-disable react/jsx-one-expression-per-line */
 import React, { PureComponent } from 'react'
 import {
   TextField,
@@ -14,7 +13,6 @@ import axios from 'axios'
 import { validateEmail, validatePass } from '../../utils'
 import { API_CONST } from '../../constants'
 
-// eslint-disable-next-line no-unused-vars
 const styles = {
   form: {
     display: 'flex',
@@ -107,7 +105,6 @@ export class LoginForm extends PureComponent {
         })
       }
     }).catch((error) => {
-      // eslint-disable-next-line no-console
       console.log(error)
     })
   }
@@ -136,7 +133,6 @@ export class LoginForm extends PureComponent {
       errors,
     } = this.state
     const { classes } = this.props
-    // eslint-disable-next-line react/destructuring-assignment
     const passError = !_.isEmpty(errors.password)
     const emailError = !_.isEmpty(errors.email)
     return (
@@ -192,7 +188,6 @@ export class LoginForm extends PureComponent {
 
 LoginForm.propTypes = {
   onLogin: PropTypes.func,
-  // eslint-disable-next-line react/forbid-prop-types
   classes: any,
 }
 
