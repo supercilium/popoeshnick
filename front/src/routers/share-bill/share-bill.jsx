@@ -1,66 +1,22 @@
-/* eslint-disable quote-props */
 import React, { useState } from 'react'
+import { PropTypes } from 'prop-types'
 import {
   Checkbox,
+  FormControlLabel,
   Typography,
   TextField,
   Button,
   Card,
   CardContent,
 } from '@material-ui/core'
-import { makeStyles } from '@material-ui/core/styles'
 import Grid from '@material-ui/core/Grid'
 import _ from 'lodash'
 
 import { validateRegexp } from '../../utils'
+import { useBillFormStyles } from './styles'
 
 // eslint-disable-next-line no-useless-escape
 const itemsRegexp = /([^;,.]+)(,[\d\.]+){1,};*/gm
-
-const useStyles = makeStyles({
-  root: {
-    paddingBottom: '50px',
-  },
-  formInitial: {
-    maxWidth: '500px',
-    margin: '42px',
-  },
-  button: {
-    margin: '20px 0 0',
-  },
-  columns: {
-    display: 'flex',
-  },
-  header: {
-    padding: '4px 0 1px',
-  },
-  form: {
-    display: 'flex',
-    margin: '0 auto',
-  },
-  userScore: {
-    display: 'flex',
-    flexDirection: 'column',
-    textAlign: 'center',
-    margin: '0 12px',
-  },
-  users: {
-    display: 'flex',
-  },
-  categoryList: {
-    display: 'flex',
-    marginTop: '36px',
-  },
-  caterory: {
-    padding: '0 42px',
-  },
-  sums: {
-    padding: '0 10px',
-  },
-  overline: {
-    lineHeight: '42px',
-  },
-})
 
 const parseItems = (str) => {
   const items = str.split(';')
@@ -75,34 +31,60 @@ const parseItems = (str) => {
   })
 }
 
+const CheckboxComponent = ({ label, input, meta }) => (
+  <FormControlLabel
+    control={(
+      <Checkbox
+        color="primary"
+        {...input}
+        {...meta}
+      />
+    )}
+    label={label}
+  />
+)
+
+CheckboxComponent.propTypes = {
+  label: PropTypes.string,
+  input: PropTypes.object.isRequired,
+  meta: PropTypes.object.isRequired,
+}
+
+CheckboxComponent.defaultProps = {
+  label: '',
+}
+
 const parseUsers = str => str.split(',')
 
-export default () => {
+export const ShareBill = () => {
   const [value, setValue] = useState('')
   const [user, setUsers] = useState('')
   const [sums, setSums] = useState([])
-  const [users, setUserChecks] = useState({})
+  const [users, setUserChecks] = useState(new Map([]))
   const [itemsError, setError] = useState(false)
-  const classes = useStyles()
-  let categoryDividers = []
+  const [isVisibleDiscount, changeVisibilityDiscount] = useState(false)
+  const [isVisibleQuantity, changeVisibilityQuantity] = useState(false)
+  const [isVisibleEqually, changeVisibilityEqually] = useState(false)
+  const classes = useBillFormStyles()
+  let categoryDividers
 
-  const handleClick = (event) => {
-    const [name, index] = event.target.name.split('-')
+  const handleClick = (key, index) => {
     setUserChecks((prevUsers) => {
-      const arr = prevUsers[name]
-      arr[index] = Number(!arr[index])
-      return Object.assign({}, prevUsers, { [name]: arr })
+      const newMap = new Map(prevUsers)
+      const item = prevUsers.get(key)
+      item.checks[index] = Number(!item.checks[index])
+      return newMap.set(key, { name: item.name, checks: item.checks })
     })
   }
 
-  const handleColClick = (event) => {
-    const name = event.target.innerHTML
+  const handleColClick = (key) => {
     setUserChecks((prevUsers) => {
-      const arr = prevUsers[name]
-      if (arr.reduce((sum, item) => sum + item, 0) < arr.length) {
-        return Object.assign({}, prevUsers, { [name]: arr.map(() => 1) })
+      const newMap = new Map(prevUsers)
+      const obj = newMap.get(key)
+      if (obj.checks.reduce((sum, item) => sum + item, 0) < obj.checks.length) {
+        return newMap.set(key, { name: obj.name, checks: obj.checks.map(() => 1) })
       }
-      return Object.assign({}, prevUsers, { [name]: arr.map(() => 0) })
+      return newMap.set(key, { name: obj.name, checks: obj.checks.map(() => 0) })
     })
   }
 
@@ -117,16 +99,69 @@ export default () => {
     e.preventDefault()
     const keys = parseUsers(user)
     setSums(items)
-    setUserChecks(Object.assign({}, ...keys.map(name => ({ [name]: items.map(() => 0) }))))
+    setUserChecks(() => {
+      const map = new Map()
+      keys.forEach((item) => {
+        map.set(Symbol(item), { name: item, checks: items.map(() => 0) })
+      })
+      return map
+    })
+  }
+
+  const formChecks = () => {
+    const res = []
+    users.forEach((item, elemKey) => {
+      const component = (
+        <div className={classes.userScore}>
+          <Typography variant="overline" display="block" gutterBottom={false}>
+            <Button color="primary" onClick={() => handleColClick(elemKey)}>{item.name}</Button>
+          </Typography>
+          {
+            item.checks
+              .map((check, j) => (
+                <Checkbox
+                  key={`${elemKey.toString()}-${j}`}
+                  name={j}
+                  symbol={elemKey}
+                  checked={Boolean(check)}
+                  onChange={() => handleClick(elemKey, j)}
+                />
+              ))
+          }
+          <Typography classes={{ overline: classes.overline }} variant="overline" display="block" gutterBottom={false}>
+            <b>
+              {
+                item.checks.reduce((sum, flag, i) => (
+                  categoryDividers[i]
+                    ? sum
+                      + flag * sums[i].quantity
+                      * sums[i].price * (1 - sums[i].discount) / categoryDividers[i]
+                    : sum
+                ), 0).toFixed(2)
+              }
+            </b>
+          </Typography>
+        </div>
+      )
+      res.push(component)
+    })
+    return res
   }
 
   // определяем что какой то товар никто не поделил между собой
   categoryDividers = items
-    .map((su, i) => Object.keys(users).reduce((acc, j) => Number(users[j][i]) + acc, 0))
+    .map((su, i) => {
+      let arr = 0
+      users
+        .forEach((item, symbol, map) => {
+          arr += map.get(symbol).checks[i]
+        })
+      return arr
+    })
 
   return (
     <Grid container className={classes.root}>
-      <Grid item xs={12}>
+      <Grid item xs={6}>
         <Card className={classes.formInitial}>
           <CardContent>
             <form noValidate onSubmit={createForm}>
@@ -168,9 +203,54 @@ export default () => {
           </CardContent>
         </Card>
       </Grid>
+      <Grid item xs={4}>
+        <Card className={classes.formInitial}>
+          <CardContent>
+            <Typography
+              variant="h5"
+              display="block"
+            >
+              Settings for form
+            </Typography>
+
+            <form>
+              <FormControlLabel
+                control={(
+                  <Checkbox
+                    checked={isVisibleDiscount}
+                    onChange={changeVisibilityDiscount}
+                    color="primary"
+                  />
+                )}
+                label="DISCOUNT"
+              />
+              <FormControlLabel
+                control={(
+                  <Checkbox
+                    checked={isVisibleQuantity}
+                    onChange={changeVisibilityQuantity}
+                    color="primary"
+                  />
+                )}
+                label="QUANTITY"
+              />
+              <FormControlLabel
+                control={(
+                  <Checkbox
+                    checked={isVisibleEqually}
+                    onChange={changeVisibilityEqually}
+                    color="primary"
+                  />
+                )}
+                label="EQUALLY"
+              />
+            </form>
+          </CardContent>
+        </Card>
+      </Grid>
 
       {
-        (_.isEmpty(sums) || _.isEmpty(users))
+        (_.isEmpty(sums) || users.size === 0)
           ? null
           : (
             <Grid item xs={12}>
@@ -180,6 +260,7 @@ export default () => {
                     {
                       sums.map(item => (
                         <Typography
+                          key={item.name}
                           classes={{ overline: classes.overline }}
                           variant="overline"
                           display="block"
@@ -201,19 +282,21 @@ export default () => {
                 </div>
 
                 <div className={classes.columns}>
-                  <div className={classes.sums}>
-                    <Typography className={classes.header} variant="overline" display="block" gutterBottom={false}>
-                      Quantity
-                    </Typography>
+                  {isVisibleQuantity && (
+                    <div className={classes.sums}>
+                      <Typography className={classes.header} variant="overline" display="block" gutterBottom={false}>
+                        Quantity
+                      </Typography>
 
-                    {
-                      sums.map((item, i) => (
-                        <Typography classes={{ overline: classes.overline }} variant="overline" display="block" gutterBottom={false}>
-                          {categoryDividers[i] ? item.quantity : <i>{item.quantity}</i>}
-                        </Typography>
-                      ))
-                    }
-                  </div>
+                      {
+                        sums.map((item, i) => (
+                          <Typography key={`qt-${item.quantity}`} classes={{ overline: classes.overline }} variant="overline" display="block" gutterBottom={false}>
+                            {categoryDividers[i] ? item.quantity : <i>{item.quantity}</i>}
+                          </Typography>
+                        ))
+                      }
+                    </div>
+                  )}
                   <div className={classes.sums}>
                     <Typography className={classes.header} variant="overline" display="block" gutterBottom={false}>
                       Price
@@ -222,6 +305,7 @@ export default () => {
                     {
                       sums.map((item, i) => (
                         <Typography
+                          key={`pr-${item.price}-${item.quantity}`}
                           classes={{ overline: classes.overline }}
                           variant="overline"
                           display="block"
@@ -247,59 +331,41 @@ export default () => {
                       </b>
                     </Typography>
                   </div>
-                  <div className={classes.sums}>
-                    <Typography className={classes.header} variant="overline" display="block" gutterBottom={false}>
-                      Discount
-                    </Typography>
+                  {isVisibleDiscount && (
+                    <div className={classes.sums}>
+                      <Typography className={classes.header} variant="overline" display="block" gutterBottom={false}>
+                        Discount
+                      </Typography>
 
-                    {
-                      sums.map((item, i) => (
-                        <Typography classes={{ overline: classes.overline }} variant="overline" display="block" gutterBottom={false}>
-                          {
-                            categoryDividers[i]
-                              ? (item.price - item.price * item.discount) * item.quantity
-                              : <i>{(item.price - item.price * item.discount) * item.quantity}</i>}
-                        </Typography>
-                      ))
-                    }
-                    <Typography classes={{ overline: classes.overline }} variant="overline" display="block" gutterBottom={false}>
-                      <b>
-                        {
-                          sums
-                            .reduce((sum, item, i) => (
+                      {
+                        sums.map((item, i) => (
+                          <Typography key={`dc-${item.price}-${item.quantity}`} classes={{ overline: classes.overline }} variant="overline" display="block" gutterBottom={false}>
+                            {
                               categoryDividers[i]
-                                ? sum + item.quantity * (item.price - item.price * item.discount)
-                                : sum
-                            ), 0)
-                            .toFixed(2)
-                        }
-                      </b>
-                    </Typography>
-                  </div>
+                                ? (item.price - item.price * item.discount) * item.quantity
+                                : <i>{(item.price - item.price * item.discount) * item.quantity}</i>}
+                          </Typography>
+                        ))
+                      }
+                      <Typography classes={{ overline: classes.overline }} variant="overline" display="block" gutterBottom={false}>
+                        <b>
+                          {
+                            sums
+                              .reduce((sum, item, i) => (
+                                categoryDividers[i]
+                                  ? sum + item.quantity * (item.price - item.price * item.discount)
+                                  : sum
+                              ), 0)
+                              .toFixed(2)
+                          }
+                        </b>
+                      </Typography>
+                    </div>
+                  )}
                 </div>
                 <div className={classes.users}>
                   {
-                    Object.keys(users).map(item => (
-                      <div className={classes.userScore}>
-                        <Typography variant="overline" display="block" gutterBottom={false}>
-                          <Button color="primary" onClick={handleColClick}>{item}</Button>
-                        </Typography>
-                        {users[item].map((check, j) => <Checkbox name={`${item}-${j}`} checked={Boolean(check)} onChange={handleClick} />)}
-                        <Typography classes={{ overline: classes.overline }} variant="overline" display="block" gutterBottom={false}>
-                          <b>
-                            {
-                              users[item].reduce((sum, flag, i) => (
-                                categoryDividers[i]
-                                  ? sum
-                                    + flag * sums[i].quantity
-                                    * sums[i].price * (1 - sums[i].discount) / categoryDividers[i]
-                                  : sum
-                              ), 0).toFixed(2)
-                            }
-                          </b>
-                        </Typography>
-                      </div>
-                    ))
+                    formChecks()
                   }
                 </div>
               </div>

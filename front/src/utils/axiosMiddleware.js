@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import axios from 'axios'
 
 const instance = axios.create()

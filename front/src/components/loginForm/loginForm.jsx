@@ -161,6 +161,7 @@ export class LoginForm extends PureComponent {
           onChange={this.handleSetLogin}
           error={emailError}
           helperText={errors.email}
+          autoComplete="username"
         />
         <TextField
           required
@@ -171,6 +172,7 @@ export class LoginForm extends PureComponent {
           onChange={this.handleSetPassword}
           error={passError}
           helperText={errors.password}
+          autoComplete="current-password"
         />
         {!_.isEmpty(errors.login) && this.renderError(errors.login)}
         <Button

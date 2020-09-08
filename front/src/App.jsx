@@ -39,7 +39,6 @@ class App extends React.PureComponent {
   }
 
   componentDidMount() {
-    // eslint-disable-next-line react/destructuring-assignment
     const { setAlkash } = this.props.alkashActions
     this.setState({ loader: true })
     const cookie = cookies.get('session')
