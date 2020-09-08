@@ -1,4 +1,3 @@
-/* eslint-disable react/jsx-one-expression-per-line */
 import React from 'react'
 import { bindActionCreators } from 'redux'
 import PropTypes from 'prop-types'
