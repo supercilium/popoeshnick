@@ -161,7 +161,7 @@ export const ShareBill = () => {
 
   return (
     <Grid container className={classes.root}>
-      <Grid item xs={6}>
+      <Grid item xs={12} md={6}>
         <Card className={classes.formInitial}>
           <CardContent>
             <form noValidate onSubmit={createForm}>
@@ -203,7 +203,7 @@ export const ShareBill = () => {
           </CardContent>
         </Card>
       </Grid>
-      <Grid item xs={4}>
+      <Grid item xs={12} md={4}>
         <Card className={classes.formInitial}>
           <CardContent>
             <Typography
