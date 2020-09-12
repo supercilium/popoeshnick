@@ -42,5 +42,9 @@ export const useBillFormStyles = makeStyles({
   },
   overline: {
     lineHeight: '42px',
+    whiteSpace: 'nowrap',
+    maxWidth: '110px',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
   },
 })
