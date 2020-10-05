@@ -11,7 +11,7 @@ import _ from 'lodash'
 import axios from 'axios'
 import { Formik } from 'formik'
 
-import { validateEmail, validatePass } from '../../utils'
+import { validatePass } from '../../utils'
 import { API_CONST } from '../../constants'
 
 const styles = {
