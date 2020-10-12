@@ -3,39 +3,62 @@ import { makeStyles } from '@material-ui/core/styles'
 export const useBillFormStyles = makeStyles({
   root: {
     paddingBottom: '50px',
+    width: 'auto',
+    overflow: 'auto',
+    maxWidth: 'none',
   },
   formInitial: {
     maxWidth: '500px',
-    margin: '42px',
+    margin: '42px auto',
   },
   button: {
-    margin: '20px 0 0',
+    margin: '20px auto 0',
+    display: 'block',
   },
   columns: {
     display: 'flex',
   },
   header: {
-    padding: '4px 0 1px',
+    fontSize: '10px',
+    lineHeight: '30px',
+    textAlign: 'center',
   },
   form: {
     display: 'flex',
     margin: '0 auto',
+    padding: '24px'
   },
   userScore: {
     display: 'flex',
-    flexDirection: 'column',
     textAlign: 'center',
-    margin: '0 12px',
+    margin: '0',
+
+    '& > div': {
+      margin: '0 12px'
+    }
   },
   users: {
     display: 'flex',
   },
   categoryList: {
     display: 'flex',
-    marginTop: '36px',
+    minWidth: '400px',
+
+    '& .MuiTextField-root': {
+      padding: '5px 0',
+    },
   },
   caterory: {
-    padding: '0 42px',
+    margin: '0 12px 0 0',
+    maxWidth: '180px',
+  },
+  short: {
+    margin: '0 12px 0 0',
+    width: '50px',
+  },
+  price: {
+    margin: '0 12px 0 0',
+    width: '70px',
   },
   sums: {
     padding: '0 10px',
@@ -46,5 +69,29 @@ export const useBillFormStyles = makeStyles({
     maxWidth: '110px',
     overflow: 'hidden',
     textOverflow: 'ellipsis',
+  },
+  deleteBtn: {
+    padding: 0,
+    fontSize: '18px',
+
+    '&:hover': {
+      background: 'none',
+    },
+  },
+  headRow: {
+    display: 'flex',
+    justifyContent: 'flex-end',
+  },
+  row: {
+    display: 'flex',
+  },
+  totalRow: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    height: '42px',
+  },
+  totalRight: {
+    display: 'flex',
   },
 })

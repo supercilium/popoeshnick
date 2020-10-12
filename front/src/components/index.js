@@ -1,4 +1,4 @@
-import LoginForm from './loginForm'
+export { default as LoginForm } from './loginForm'
 
 export {
   DialogForgot,
@@ -6,7 +6,3 @@ export {
 } from './dialogs'
 export { Home } from './home'
 export { Layout } from './layout'
-
-export {
-  LoginForm,
-}
