@@ -6,13 +6,14 @@ import {
   TextField,
   Button,
   IconButton,
+  MenuItem,
 } from '@material-ui/core'
 import Grid from '@material-ui/core/Grid'
 import Stepper from '@material-ui/core/Stepper'
 import Step from '@material-ui/core/Step'
 import StepLabel from '@material-ui/core/StepLabel'
 import _ from 'lodash'
-import { Formik, FieldArray, Form, Field } from 'formik'
+import { Formik, FieldArray, Form, Field, FastField } from 'formik'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTimesCircle } from '@fortawesome/free-solid-svg-icons'
 import classNames from 'classnames'
@@ -33,9 +34,12 @@ export const ShareBill = () => {
   const [isVisibleEqually, changeVisibilityEqually] = useState(false)
   const [newAlkash, setNewAlkash] = useState('')
   const [newItem, setNewItem] = useState('')
+  const [partyName, setPartyName] = useState('')
   const [step, setStep] = useState(0)
   const classes = useBillFormStyles()
   let categoryDividers
+  let initialValues = JSON.parse(localStorage.getItem('lastParty')) || []
+  console.log(initialValues)
 
   const handleChangeSums = (e) => {
     setValue(e.target.value)
@@ -55,15 +59,25 @@ export const ShareBill = () => {
       })
       return res
     })
+    // TODO update LS by partyName
+    localStorage.setItem('lastParty', JSON.stringify([ ...initialValues, { partyName, user, value }]))
     setStep(1)
   }
 
+  const setFromInitialData = e => {
+    console.log(e.target.value)
+    setPartyName(e.target.value.partyName)
+    setUsers(e.target.value.user)
+    setValue(e.target.value.value)
+  }
+
   // короче супир идея:
-  // wizard form, первый шаг - задать входные параметры для формы
+  // wizard form, первый шаг - задать входные параметры для формы (v)
   // второй шаг - построить форму с FieldsArray (v)
   // редактировать форму (добавлять/удалять алкашей, позиции) - (v)
-  //  сначала сохраняем в localstorage конфиг текущей формы (?)
-  // заменить лейблы на инпуты - даем возможность редактировать название, цену и проч
+  //  сначала сохраняем в localstorage конфиг текущей формы (v)
+  // добавить колонку с переключением на дележку количеством
+  // заменить лейблы на инпуты - даем возможность редактировать название, цену и проч (v)
   // все это добавить в values
   return (
     <div>
@@ -85,6 +99,26 @@ export const ShareBill = () => {
               >
                 Set initial data for your popoyka
               </Typography>
+              {/* TODO join in one text field with select */}
+              {initialValues.length && (
+                <TextField
+                id="partySaved"
+                select
+                value={partyName}
+                label="You have saved parties"
+                onChange={setFromInitialData}
+                fullWidth
+              >
+                {initialValues.map(item => <MenuItem key={item.partyName} value={item}>{item.partyName}</MenuItem>)}
+              </TextField>
+              )}
+              <TextField
+                id="partyName"
+                label="Party name"
+                value={partyName}
+                onChange={e => setPartyName(e.target.value)}
+                fullWidth
+              />
               <TextField
                 id="users"
                 label="Enter participants"
@@ -110,7 +144,7 @@ export const ShareBill = () => {
                 type="submit"
                 variant="contained"
                 color="primary"
-                disabled={!user || itemsError || !value}
+                disabled={!user || itemsError || !partyName}
               >
                 Create form
               </Button>
@@ -223,13 +257,13 @@ export const ShareBill = () => {
                                         {
                                           values.sums.length > 0 && values.sums.map((item, i) => (
                                             <div className={classes.row} key={i}>
-                                              <Field
+                                              <FastField
                                                 name={`sums[${i}].name`}
                                               >
                                                 {({ field }) => (
                                                   <TextField {...field} className={classes.caterory} />
                                                 )}
-                                              </Field>
+                                              </FastField>
                                               <Field
                                                 name={`sums[${i}].quantity`}
                                               >
@@ -297,7 +331,10 @@ export const ShareBill = () => {
                                             </Typography>
                                           </div>
                                         </div>
-                                        <TextField value={newItem} onChange={(e) => setNewItem(e.target.value)} />
+                                        {/* TODO add validation */}
+                                        {/* move arrow func outside */}
+                                        <TextField value={newItem} onChange={(e) => setNewItem(e.target.value)} onKeyDown={e => e.keyCode === 13 && addStuff()} />
+                                        {/* TODO we can add when newItem empty or valid */}
                                         <Button disabled={!newItem} onClick={addStuff}>Add stuff</Button>
                                       </div>
                                     )
@@ -366,7 +403,7 @@ export const ShareBill = () => {
                                         )
                                       }
                                       <div>
-                                        <TextField value={newAlkash} onChange={e => setNewAlkash(e.target.value)} />
+                                        <TextField value={newAlkash} onChange={e => setNewAlkash(e.target.value)} onKeyDown={(e) => e.keyCode === 13 && newAlkash && addUser()} />
                                         <Button
                                           onClick={addUser}
                                           disabled={!newAlkash}

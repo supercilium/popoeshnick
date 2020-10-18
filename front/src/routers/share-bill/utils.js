@@ -8,9 +8,17 @@ export const itemsRegexp = /([^;,.]+)(,[\d\.]+){1,};*/gm
  * @param {String} str 
  */
 export const parseItems = (str) => {
+    if (!str?.length) {
+        return ([{
+            name: '',
+            price: 0,
+            quantity: 0,
+            discount: 0,
+            }])
+    }
     const items = str.split(';')
     return items.map((item) => {
-      const [name, price, quantity = 1, discount = 0] = item.split(',')
+      const [name, price = 0, quantity = 1, discount = 0] = item.split(',')
       return ({
         name,
         price: Number(price),
