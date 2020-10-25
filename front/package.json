@@ -17,12 +17,6 @@
     "name": "Pakhomova Mary",
     "email": "marusel.12@gmail.com"
   },
-  "contributors": [
-    {
-      "name": "Rarnz",
-      "email": "lightnekromant@gmail.com"
-    }
-  ],
   "browserslist": [
     ">0.2%",
     "not dead",
@@ -36,6 +30,10 @@
     "@fortawesome/react-fontawesome": "^0.1.8",
     "@material-ui/core": "^4.11.0",
     "@svgr/webpack": "4.3.3",
+    "@types/jest": "^26.0.14",
+    "@types/node": "^14.11.10",
+    "@types/react": "^16.9.53",
+    "@types/react-dom": "^16.9.8",
     "axios": "^0.18.0",
     "babel-loader": "8.1.0",
     "babel-plugin-named-asset-import": "^0.3.6",
@@ -58,7 +56,6 @@
     "postcss-normalize": "8.0.1",
     "postcss-preset-env": "6.7.0",
     "postcss-safe-parser": "4.0.1",
-    "prop-types": "^15.7.2",
     "react": "^16.13.0",
     "react-app-polyfill": "^1.0.6",
     "react-dev-utils": "^10.2.1",
@@ -67,11 +64,12 @@
     "react-router-dom": "^5.1.2",
     "redux": "^4.0.5",
     "resolve": "1.15.0",
-    "resolve-url-loader": "3.1.1",
+    "resolve-url-loader": "^3.1.2",
     "sass-loader": "8.0.2",
     "semver": "6.3.0",
     "style-loader": "0.23.1",
     "terser-webpack-plugin": "4.1.0",
+    "typescript": "^4.0.3",
     "universal-cookie": "^3.1.0",
     "url-loader": "2.3.0",
     "webpack": "4.42.0",
@@ -80,7 +78,12 @@
     "workbox-webpack-plugin": "4.3.1"
   },
   "devDependencies": {
-    "babel-eslint": "10.1.0",
+    "@types/classnames": "^2.2.10",
+    "@types/lodash": "^4.14.162",
+    "@types/react-redux": "^7.1.9",
+    "@types/react-router-dom": "^5.1.6",
+    "@typescript-eslint/eslint-plugin": "^4.5.0",
+    "@typescript-eslint/parser": "^4.5.0",
     "babel-jest": "^25.1.0",
     "body-parser": "^1.19.0",
     "classnames": "^2.2.6",
@@ -90,7 +93,7 @@
     "eslint-loader": "3.0.3",
     "eslint-plugin-import": "2.20.1",
     "eslint-plugin-jsx-a11y": "^6.2.3",
-    "eslint-plugin-react": "^7.18.3",
+    "eslint-plugin-react": "^7.21.5",
     "eslint-plugin-react-hooks": "^1.6.1",
     "express": "^4.17.1",
     "express-pino-logger": "^4.0.0",

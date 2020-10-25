@@ -1,27 +1,30 @@
 {
-    "parser": "babel-eslint",
-    "extends": [
-      "eslint:recommended",
-      "plugin:react/recommended"
-    ],
     "env": {
-      "browser": true,
-      "node": true,
-      "es2017": true
+        "browser": true,
+        "es6": true
     },
+    "extends": [
+        "plugin:react/recommended",
+        "plugin:@typescript-eslint/eslint-recommended"
+    ],
+    "globals": {
+        "Atomics": "readonly",
+        "SharedArrayBuffer": "readonly"
+    },
+    "parser": "@typescript-eslint/parser",
     "parserOptions": {
-      "ecmaVersion": 6,
-      "ecmaFeatures": {
-        "jsx": true
-      }
+        "ecmaFeatures": {
+            "jsx": true
+        },
+        "ecmaVersion": 2018,
+        "sourceType": "module"
     },
+    "plugins": [
+        "react",
+        "@typescript-eslint"
+    ],
     "rules": {
-        "linebreak-style": 0,
-        "semi": [2, "never"],
-        "import/no-named-as-default": 0,
-        "import/prefer-default-export": 0,
-        "react/destructuring-assignment": 0,
-        "react/forbid-prop-types": [0, { "forbid": ["any"] }]
-    },
-    "reportUnusedDisableDirectives": true
+        "react/prop-types": [0],
+        "react/display-name": [0]
+    }
 }
