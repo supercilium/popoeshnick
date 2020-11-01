@@ -1,4 +1,4 @@
-import React, { useState, SyntheticEvent, ChangeEvent, FormEvent } from 'react'
+import React, { useState } from 'react'
 import {
   Checkbox,
   FormControlLabel,
@@ -6,9 +6,7 @@ import {
   TextField,
   Button,
   IconButton,
-  MenuItem,
 } from '@material-ui/core'
-import Grid from '@material-ui/core/Grid'
 import Stepper from '@material-ui/core/Stepper'
 import Step from '@material-ui/core/Step'
 import StepLabel from '@material-ui/core/StepLabel'
@@ -18,38 +16,26 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTimesCircle } from '@fortawesome/free-solid-svg-icons'
 import classNames from 'classnames'
 
-import { validateRegexp } from '../../utils'
-import { parseItems, parseUsers, itemsRegexp } from './utils'
+import { parseItem, ItemInterface } from './utils'
 import { useBillFormStyles } from './styles'
+import { ShareBillInitialForm } from '../../components/organisms'
 
 
 export const ShareBill = () => {
-  const [value, setValue] = useState('')
-  const [user, setUsers] = useState('')
   const [sums, setSums] = useState<any[]>([])
   const [users, setUserChecks] = useState<any[]>([])
-  const [itemsError, setError] = useState(false)
   const [isVisibleDiscount, changeVisibilityDiscount] = useState(false)
   const [isVisibleQuantity, changeVisibilityQuantity] = useState(false)
   const [isVisibleEqually, changeVisibilityEqually] = useState(false)
   const [newAlkash, setNewAlkash] = useState('')
   const [newItem, setNewItem] = useState('')
-  const [partyName, setPartyName] = useState('')
   const [step, setStep] = useState(0)
   const classes = useBillFormStyles()
   let categoryDividers: number[]
-  const initialValues = JSON.parse(localStorage.getItem('lastParty') || '') || []
 
-  const handleChangeSums = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setValue(e.target.value)
-    setError(!validateRegexp(e.target.value, itemsRegexp))
-  }
 
-  const items = parseItems(value)
-
-  const createForm = (e: React.FormEvent) => {
-    e.preventDefault()
-    const keys = parseUsers(user)
+  const createForm = (items: ItemInterface[], keys: string[]) => {
+    // e.preventDefault()
     setSums(items)
     setUserChecks(() => {
       const res: any[] = []
@@ -58,15 +44,7 @@ export const ShareBill = () => {
       })
       return res
     })
-    // TODO update LS by partyName
-    localStorage.setItem('lastParty', JSON.stringify([ ...initialValues, { partyName, user, value }]))
     setStep(1)
-  }
-
-  const setFromInitialData = (e: any) => {
-    setPartyName(e.target.value.partyName)
-    setUsers(e.target.value.user)
-    setValue(e.target.value.value)
   }
 
   // короче супир идея:
@@ -87,71 +65,9 @@ export const ShareBill = () => {
           <StepLabel>Calculate Bill</StepLabel>
         </Step>
       </Stepper>
-      {step === 0 && (
-        <Grid container className={classes.root}>
-          <Grid item xs={12} md={12}>
-            <form noValidate onSubmit={createForm} className={classes.formInitial}>
-              <Typography
-                variant="h5"
-                display="block"
-              >
-                Set initial data for your popoyka
-              </Typography>
-              {/* TODO join in one text field with select */}
-              {initialValues.length && (
-                <TextField
-                id="partySaved"
-                select
-                value={partyName}
-                label="You have saved parties"
-                onChange={setFromInitialData}
-                fullWidth
-              >
-                {initialValues.map((item: any) => <MenuItem key={item.partyName} value={item}>{item.partyName}</MenuItem>)}
-              </TextField>
-              )}
-              <TextField
-                id="partyName"
-                label="Party name"
-                value={partyName}
-                onChange={e => setPartyName(e.target.value)}
-                fullWidth
-              />
-              <TextField
-                id="users"
-                label="Enter participants"
-                fullWidth
-                value={user}
-                onChange={e => setUsers(e.target.value)}
-                margin="normal"
-                helperText="Input format: user1,user2,...,userN"
-              />
-              <TextField
-                error={itemsError}
-                multiline
-                id="items"
-                label="Enter items"
-                fullWidth
-                value={value}
-                onChange={handleChangeSums}
-                margin="normal"
-                helperText="Input format: itemName1,itemPrice1[,itemQuantity1,itemDiscount1];..."
-              />
-              <Button
-                className={classes.button}
-                type="submit"
-                variant="contained"
-                color="primary"
-                disabled={!user || itemsError || !partyName}
-              >
-                Create form
-              </Button>
-            </form>
-          </Grid>
-        </Grid>
-      )}
+      {step === 0 && <ShareBillInitialForm setForm={createForm} />}
       {step === 1 && (
-        <Grid container className={classes.root}>
+        <div className={classes.root}>
           {
             (_.isEmpty(sums) || users.length === 0)
               ? null
@@ -162,7 +78,7 @@ export const ShareBill = () => {
                 >
                   {
                     ({ values, setFieldValue }) => {
-                      // по клику на колоннку заполняем/снимаем все галки в столбце
+                      // по клику на колонку заполняем/снимаем все галки в столбце
                       const handleColClick = (index: number) => {
                         if (values.users[index].checks.some((item: number) => item === 0)) {
                           values.users[index].checks.forEach((value: any, i: number) => setFieldValue(`users[${index}].checks[${i}]`, 1, false))
@@ -222,15 +138,14 @@ export const ShareBill = () => {
                               label="EQUALLY"
                             />
                           </form>
-                          <Form>
-                            <div className={classes.form}>
+                          <Form className={classes.form}>
                               <div className={classes.categoryList}>
                                 <FieldArray
                                   name="sums"
                                   render={({ push }) => {
                                     // добавляем позицию в счет
                                     const addStuff = () => {
-                                      const item = parseItems(newItem)
+                                      const item = parseItem(newItem)
                                       push(item)
                                       values.users.forEach(item => {
                                         item.checks.push(0)
@@ -240,13 +155,13 @@ export const ShareBill = () => {
                                     return (
                                       <div>
                                         <div className={classes.headRow}>
-                                          <Typography className={classNames(classes.header, classes.short)} variant="overline" display="block" gutterBottom={false}>
+                                          <Typography className={classNames(classes.header, classes.short, {[classes.hidden]: !isVisibleQuantity})} variant="overline" display="block" gutterBottom={false}>
                                             Quantity
                                           </Typography>
                                           <Typography className={classNames(classes.header, classes.price)} variant="overline" display="block" gutterBottom={false}>
                                             Price
                                           </Typography>
-                                          <Typography className={classNames(classes.header, classes.short)} variant="overline" display="block" gutterBottom={false}>
+                                          <Typography className={classNames(classes.header, classes.short, {[classes.hidden]: !isVisibleDiscount})} variant="overline" display="block" gutterBottom={false}>
                                             Discount
                                           </Typography>
                                         </div>
@@ -261,16 +176,18 @@ export const ShareBill = () => {
                                                   <TextField {...field} className={classes.caterory} />
                                                 )}
                                               </FastField>
-                                              <Field
-                                                name={`sums[${i}].quantity`}
-                                              >
-                                                {({ field }: FieldProps) => (
-                                                  <TextField
-                                                    {...field}
-                                                    className={classes.short}
-                                                  />
-                                                )}
-                                              </Field>
+                                              <div className={classNames({[classes.hidden]: !isVisibleQuantity})}>
+                                                <Field
+                                                  name={`sums[${i}].quantity`}
+                                                >
+                                                  {({ field }: FieldProps) => (
+                                                    <TextField
+                                                      {...field}
+                                                      className={classes.short}
+                                                    />
+                                                  )}
+                                                </Field>
+                                              </div>
                                               <Field
                                                 name={`sums[${i}].price`}
                                               >
@@ -278,16 +195,18 @@ export const ShareBill = () => {
                                                   <TextField {...field} className={classes.price} />
                                                 )}
                                               </Field>
-                                              <Field
-                                                name={`sums[${i}].discount`}
-                                              >
-                                                {({ field }: FieldProps) => (
-                                                  <TextField
-                                                    {...field}
-                                                    className={classes.short}
-                                                  />
-                                                )}
-                                              </Field>
+                                              <div className={classNames({[classes.hidden]: !isVisibleDiscount})}>
+                                                <Field
+                                                  name={`sums[${i}].discount`}
+                                                >
+                                                  {({ field }: FieldProps) => (
+                                                    <TextField
+                                                      {...field}
+                                                      className={classes.short}
+                                                    />
+                                                  )}
+                                                </Field>
+                                              </div>
 
                                             </div>
                                           ))
@@ -313,7 +232,7 @@ export const ShareBill = () => {
                                                 }
                                               </b>
                                             </Typography>
-                                            <Typography className={classes.short} variant="overline" display="block" gutterBottom={false}>
+                                            <Typography className={classNames(classes.short, {[classes.hidden]: !isVisibleDiscount})} variant="overline" display="block" gutterBottom={false}>
                                               <b>
                                                 {
                                                   values.sums
@@ -330,9 +249,11 @@ export const ShareBill = () => {
                                         </div>
                                         {/* TODO add validation */}
                                         {/* move arrow func outside */}
-                                        <TextField value={newItem} onChange={(e) => setNewItem(e.target.value)} onKeyDown={e => e.keyCode === 13 && addStuff()} />
-                                        {/* TODO we can add when newItem empty or valid */}
-                                        <Button disabled={!newItem} onClick={addStuff}>Add stuff</Button>
+                                        <div className={classes.addButton}>
+                                          <TextField value={newItem} onChange={(e) => setNewItem(e.target.value)} onKeyDown={e => e.keyCode === 13 && addStuff()} />
+                                          {/* TODO we can add when newItem empty or valid */}
+                                          <Button disabled={!newItem} onClick={addStuff}>Add stuff</Button>
+                                        </div>
                                       </div>
                                     )
                                   }}
@@ -342,7 +263,7 @@ export const ShareBill = () => {
                                 name="users"
                                 render={({ push, remove }) => {
                                   const addUser = () => {
-                                    push({ name: newAlkash, checks: new Array(values.sums.length).fill(0) })
+                                    push({ name: newAlkash || 'Buddy', checks: new Array(values.sums.length).fill(0) })
                                     setNewAlkash('')
                                   }
                                   return (
@@ -399,11 +320,10 @@ export const ShareBill = () => {
                                           ))
                                         )
                                       }
-                                      <div>
+                                      <div className={classes.addButton}>
                                         <TextField value={newAlkash} onChange={e => setNewAlkash(e.target.value)} onKeyDown={(e) => e.keyCode === 13 && newAlkash && addUser()} />
                                         <Button
                                           onClick={addUser}
-                                          disabled={!newAlkash}
                                         >
                                           Add Friend
                                         </Button>
@@ -412,7 +332,6 @@ export const ShareBill = () => {
                                   )
                                 }}
                               />
-                            </div>
                           </Form>
                         </>
                       )
@@ -421,7 +340,7 @@ export const ShareBill = () => {
                 </Formik>
               )
           }
-        </Grid>
+        </div>
       )
       }
     </div>

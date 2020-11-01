@@ -1,19 +1,24 @@
 import { makeStyles } from '@material-ui/core/styles'
 
 export const useBillFormStyles = makeStyles({
+  hidden: {
+    display: 'none',
+  },
+  addButton: {
+    display: 'flex',
+    flexDirection: 'column',
+  },
   root: {
     paddingBottom: '50px',
     width: 'auto',
     overflow: 'auto',
     maxWidth: 'none',
+    display: 'flex',
+    flexDirection: 'column',
   },
   formInitial: {
     maxWidth: '500px',
     margin: '42px auto',
-  },
-  button: {
-    margin: '20px auto 0',
-    display: 'block',
   },
   columns: {
     display: 'flex',
@@ -42,7 +47,7 @@ export const useBillFormStyles = makeStyles({
   },
   categoryList: {
     display: 'flex',
-    minWidth: '400px',
+    flexShrink: 0,
 
     '& .MuiTextField-root': {
       padding: '5px 0',
