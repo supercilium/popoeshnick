@@ -14,12 +14,11 @@ interface Props {
 export const ShareBillInitialForm: FC<Props> = ({ setForm }) => {
     const classes = useStyles()
     const [partyName, setPartyName] = useState('')
-    const [user, setUsers] = useState('Harry')
+    const [user, setUsers] = useState('')
     const [value, setValue] = useState('')
     const [itemsError, setError] = useState(false)
 
-    const initialValues = JSON.parse(localStorage.getItem('lastParty') || '') || []
-
+    const initialValues = JSON.parse(localStorage.getItem('lastParty') || '[]')
 
     const setFromInitialData = (e: any) => {
         setPartyName(e.target.value.partyName)
@@ -29,7 +28,7 @@ export const ShareBillInitialForm: FC<Props> = ({ setForm }) => {
 
     const handleChangeSums = (e: React.ChangeEvent<HTMLInputElement>) => {
         setValue(e.target.value)
-        setError(!validateRegexp(e.target.value, itemsRegexp))
+        setError(Boolean(e.target.value.length) && !validateRegexp(e.target.value, itemsRegexp))
     }
 
     const handleSubmit = () => {
@@ -50,7 +49,7 @@ export const ShareBillInitialForm: FC<Props> = ({ setForm }) => {
                 Set initial data for your popoyka
               </Typography>
               {/* TODO join in one text field with select */}
-              {initialValues.length && (
+              {!!initialValues.length && (
                 <TextField
                 id="partySaved"
                 select
