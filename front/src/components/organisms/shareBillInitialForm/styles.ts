@@ -14,7 +14,7 @@ export const useStyles =makeStyles(() => ({
         margin: '42px auto',
       },
       button: {
-        margin: '20px auto 0',
+        margin: '20px 20px 0 0',
         display: 'inline-block',
       },
 }))

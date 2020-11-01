@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useRef, useEffect } from 'react'
 import {
   Paper,
   makeStyles,
@@ -30,12 +30,18 @@ const useStyles = makeStyles(theme => ({
 
 export const Root = () => {
   const classes = useStyles()
+  const ref = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    console.log(ref.current?.getBoundingClientRect())
+  }, [ref])
+
   return (
     <header className={classes.header}>
       <h1>PoPoTools</h1>
       <div className={classes.root}>
         <Paper elevation={3}><Link href="/share-bill">Share bill</Link></Paper>
-        <Paper elevation={3}><Link href="/">Theme Counter</Link></Paper>
+        <Paper ref={ref} elevation={3}><Link href="/">Theme Counter</Link></Paper>
         <Paper elevation={3}><Link href="/">Statistics</Link></Paper>
         <Paper elevation={3}><Link href="/protected">Popo Assistent</Link></Paper>
       </div>
