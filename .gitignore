@@ -3,3 +3,5 @@
 */penv/*
 */schemes/*
 *.vagrant*
+crdz
+*/.vscode/*
