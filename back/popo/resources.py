@@ -1,6 +1,6 @@
 from popo import db
 from popo.models import User, Party, Item
-from flask import request
+from flask import request, session
 from flask_restful import Resource
 from sqlalchemy.exc import IntegrityError
 
@@ -27,17 +27,6 @@ class Users(Resource):
             return {'user_id': id}, 201
 
     
-    # def get(self):
-
-    #     users = User.query.all()
-    #     res = [u.json_profile() for u in users]
-
-    #     return {
-    #         'number_of_users': len(res),
-    #         'users_list': res
-    #     }, 200
-
-
 class UserID(Resource):
 
     def post(self):
@@ -84,11 +73,12 @@ class UserID(Resource):
                     }
         else:
             if u.check_password(password):
-                # set session cookie
+                session.permanent = True
+                session['test'] = 'success'
                 return {
                         "status": "success",
-                        #"profile":  u.json_profile(),
-                        "profile":  alkashProfile,
+                        "profile":  u.json_profile(),
+                        #"profile":  alkashProfile,
                        }
             else:
                 return {
@@ -99,13 +89,3 @@ class UserID(Resource):
                                 "login":[]
                                }
                     }
-
-
-        
-
-        # if User.query.filter_by(id=id).first():
-        #     return User.query.filter_by(id=id).first().json_profile(), 200
-
-        # else:
-        #     return {'error': f'no user found with ID {id}'}, 404
-
