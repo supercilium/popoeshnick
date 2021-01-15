@@ -20,6 +20,8 @@ users_to_items = db.Table('users_to_items',
 class User(db.Model):
     __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
+    telegram_id = db.Column(db.Integer, unique=True)
+    telegram_name = db.Column(db.String(32), unique=True)
     username = db.Column(db.String(64), unique=True)
     email = db.Column(db.String(120), unique=True)
     password_hash = db.Column(db.String(128))
@@ -63,7 +65,7 @@ class User(db.Model):
     def get_rank_by_lg_score(self):
         score = float(self.get_lg_score())
 
-        if 1 <= score < 6:
+        if 0 <= score < 6:
             return 'rank 1'
         elif 6 <= score < 11:
             return 'rank 2'
@@ -97,7 +99,6 @@ class User(db.Model):
         items-prices-shared
         total
         '''
-# TODO: add
         pass
 
 
@@ -111,7 +112,7 @@ class User(db.Model):
         'email': self.email,
         'lg_score': self.get_lg_score(),
         'rank': self.get_rank_by_lg_score(),
-        'budget': self.get_budget(),
+        'budget': self.get_budget() or '0',
         'parties_list': [p.json_party() for p in self.parties],
         }
 
